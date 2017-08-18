@@ -1,0 +1,126 @@
+iPress Filters And Actions
+=============================
+
+class-theme.php
+-------------------
+
+'ipress_content_width'
+filter - content width: default 840
+
+'ipress_document_title_separator'
+filter - document title separator: default '-'
+
+'ipress_home_doctitle_append'
+filter - append site description to title on homepage: default true
+
+'ipress_doctitle_separator'
+filter - title separator: default ''
+
+'ipress_append_site_name'
+filter - append site name to inner pages: default true
+
+class-init.php
+-------------------
+
+'ipress_login_info'
+filter - failed login security message
+
+class-admin.php
+-------------------
+
+'ipress_dashboard_post_types'
+filter - add post-types to "At a glance" Dashboard widget: default []
+
+class-layout.php
+-------------------
+
+'ipress_theme_direction'
+filter - theme direction: default: ''
+
+'ipress_view_more'
+filter - custom view more link: default false
+
+'ipress_view_more_link'
+filter - custom view more link
+
+'ipress_embed_video'
+filter - embed video html
+
+class-media.php
+-------------------
+
+'ipress_media_images'
+filter - image size media editor support
+
+'ipress_media_images_sizes'
+filter - remove default image sizes: default no action
+
+'ipress_upload_mimes',
+filter - add image mime types: default add svg support
+
+'ipress_remove_thumbnail_dimensions'
+filter - remove thumbnail width and height dimensions: default true
+
+'ipress_gravatar'
+filter - custom Gravatar in Settings > Discussion: default none
+
+class-media.php
+-------------------
+
+'ipress_nav_clean'
+filter - remove div round navigation: default false
+
+'ipress_css_attr'
+filter - remove injected classes from nav li: default false
+
+class-rewrites.php
+-------------------
+
+'ipress_query_vars'
+filter - add new query vars: default []
+
+class-sidebars.php
+-------------------
+
+'ipress_sidebar_xxx_defaults'
+filter - dynamic sidebar defaults 
+
+'ipress_default_sidebars'
+filter - default sidebars: default [ primary...]
+
+'ipress_footer_sidebars'
+filter - footer sidebars: default []
+
+'ipress_custom_sidebars'
+filter - custom sidebars: default []
+
+class-widgets.php
+-------------------
+
+'ipress_widgets'
+filter - custom widgets: default []
+
+class-page.php
+-------------------
+
+'ipress_page_excerpt'
+filter - page excerpt support: default false
+
+'ipress_page_tags'
+filter - page tags support: default false
+
+'ipress_page_tags_query', false
+filter - add page tags to query: default false
+
+
+iPress Theme Mods
+=============================
+
+class-theme.php
+-------------------
+
+'ipress_posts_format'
+- blog posts style: default 'default'
+
+'ipress_content'
+- content area position: default 'left'
