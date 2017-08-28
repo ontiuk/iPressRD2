@@ -11,6 +11,13 @@
  * @license     GPL-2.0+
  */
 
+// Access restriction
+if ( ! defined( 'ABSPATH' ) ) {
+    header( 'Status: 403 Forbidden' );
+    header( 'HTTP/1.1 403 Forbidden' );
+    exit;
+}
+
 /**
  * Set up template & template heirarchy features
  */ 
@@ -30,6 +37,9 @@ final class IPR_Template {
 
         // Modify template partial search path for e.g. header file Trac #13239
 //        add_filter( 'locate_template', [ $this, 'locate_template' ], 10, 2 ); 
+
+        // Force front-page.php as template when static home page set        
+//        add_filter( 'frontpage_template',  [ $this, 'front_page_template' ] );
     }
 
     //---------------------------------------------
@@ -94,6 +104,17 @@ final class IPR_Template {
             $location = ( is_child_theme() ) ? get_theme_file_path() . 'header.php' : get_parent_theme_file_path() . 'partials/header.php';
         }
         return $location;
+    }
+
+    /**
+     * Use front-page.php when Front page displays is set to a static page
+     *
+     * @param string $template defaults to front-page.php
+     *
+     * @return string The template to be used: blank if is_home() is true (defaults to index.php), else $template.
+     */
+    public function front_page_template( $template ) {
+    	return is_home() ? '' : $template;
     }
 }
 

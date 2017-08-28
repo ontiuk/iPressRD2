@@ -136,7 +136,7 @@ function ipress_pagination() {
     ] );
 
     // Get paged value
-    $paged = ( get_query_var('paged') == 0 ) ? 1 : get_query_var('paged');
+    $paged = ( get_query_var('paged') == 0 ) ? 1 : absint( get_query_var('paged') );
 
     // Generate list if set
     if ( is_array( $pages ) && $paged ) {
@@ -376,8 +376,8 @@ function ipress_canonical_url() {
     $canonical = '';
 
     // Pagination values
-    $paged = intval( get_query_var( 'paged' ) );
-    $page  = intval( get_query_var( 'page' ) );
+    $paged = absint( get_query_var( 'paged' ) );    
+    $page  = absint( get_query_var( 'page' ) );
 
     // Front page / home page
     if ( is_front_page() ) {
@@ -395,7 +395,7 @@ function ipress_canonical_url() {
     if ( is_category() || is_tag() || is_tax() ) {
         if ( ! $id = $wp_query->get_queried_object_id() ) { return; }
         $taxonomy = $wp_query->queried_object->taxonomy;
-        $canonical = ( $paged ) ? get_pagenum_link( $paged ) : get_term_link( (int) $id, $taxonomy );
+        $canonical = ( $paged ) ? get_pagenum_link( $paged ) : get_term_link( (int)$id, $taxonomy );
     }
 
     // Author

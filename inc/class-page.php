@@ -11,6 +11,13 @@
  * @license     GPL-2.0+
  */
 
+// Access restriction
+if ( ! defined( 'ABSPATH' ) ) {
+    header( 'Status: 403 Forbidden' );
+    header( 'HTTP/1.1 403 Forbidden' );
+    exit;
+}
+
 /**
  * Set up page support features
  */ 
@@ -42,11 +49,11 @@ final class IPR_Page {
     public function page_support() {
 
         // Page excerpt support
-        $page_excerpt_support = (bool)apply_filters( 'ipress_page_excerpt', '__return_false' );
+        $page_excerpt_support = (bool)apply_filters( 'ipress_page_excerpt', false );
         if ( $page_excerpt_support ) { add_post_type_support( 'page', 'excerpt' ); }
 
         // Page tag support   
-        $page_tag_support = (bool)apply_filters( 'ipress_page_tags', '__return_false' );
+        $page_tag_support = (bool)apply_filters( 'ipress_page_tags', false );
         if ( $page_tag_support ) { register_taxonomy_for_object_type( 'post_tag', 'page' ); }
     }
 
@@ -56,7 +63,7 @@ final class IPR_Page {
      * @param object $query WP_Query
      */
     public function page_tags_query( $wp_query ) {
-        $page_tag_support = (bool)apply_filters( 'ipress_page_tags_query', '__return_false' );
+        $page_tag_support = (bool)apply_filters( 'ipress_page_tags_query', false );
         if ( $page_tag_support && $wp_query->get( 'tag' ) ) { $wp_query->set( 'post_type', 'any' ); }
     }
 
@@ -74,7 +81,7 @@ final class IPR_Page {
 
      	// Check to verify it's search page & add post types to search
         if ( !is_admin() && $query->is_main_query() && $query->is_search() ) { 
-            $query->set( 'post_type', array_merge( $post_types, [ 'post', 'page' ] ); 
+            $query->set( 'post_type', array_merge( $post_types, [ 'post', 'page' ] ) ); 
  	    } 
      	return $query; 
     } 

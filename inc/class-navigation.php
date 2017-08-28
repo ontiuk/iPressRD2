@@ -11,6 +11,13 @@
  * @license     GPL-2.0+
  */
 
+// Access restriction
+if ( ! defined( 'ABSPATH' ) ) {
+    header( 'Status: 403 Forbidden' );
+    header( 'HTTP/1.1 403 Forbidden' );
+    exit;
+}
+
 /**
  * Set up navigation features
  */ 
@@ -44,7 +51,7 @@ final class IPR_Navigation {
     public function nav_menu_args( $args = [] ) {
 
         // Filterable menu args
-        $nav_clean = apply_filters( 'ipress_nav_clean', '__return_false' );
+        $nav_clean = apply_filters( 'ipress_nav_clean', false );
         if ( $nav_clean ) { $args['container'] = false; }
 
         // Return menu args
@@ -60,7 +67,7 @@ final class IPR_Navigation {
     public function css_attributes_filter( $var ) {
 
         // Filterable css attributes
-        $css_attr       = (bool)apply_filters( 'ipress_css_attr', '__return_false' );    
+        $css_attr       = (bool)apply_filters( 'ipress_css_attr', false );    
         $css_attr_val   = ( is_array( $var ) ) ? [] : '';
 
         // Return attributes

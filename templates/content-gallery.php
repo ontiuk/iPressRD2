@@ -43,51 +43,6 @@ if ( ! defined( 'ABSPATH' ) ) {
     ?>        
 	</header><!-- .entry-header -->
 
-	<section class="entry-meta">
-	<?php if ( 'post' == get_post_type() ) : ?>
-		<div class="author">
-		<?php
-			echo get_avatar( get_the_author_meta( 'ID' ), 128 );
-			echo sprintf( '<div class="label">%s</div>', esc_attr( __( 'Written by', 'ipress' ) ) );
-			the_author_posts_link();
-		?>
-		</div>
-		<?php
-		/* translators: used between list items, there is a space after the comma */
-		$categories_list = get_the_category_list( __( ', ', 'ipress' ) );
-
-		if ( $categories_list ) : ?>
-		<div class="cat-links">
-		<?php
-			echo sprintf( '<div class="label">%s</div>', esc_attr( __( 'Posted in', 'ipress' ) ) );
-			echo wp_kses_post( $categories_list );
-		?>
-		</div>
-		<?php endif; // End if categories. ?>
-
-		<?php
-		/* translators: used between list items, there is a space after the comma */
-		$tags_list = get_the_tag_list( '', __( ', ', 'ipress' ) );
-
-		if ( $tags_list ) : ?>
-		<div class="tags-links">
-		<?php
-			echo sprintf( '<div class="label">%s</div>', esc_attr( __( 'Tagged', 'ipress' ) ) );
-			echo wp_kses_post( $tags_list );
-		?>
-		</div>
-		<?php endif; // End if $tags_list. ?>
-
-	<?php endif; // 'post' ?>
-
-	<?php if ( ! post_password_required() && ( comments_open() || '0' != get_comments_number() ) ) : ?>
-		<div class="comments-link">
-			<?php echo sprintf( '<div class="label">%s</div>', esc_attr( __( 'Comments', 'ipress' ) ) ); ?>
-			<span class="comments-link"><?php comments_popup_link( __( 'Leave a comment', 'ipress' ), __( '1 Comment', 'ipress' ), __( '% Comments', 'ipress' ) ); ?></span>
-		</div>
-	<?php endif; ?>
-	</section>
-
 	<section class="entry-content">
 
     <?php if ( has_post_thumbnail() ) :
@@ -103,18 +58,23 @@ if ( ! defined( 'ABSPATH' ) ) {
     ?>
 
 	<?php
-   		the_content( sprintf(
-    		__( 'Continue reading <span class="screen-reader-text">%s</span><span class="meta-nav">&rarr;</span>', 'ipress' ),
-	    	get_the_title()
-	    ) );
-
-		wp_link_pages( [
-			'before'        => '<div class="page-links">' . esc_html__( 'Pages:', 'ipress' ),
-			'after'         => '</div>',
-   			'link_before'   => '<span class="page-number">',
-    		'link_after'    => '</span>',
-		] );
-	?>
+    // If not a single post, highlight the gallery
+	if ( ! is_single() ) { 
+        if ( get_post_gallery() ) { ?>
+        <div class="entry-gallery"><?= get_post_gallery(); ?></div>
+        <?php
+        }; 
+    }; 
+ 
+    if ( is_single() || ! get_post_gallery() ) { 
+        the_content( sprintf( __( 'Continue reading<span class="screen-reader-text"> "%s"</span>', 'twentyseventeen' ), get_the_title() ) ); 
+        wp_link_pages( [ 
+        	'before'      => '<div class="page-links">' . __( 'Pages:', 'twentyseventeen' ), 
+  	        'after'       => '</div>', 
+	        'link_before' => '<span class="page-number">', 
+	        'link_after'  => '</span>', 
+        ] ); 
+		?>
 	</section><!-- .entry-content -->
 
 	<footer class="entry-footer">

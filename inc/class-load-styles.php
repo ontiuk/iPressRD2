@@ -11,6 +11,13 @@
  * @license     GPL-2.0+
  */
 
+// Access restriction
+if ( ! defined( 'ABSPATH' ) ) {
+    header( 'Status: 403 Forbidden' );
+    header( 'HTTP/1.1 403 Forbidden' );
+    exit;
+}
+
 /**
  * Set up theme styles
  */ 
@@ -152,6 +159,7 @@ final class IPR_Load_Styles {
         foreach ( $this->theme as $k=>$v ) { 
             wp_register_style( $k, $v[0], $v[1], $v[2] ); 
             wp_enqueue_style( $k ); 
+			wp_style_add_data( $k, 'rtl', 'replace' );
         }
     }
 
@@ -217,15 +225,12 @@ final class IPR_Load_Styles {
      */
     public function header_styles() {
 
-        // Capture output   
-        ob_start();
-
         // Use filter to add styles
-        echo apply_filters( 'ipress_header_styles', '' );
-    
-        // Get & display header styles
-        $output = ob_get_clean();
-        echo $output;
+        $styles = apply_filters( 'ipress_header_styles', '' );
+        if ( empty( $styles ) ) { return; }
+        
+        // Capture output   
+        echo $styles;
     }
 
     //----------------------------------------------

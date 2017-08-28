@@ -11,6 +11,13 @@
  * @license     GPL-2.0+
  */
 
+// Access restriction
+if ( ! defined( 'ABSPATH' ) ) {
+    header( 'Status: 403 Forbidden' );
+    header( 'HTTP/1.1 403 Forbidden' );
+    exit;
+}
+
 global $wp_query;
 
 if ( $wp_query->max_num_pages > 1 ) : ?>

@@ -25,9 +25,35 @@ if ( ! defined( 'ABSPATH' ) ) {
     	<header class="page-header">
 	    	<h1 class="page-title"><?= esc_html__( 'Oops! That page can&rsquo;t be found.', 'ipress' ); ?></h1>
             <p><a href="<?= home_url(); ?>"><?= __( 'Return home?', 'ipress' ); ?></a></p>
-	    </header><!-- .page-header -->
+    	</header><!-- .page-header -->
 
 		<p><?= esc_html__( 'Nothing found at this location.', 'ipress' ); ?></p>
 
-    </div><!-- .page-content -->
+        <?php the_widget( 'WP_Widget_Recent_Posts' ); ?>
+
+        <div class="error-search">
+            <?php 
+                get_search_form(); 
+                the_widget( 'WP_Widget_Recent_Posts' );
+            ?>
+        </div>
+
+        <?php if ( ipress_has_categories() ) : ?>
+		<div class="widget widget_categories">
+			<h2 class="widget-title"><?= esc_html__( 'Popular Categories', 'ipress' ); ?></h2>
+			<ul>
+			<?php
+				wp_list_categories( [
+					'orderby'    => 'count',
+					'order'      => 'DESC',
+					'show_count' => 1,
+					'title_li'   => '',
+					'number'     => 10,
+				] );
+			?>
+			</ul>
+		</div><!-- .widget -->
+        <?php endif; ?>
+
+	</div><!-- .page-content -->
 </section><!-- .error-404 -->

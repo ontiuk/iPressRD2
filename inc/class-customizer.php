@@ -11,6 +11,13 @@
  * @license     GPL-2.0+
  */
 
+// Access restriction
+if ( ! defined( 'ABSPATH' ) ) {
+    header( 'Status: 403 Forbidden' );
+    header( 'HTTP/1.1 403 Forbidden' );
+    exit;
+}
+
 /**
  * Initialise and set up Customizer features
  */ 
@@ -22,6 +29,12 @@ final class IPR_Customizer {
      */
     public function __construct() {
 
+        // Core WordPress functionality
+        add_action( 'after_setup_theme', [ $this, 'setup_theme' ] );
+
+        // Theme settings
+        add_action( 'after_setup_theme', [ $this, 'theme_settings' ], 12 );
+
         // Register customizer function
         add_action( 'customize_register', [ $this, 'customize_register' ] );
 
@@ -30,6 +43,119 @@ final class IPR_Customizer {
 
         // Customizer controls
         add_action( 'customize_controls_enqueue_scripts', [ $this, 'customize_controls_js' ] );
+    }
+
+    //----------------------------------------------
+    //  Customizer Support
+    //----------------------------------------------
+
+    /**
+     * Set up core customizer driven theme support & functionality
+     * - add_theme_support( 'custom-logo' )
+     * - add_theme_support( 'site-logo' ) (Jetpack)
+     * - add_theme_support( 'custom-header' )
+     * - register_default_headers()
+     * - add_theme_support( 'custom-background' )
+     * - add_theme_support( 'customize-selective-refresh-widgets' )
+     */
+    public function setup_theme() {
+
+        // Enable support for custom logo
+        // @see https://developer.wordpress.org/themes/functionality/custom-logo/
+        // logo_args = [
+        //   'width'       => 250,
+        //   'height'      => 80,
+        //   'flex-width'  => true,
+        //   'flex-height' => true,
+        //   'header-text' => [ get_bloginfo( 'name' ), get_bloginfo( 'description' ) ]
+        // ];
+        // - add_theme_support( 'custom-logo', apply_filters( 'ipress_custom_logo_args', $logo_args ) );
+        $logo_args = [
+		    'width'       => 200,
+		    'height'      => 133,
+		    'flex-width'  => true
+		];
+        add_theme_support( 'custom-logo', apply_filters( 'ipress_custom_logo_args', $logo_args ) );
+
+        // Add support for the Jetpack Site Logo plugin and the site logo functionality
+        // https://github.com/automattic/site-logo
+		// http://jetpack.me/
+		//
+		// - add_theme_support( 'site-logo', apply_filters( 'ipress_jetpack_logo_args', [ 'size' => 'full' ] ) );
+
+        // Enable support for custom headers
+        // @see https://developer.wordpress.org/themes/functionality/custom-headers/    
+        // $header_args = [
+        //    'default-image'          => '',
+        //    'random-default'         => false,
+        //    'width'                  => 0,
+        //    'height'                 => 0,
+        //    'flex-height'            => false,
+        //    'flex-width'             => false,  
+        //    'default-text-color'     => '', 
+        //    'header-text'            => true,
+        //    'uploads'                => true,
+        //    'wp-head-callback'       => '',
+        //    'admin-head-callback'    => '',
+        //    'admin-preview-callback' => ''
+        // ];
+        // - add_theme_support( 'custom-header', apply_filters( 'ipress_custom_header_args', $header_args ) ); 
+        $header_args = [
+			'default-image' => '',
+			'header-text'   => false,
+			'width'         => 1600,
+			'height'        => 200,
+			'flex-width'    => true,
+			'flex-height'   => true
+        ];        
+        add_theme_support( 'custom-header', apply_filters( 'ipress_custom_header_args', $header_args ) ); 
+
+        // Register default header images
+        // @see	https://codex.wordpress.org/Function_Reference/register_default_headers
+        //	register_default_headers( apply_filters( 'ipress_register_default_headers', [
+		//      'default-image' => [
+		//	        'url'           => '%s/images/header.jpg',
+		//	        'thumbnail_url' => '%s/images/header.jpg',
+		//	        'description'   => __( 'Default Header Image', 'ipress' ),
+		//      ],
+	    //  ] ) );
+
+        // Enable support for custom backgrounds - default false
+        // @see https://codex.wordpress.org/Custom_Backgrounds
+        // $background_args = [ 
+        //     'default-color'         => '', 
+        //     'default-image'         => '', 
+        //     'wp-head-callback'      => '_custom_background_cb',
+        //     'admin-head-callback'   => '',
+        //     'admin-preview-callback' => ''
+        // ];
+        // - add_theme_support( 'custom-background', apply_filters( 'ipress_custom_background_args', $background_args ) ); 
+    
+    	// Add theme support for selective refresh for widgets
+	    // - add_theme_support( 'customize-selective-refresh-widgets' );
+    }
+
+    //----------------------------------------------
+    //  Theme Mods - Customizer driven
+    //----------------------------------------------
+
+    /**
+     * Check and setup default theme settings - mods & options
+     * - Check if setting is set, if not set default
+     */
+    public function theme_settings() {
+
+        // Latest blog posts style
+    	$post_format = get_theme_mod( 'ipress_posts_format' );
+	    if ( empty( $post_format ) ) {
+		    set_theme_mod( 'ipress_post_format', 'default' );
+	    }
+
+    	// Content position
+	    $ipress_content = get_theme_mod( 'ipress_content' );
+    	if ( empty( $ipress_content ) ) {
+    		set_theme_mod( 'ipress_content', 'left' );
+    	}
     }
 
     //----------------------------------------------

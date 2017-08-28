@@ -11,6 +11,13 @@
  * @license     GPL-2.0+
  */
 
+// Access restriction
+if ( ! defined( 'ABSPATH' ) ) {
+    header( 'Status: 403 Forbidden' );
+    header( 'HTTP/1.1 403 Forbidden' );
+    exit;
+}
+
 /**
  * Set up theme scripts
  */ 
@@ -155,7 +162,7 @@ final class IPR_Load_Scripts {
         foreach ( $this->header as $k=>$v ) { 
             wp_register_script( $k, $v[0], $v[1], $v[2], false ); 
             if ( array_key_exists( $k, $this->local ) ) {
-                $h = $this->local[$k]; wp_localize_script( $k, $h['name'], $h['trans'] ); 
+                $this->localize( $k );
             }
             wp_enqueue_script( $k );
         }
@@ -164,7 +171,7 @@ final class IPR_Load_Scripts {
         foreach ( $this->footer as $k=>$v ) { 
             wp_register_script( $k, $v[0], $v[1], $v[2], true ); 
             if ( array_key_exists( $k, $this->local ) ) {
-                $h = $this->local[$k]; wp_localize_script( $k, $h['name'], $h['trans'] ); 
+                $this->localize( $k );
             }
             wp_enqueue_script( $k );
         }
@@ -173,7 +180,7 @@ final class IPR_Load_Scripts {
         foreach ( $this->plugins as $k=>$v ) { 
             wp_register_script( $k, $v[0], $v[1], $v[2], true ); 
             if ( array_key_exists( $k, $this->local ) ) {
-                $h = $this->local[$k]; wp_localize_script( $k, $h['name'], $h['trans'] ); 
+                $this->localize( $k );
             }
             wp_enqueue_script( $k );
         }
@@ -183,13 +190,13 @@ final class IPR_Load_Scripts {
             if ( is_page_template( $v[0] ) ) {
                 wp_register_script( $k, $v[1], $v[2], $v[3], true ); 
                 if ( array_key_exists( $k, $this->local ) ) {   
-                    $h = $this->local[$k]; wp_localize_script( $k, $h['name'], $h['trans'] );    
+                    $this->localize( $k );
                 } 
                 wp_enqueue_script( $k );
             }
         }
 
-        // Conditional templating in footer head
+        // Conditional templating in footer
         foreach ( $this->conditional as $k=>$v ) {
             $callback = $v[0];
             if ( is_array( $callback ) ) {
@@ -210,7 +217,7 @@ final class IPR_Load_Scripts {
                     if ( is_front_page() ) { 
                         wp_register_script( $k, $v[1], $v[2], $v[3], true ); 
                         if ( array_key_exists( $k, $this->local ) ) {
-                            $h = $this->local[$k]; wp_localize_script( $k, $h['name'], $h['trans'] ); 
+                            $this->localize( $k );
                         }
                         wp_enqueue_script( $k );
                     }
@@ -219,7 +226,7 @@ final class IPR_Load_Scripts {
                     if ( is_home() ) { 
                         wp_register_script( $k, $v[1], $v[2], $v[3], true ); 
                         if ( array_key_exists( $k, $this->local ) ) {
-                            $h = $this->local[$k]; wp_localize_script( $k, $h['name'], $h['trans'] ); 
+                            $this->localize( $k );
                         }
                         wp_enqueue_script( $k );
                     }
@@ -229,7 +236,7 @@ final class IPR_Load_Scripts {
                     if ( is_home() && is_front_page() ) { 
                         wp_register_script( $k, $v[1], $v[2], $v[3], true ); 
                         if ( array_key_exists( $k, $this->local ) ) {
-                            $h = $this->local[$k]; wp_localize_script( $k, $h['name'], $h['trans'] ); 
+                            $this->localize( $k );
                         }
                         wp_enqueue_script( $k );
                     }
@@ -242,7 +249,7 @@ final class IPR_Load_Scripts {
         foreach ( $this->custom as $k=>$v ) { 
             wp_register_script( $k, $v[0], $v[1], $v[2], true ); 
             if ( array_key_exists( $k, $this->local ) ) {
-                $h = $this->local[$k]; wp_localize_script( $k, $h['name'], $h['trans'] ); 
+                $this->localize( $k );
             }
             wp_enqueue_script( $k );
         }
@@ -251,6 +258,24 @@ final class IPR_Load_Scripts {
         if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		    wp_enqueue_script( 'comment-reply' );
 	    }
+    }
+
+    /**
+     * Localize script
+     *
+     * @param string $key
+     * @return void
+     */
+    private function localize( $key ) {
+
+        // Get local key
+        $h = $this->local[$key]; 
+
+        // Validate
+        if ( !isset( $h['name'] ) || !isset( $h['trans'] ) ) { return; } 
+
+        // Localize
+        wp_localize_script( $key, $h['name'], $h['trans'] ); 
     }
 
     //----------------------------------------------
@@ -286,15 +311,12 @@ final class IPR_Load_Scripts {
      */
     public function header_scripts() {
 
+        // Set?
+        $scripts = apply_filters( 'ipress_header_scripts', '' );
+        if ( empty( $scripts ) ) { return; }
+        
         // Capture output
-        ob_start();
-
-        // Use filter to add scripts
-        echo apply_filters( 'ipress_header_scripts', '' );
-    
-        // Get & display header scripts
-        $output = ob_get_clean();
-        echo $output;
+        echo $scripts;
     }
 
     /**
@@ -303,15 +325,12 @@ final class IPR_Load_Scripts {
      */
     public function footer_scripts() {
 
-        // Capture output
-        ob_start();
+        // Set?
+        $scripts = apply_filters( 'ipress_footer_scripts', '' );
+        if ( empty( $scripts ) ) { return; }
 
-        // Use filter to add scripts
-        echo apply_filters( 'ipress_footer_scripts', '' );
-   
-        // Get & display header scripts
-        $output = ob_get_clean();        
-        echo $output;
+        // Capture output
+        echo $scripts;
     }
 
     //----------------------------------------------
@@ -320,20 +339,22 @@ final class IPR_Load_Scripts {
 
     /**
      * Load analytics scripts
-     * - Must be full analytics text inside <script></script> wrapper
+     * - Must be valid analytics identifier: UA-XXXX
      * - See https://google.com/analytics
      */
     public function analytics_script() {
     
-        // Capture output
-        ob_start();
+        // Default Analytics code block
+        $ga = get_template_part( 'templates/analytics' );
 
-        // Use filter to add scripts
-        echo apply_filters( 'ipress_analytics_scripts', '' );
+        // Theme mod set? Filterable identifier
+        $analytics = apply_filters( 'ipress_analytics', get_theme_mod( 'ipress_analytics', $ga ) );
 
-        // Get & display analytics scripts
-        $output = ob_get_clean();        
-        echo $output;
+        // Test valid identifier
+        if ( empty( $analytics ) || !preg_match( '/^UA-/', $analytics ) ) { return; }
+
+        // OK, output analytics code
+        echo sprintf( $ga, $analytics );
     }
 }
 

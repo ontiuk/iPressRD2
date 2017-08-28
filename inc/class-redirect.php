@@ -11,6 +11,13 @@
  * @license     GPL-2.0+
  */
 
+// Access restriction
+if ( ! defined( 'ABSPATH' ) ) {
+    header( 'Status: 403 Forbidden' );
+    header( 'HTTP/1.1 403 Forbidden' );
+    exit;
+}
+
 /**
  * Set up redirect features
  */ 
@@ -29,6 +36,6 @@ final class IPR_Redirect {
 }
 
 // Instantiate Redirect Class
-//return new IPR_Redirect;
+return new IPR_Redirect;
 
 //end

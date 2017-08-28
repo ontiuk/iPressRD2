@@ -24,8 +24,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // Theme Name & Versioning
 define( 'IPRESS_THEME_NAME', 'iPress' );
-define( 'IPRESS_THEME_VERSION', '1.0.3' );
-define( 'IPRESS_THEME_RELEASE_DATE', date_i18n( 'F j, Y', '1483574400' ) );
 define( 'IPRESS_THEME_WP', 4.7 );
 define( 'IPRESS_THEME_PHP', 5.4 );
 
@@ -70,104 +68,127 @@ define( 'IPRESS_SHORTCODES_URL',    IPRESS_INCLUDES_URL . '/shortcodes' );
 define( 'IPRESS_WIDGETS_URL',       IPRESS_INCLUDES_URL . '/widgets' );
 
 //----------------------------------------------
+//  Theme Compatibility & Versioning
+//----------------------------------------------
+
+// Load compatability check
+$ipress_version_error = require_once IPRESS_INCLUDES_DIR . '/class-compat.php';
+if ( $ipress_version_error->get_error() === true ) { return; }
+
+//----------------------------------------------
 //  Includes - Functions
 //----------------------------------------------
 
 // Functions
-require_once( IPRESS_INCLUDES_DIR . '/functions.php' );
-require_once( IPRESS_INCLUDES_DIR . '/helper.php' );
+require_once IPRESS_INCLUDES_DIR . '/functions.php';
+require_once IPRESS_INCLUDES_DIR . '/helper.php';
 
 // Images & Media template functions
-require_once( IPRESS_INCLUDES_DIR . '/images.php' );
+require_once IPRESS_INCLUDES_DIR . '/images.php';
 
 // Navigation template functions
-require_once( IPRESS_INCLUDES_DIR . '/navigation.php' );
+require_once IPRESS_INCLUDES_DIR . '/navigation.php';
 
 // Shortcodes functionality
-require_once( IPRESS_INCLUDES_DIR . '/shortcodes.php' );
+require_once IPRESS_INCLUDES_DIR . '/shortcodes.php';
 
 // Functions: theme functions, actions & filters
-require_once( IPRESS_INCLUDES_DIR . '/template-functions.php' );
+require_once IPRESS_INCLUDES_DIR . '/template-functions.php';
 
 //----------------------------------------------
 //  Includes - Classes
 //----------------------------------------------
 
+// Set Up theme
+$theme          = wp_get_theme( IPRESS_THEME_NAME );
+$ipress_version = $theme['Version'];
+
 // Initiate Main Registry, Scripts & Styles
 $ipress = (object)[
 
     // Set theme
-    'theme'     => wp_get_theme( 'IPRESS_THEME_NAME' ),
+    'theme'     => $theme,
+    'version'   => $ipress_version,
 
     // Load scripts & styles
-    'scripts'   => require_once( IPRESS_INCLUDES_DIR . '/class-load-scripts.php' ),
-    'styles'    => require_once( IPRESS_INCLUDES_DIR . '/class-load-styles.php' ),
+    'scripts'   => require_once IPRESS_INCLUDES_DIR . '/class-load-scripts.php',
+    'styles'    => require_once IPRESS_INCLUDES_DIR . '/class-load-styles.php',
     
     // Custom Post-Types & Taxonomies 
-    'custom'    => require_once( IPRESS_INCLUDES_DIR . '/class-custom.php' )
+    'custom'    => require_once IPRESS_INCLUDES_DIR . '/class-custom.php',
+
+    // Theme setup
+    'main'          => require_once IPRESS_INCLUDES_DIR . '/class-theme.php',
+    'customizer'    => require_once IPRESS_INCLUDES_DIR . '/class-customizer.php'
 ];
 
-// Theme compatibility
-require_once( IPRESS_INCLUDES_DIR . '/class-compat.php' );
+// Theme header setup
+require_once IPRESS_INCLUDES_DIR . '/class-init.php';
 
-// Theme setup
-require_once( IPRESS_INCLUDES_DIR . '/class-theme.php' );
-
-// Theme setup
-require_once( IPRESS_INCLUDES_DIR . '/class-init.php' );
-
-// Cron Support: actions & filters
-require_once( IPRESS_INCLUDES_DIR . '/class-cron.php' );
+// Cron support: actions & filters
+require_once IPRESS_INCLUDES_DIR . '/class-cron.php';
 
 // Core hooks repository
-require_once( IPRESS_INCLUDES_DIR . '/class-hooks.php' );
+require_once IPRESS_INCLUDES_DIR . '/class-hooks.php';
 
 // Main query manipulation
-require_once( IPRESS_INCLUDES_DIR . '/class-query.php' );
-
-// WordPress Customizer support
-require_once( IPRESS_INCLUDES_DIR . '/class-customizer.php' );
+require_once IPRESS_INCLUDES_DIR . '/class-query.php';
 
 // Admin functionlity
 if ( is_admin() ) {
-    require_once( IPRESS_INCLUDES_DIR . '/class-admin.php' );
+    $ipress->admin = require_once IPRESS_INCLUDES_DIR . '/class-admin.php';
 }
 
 // Layout template functions
-require_once( IPRESS_INCLUDES_DIR . '/class-layout.php' );
+require_once IPRESS_INCLUDES_DIR . '/class-layout.php';
 
 // Images & Media template functions
-require_once( IPRESS_INCLUDES_DIR . '/class-images.php' );
+require_once IPRESS_INCLUDES_DIR . '/class-images.php';
 
 // Navigation template functions
-require_once( IPRESS_INCLUDES_DIR . '/class-navigation.php' );
+require_once IPRESS_INCLUDES_DIR . '/class-navigation.php';
 
 // Redirect template functions
-require_once( IPRESS_INCLUDES_DIR . '/class-redirect.php' );
+require_once IPRESS_INCLUDES_DIR . '/class-redirect.php';
 
 // Rewrites template functions
-require_once( IPRESS_INCLUDES_DIR . '/class-rewrites.php' );
+require_once IPRESS_INCLUDES_DIR . '/class-rewrites.php';
 
 // Sidebars functionality
-require_once( IPRESS_INCLUDES_DIR . '/class-sidebars.php' );
+require_once IPRESS_INCLUDES_DIR . '/class-sidebars.php';
 
 // Template functionality
-require_once( IPRESS_INCLUDES_DIR . '/class-template.php' );
+require_once IPRESS_INCLUDES_DIR . '/class-template.php';
 
 // Widgets functionality
-require_once( IPRESS_INCLUDES_DIR . '/class-widgets.php' );
+require_once IPRESS_INCLUDES_DIR . '/class-widgets.php';
 
 // Page Support: actions & filters
-require_once( IPRESS_INCLUDES_DIR . '/class-page.php' );
+require_once IPRESS_INCLUDES_DIR . '/class-page.php';
 
 // User Support: actions & filters
-require_once( IPRESS_INCLUDES_DIR . '/class-user.php' );
+require_once IPRESS_INCLUDES_DIR . '/class-user.php';
 
-// Ajax Functions: actions & filters
-require_once( IPRESS_INCLUDES_DIR . '/class-ajax.php' );
+// Ajax Functionality: actions & filters
+require_once IPRESS_INCLUDES_DIR . '/class-ajax.php';
+
+// Content Functionality: actions & filters
+require_once IPRESS_INCLUDES_DIR . '/class-content.php';
 
 //----------------------------------------------
-//  Libraries
+//  Libraries & Plugins
 //----------------------------------------------
+
+// Jetpack functionality
+if ( defined( 'JETPACK__VERSION' ) ) {
+	$ipress->jetpack = require_once IPRESS_INCLUDES_DIR . '/class-jetpack.php';
+}
+
+//----------------------------------------------
+//  Theme Settings
+//----------------------------------------------
+
+// Register theme object
+$GLOBALS['ipress'] = $ipress;
 
 //end

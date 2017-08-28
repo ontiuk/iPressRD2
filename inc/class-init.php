@@ -11,6 +11,13 @@
  * @license     GPL-2.0+
  */
 
+// Access restriction
+if ( ! defined( 'ABSPATH' ) ) {
+    header( 'Status: 403 Forbidden' );
+    header( 'HTTP/1.1 403 Forbidden' );
+    exit;
+}
+
 /**
  * Set up core WordPress theme features
  */ 
@@ -27,9 +34,6 @@ final class IPR_Init {
         // Remove the bloody awful emojicons! Worse than Pokemon!
         add_action( 'init', [ $this, 'disable_emojicons' ] );
 
-        // Enable Threaded Comments
-        // add_action( 'get_header', [ $this, 'enable_threaded_comments' ] ); 
-
         // Remove the admin bars
         // add_action( 'init', [ $this, 'admin_bar' ] );
 
@@ -44,11 +48,15 @@ final class IPR_Init {
     /**
      * Clean the WordPress Header
      * - The WordPress head contains multiple meta & link records,
-     * - many of which are not required, are detrimental, and slow loading.
+     * - many of which are not required, are detrimental, and slow loading
      * - All are removed here by default. Comment out/remove entries to reactivate
      */
     public function header_clean() {
     
+        // Due process
+        $do_clean = apply_filters( 'ipress_header_clean', true );
+        if ( ! $do_clean ) { return; }
+
         // Post & comment feeds    
         remove_action( 'wp_head', 'feed_links', 2 );
 
@@ -191,17 +199,6 @@ final class IPR_Init {
     public function disable_emojis_tinymce( $plugins ) { 
         return ( is_array( $plugins ) ) ? array_diff( $plugins, [ 'wpemoji' ] ) : []; 
     } 
-
-    /**
-     * Threaded Comments for single posts
-     */
-    public function enable_threaded_comments() {
-    
-        // Restrictions: front-end single post page
-        if ( !is_admin() && ( is_singular() AND comments_open() AND ( get_option( 'thread_comments' ) == 1) ) ) {
-            wp_enqueue_script( 'comment-reply' );
-        }
-    }
 
     /**
      * Hide the Admin Bar

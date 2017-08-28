@@ -11,6 +11,13 @@
  * @license     GPL-2.0+
  */
 
+// Access restriction
+if ( ! defined( 'ABSPATH' ) ) {
+    header( 'Status: 403 Forbidden' );
+    header( 'HTTP/1.1 403 Forbidden' );
+    exit;
+}
+
 /**
  * Set up cron functionality 
  */ 
@@ -28,6 +35,6 @@ final class IPR_Cron {
 }
 
 // Instantiate Cron Class
-//return new IPR_Cron;
+return new IPR_Cron;
 
 //end

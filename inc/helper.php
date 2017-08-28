@@ -20,6 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 //----------------------------------------------
 //  WordPress Helper Functions
 //
+//  - ipress_get_category
 //  - ipress_the_category_id
 //  - ipress_get_category_id
 //  - ipress_the_category_parent_id
@@ -52,6 +53,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 //----------------------------------------------
 //  Category Functions
 //----------------------------------------------
+
+/**
+ * Return the current object
+ * 
+ * @return object stdClass
+ */
+function ipress_get_category() {
+    return get_the_category()[0];
+}
 
 /**
  * Output the current category ID
@@ -89,7 +99,7 @@ function ipress_get_category_parent_id() {
  * Output the current category slug
  */
 function ipress_the_category_slug() {
-    echo get_the_category()[0]->category_nicename;
+    echo get_the_category()[0]->slug;
 }
 
 /**
@@ -98,14 +108,14 @@ function ipress_the_category_slug() {
  * @return string
  */
 function ipress_get_category_slug() {
-    return get_the_category()[0]->category_nicename;
+    return get_the_category()[0]->slug;
 }
 
 /**
  * Output the current category name
  */
 function ipress_the_category_name() {
-    echo get_the_category()[0]->cat_name;
+    echo get_the_category()[0]->cat_nicename;
 }
 
 /**
@@ -114,7 +124,7 @@ function ipress_the_category_name() {
  * @return string
  */
 function ipress_get_category_name() {
-    return get_the_category()[0]->cat_name;
+    return get_the_category()[0]->cat_nicename;
 }
 
 /**

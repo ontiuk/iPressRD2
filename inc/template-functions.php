@@ -86,6 +86,99 @@ function ipress_entry_footer() {
 	);
 }
 
+/**
+ * Post structured data
+ */
+function ipress_init_structured_data() {
+
+    global $ipress;
+
+    // Init data
+    $json = [];
+
+	// Post & page structured data
+	if ( is_home() || is_category() || is_date() || is_search() || is_single() ) {
+
+        $image = wp_get_attachment_image_src( get_post_thumbnail_id( get_the_ID() ), 'normal' );
+		$logo  = wp_get_attachment_image_src( get_theme_mod( 'custom_logo' ), 'full' );
+
+		$json['@type']            = 'BlogPosting';
+
+		$json['mainEntityOfPage'] = array(
+			'@type'                 => 'webpage',
+			'@id'                   => get_the_permalink(),
+		);
+
+		$json['publisher']        = array(
+			'@type'                 => 'organization',
+			'name'                  => get_bloginfo( 'name' ),
+			'logo'                  => array(
+				'@type'               => 'ImageObject',
+				'url'                 => $logo[0],
+				'width'               => $logo[1],
+				'height'              => $logo[2],
+			),
+		);
+
+		$json['author']           = array(
+			'@type'                 => 'person',
+			'name'                  => get_the_author(),
+		);
+
+		if ( $image ) {
+			$json['image']            = array(
+				'@type'                 => 'ImageObject',
+				'url'                   => $image[0],
+				'width'                 => $image[1],
+				'height'                => $image[2],
+			);
+		}
+
+		$json['datePublished']    = get_post_time( 'c' );
+		$json['dateModified']     = get_the_modified_date( 'c' );
+		$json['name']             = get_the_title();
+		$json['headline']         = $json['name'];
+		$json['description']      = get_the_excerpt();
+
+	} elseif ( is_page() ) {
+		$json['@type']            = 'WebPage';
+		$json['url']              = get_the_permalink();
+		$json['name']             = get_the_title();
+		$json['description']      = get_the_excerpt();
+	}
+
+    // Set if ok
+	if ( !empty( $json ) ) {
+		$ipress->main->set_structured_data( apply_filters( 'ipress_structured_data', $json ) );
+	}
+}
+
+/**
+ * Apply background image to header
+ *
+ * @uses  get_header_image()
+ */
+function ipress_header_style() {
+
+    // Header image?
+    $is_header_image = get_header_image();
+    if ( ! $is_header_image ) { return; }
+
+    // Filterable output
+	$styles = apply_filters( 'ipress_header_style', [
+		'background-image' => 'url(' . esc_url( $is_header_image ) . ')'
+    ] );
+    if ( !is_array( $styles ) || empty( $styles ) ) { return; }
+
+    // Set header style
+    ob_start();
+    foreach ( $styles as $style => $value ) {
+  		echo esc_attr( $style . ': ' . $value . '; ' );
+    }
+    $attr = ob_get_clean();
+    echo 'style="' . $attr . '"';
+}
+
 //----------------------------------------------  
 // Custom Template Funcions
 //----------------------------------------------  

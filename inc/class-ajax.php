@@ -11,6 +11,13 @@
  * @license     GPL-2.0+
  */
 
+// Access restriction
+if ( ! defined( 'ABSPATH' ) ) {
+    header( 'Status: 403 Forbidden' );
+    header( 'HTTP/1.1 403 Forbidden' );
+    exit;
+}
+
 /**
  * Set up ajax features
  */ 
@@ -32,6 +39,6 @@ final class IPR_Ajax {
 }
 
 // Instantiate Ajax Class
-//return new IPR_Ajax;
+return new IPR_Ajax;
 
 //end

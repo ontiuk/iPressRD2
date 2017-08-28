@@ -11,10 +11,22 @@
  * @license     GPL-2.0+
  */
 
+// Access restriction
+if ( ! defined( 'ABSPATH' ) ) {
+    header( 'Status: 403 Forbidden' );
+    header( 'HTTP/1.1 403 Forbidden' );
+    exit;
+}
+
 /**
  * Set up core theme features
  */ 
 final class IPR_Theme {
+
+    /**
+     * Post structured data
+     */
+    private static $structured_data;
 
     /**
      * Class constructor. Set up hooks
@@ -27,8 +39,8 @@ final class IPR_Theme {
         // Core WordPress functionality
         add_action( 'after_setup_theme', [ $this, 'setup_theme' ] );
 
-        // Theme settings
-        add_action( 'after_setup_theme', [ $this, 'theme_settings' ] );
+        // Single post data
+        add_action( 'wp_footer', [ $this, 'get_structured_data' ] );
     }
 
     //----------------------------------------------
@@ -50,16 +62,25 @@ final class IPR_Theme {
      */
     public function setup_theme() {
 
-        // Localisation Support 
+        // Load Localisation files - Uses first available option
+
+		// Localisation Support - Loads from WP location: wp-content/languages/themes/ipress-en_GB.mo
+		load_theme_textdomain( 'ipress', trailingslashit( WP_LANG_DIR ) . 'themes/' );
+
+		// Localisation Support - Loads child theme file: wp-content/themes/ipress-child/languages/en_GB.mo
+		load_theme_textdomain( 'ipress', get_stylesheet_directory() . '/languages' );
+
+        // Localisation Support - Loads parent theme file: wp-content/themes/ipress/languages/en_GB.mo
         load_theme_textdomain( 'ipress', IPRESS_LANG_DIR );
 
         // Enables post and comment RSS feed links to head 
         add_theme_support( 'automatic-feed-links' ); 
 
-        // Make WordPress manage the document title.
+        // Make WordPress manage the document title & <title> tag
         add_theme_support( 'title-tag' );
 
         // Add thumbnail theme support & post type support
+        // @see https://developer.wordpress.org/themes/functionality/featured-images-post-thumbnails/
         // - add_theme_support( 'post-thumbnails' ); 
         // - add_theme_support( 'post-thumbnails', $post_types ); 
         add_theme_support( 'post-thumbnails' ); 
@@ -96,58 +117,19 @@ final class IPR_Theme {
         //   'header'    => __( 'Header Menu', 'ipress' ) 
         // ] );
 
-        // Enable support for HTML5 markup: 'search-form', 'comment-form', 'comment-list', 'gallery', 'caption'
+        // Enable support for HTML5 markup: 'search-form', 'comment-form', 'comment-list', 'gallery', 'caption', 'widgets'
         add_theme_support( 'html5', [
-            'comment-list',
             'search-form',
             'comment-form',
+            'comment-list',
             'gallery',
-            'caption'
+            'caption',
+            'widgets'
         ] );
  
         // Add post-format support: 'aside', 'image', 'video', 'quote', 'link', 'gallery', 'status', 'audio', 'chat'
         // - add_theme_support( 'post-formats', [ 'image', 'link' ] ); 
 
-        // Enable support for custom logo - default off
-        // see: https://developer.wordpress.org/themes/functionality/custom-logo/
-        // logo_defaults = [
-        //   'height'      => 80,
-        //   'width'       => 250,
-        //   'flex-height' => true,
-        //   'flex-width'  => true,
-        //   'header-text' => [ get_bloginfo( 'name' ), get_bloginfo( 'description' ) ]
-        // ];
-        // - add_theme_support( 'custom-logo', $logo_defaults );
-
-        // Enable support for custom headers
-        // see: https://developer.wordpress.org/themes/functionality/custom-headers/    
-        // $header_defaults = [
-        //    'default-image'          => '',
-        //    'random-default'         => false,
-        //    'width'                  => 0,
-        //    'height'                 => 0,
-        //    'flex-height'            => false,
-        //    'flex-width'             => false,  
-        //    'default-text-color'     => '', 
-        //    'header-text'            => true,
-        //    'uploads'                => true,
-        //    'wp-head-callback'       => '',
-        //    'admin-head-callback'    => '',
-        //    'admin-preview-callback' => ''
-        // ];
-        // - add_theme_support( 'custom-header', $header_defaults ); 
-
-        // Enable support for custom backgrounds - default false
-        // see: https://codex.wordpress.org/Custom_Backgrounds
-        // $background_defaults = [ 
-        //     'default-color'         => '', 
-        //     'default-image'         => '', 
-        //     'wp-head-callback'      => '_custom_background_cb',
-        //     'admin-head-callback'   => '',
-        //     'admin-preview-callback' => ''
-        // ];
-        // - add_theme_support( 'custom-background', $background_defaults ); 
-    
         // Add Woocommerce support?
         // - add_theme_support( 'woocommerce' ); 
 
@@ -160,7 +142,7 @@ final class IPR_Theme {
     //----------------------------------------------
     //  Title Tag Support
     //  - Make WordPress manage the document title
-    //  - Required there is no hardcodeded title tag in header
+    //  - Requires there is no hardcoded title tag in header
     //----------------------------------------------
 
     /**
@@ -226,28 +208,74 @@ final class IPR_Theme {
         return $title; 
     }
 
-    //----------------------------------------------
-    //  Theme Mods
-    //----------------------------------------------
 
+    //----------------------------------------------
+    //  Post Structured Data
+    //----------------------------------------------
+    
     /**
-     * Check and setup default theme settings - mods & options
-     * - Check if setting is set, if not set default
-     */
-    public function theme_settings() {
+	 * Set post structured_data
+	 *
+     * @param array $json
+     * @param boolean $reset default true
+     * @return void
+	 */
+    public static function set_structured_data( $json, $reset=true ) {
 
-        // Latest blog posts style
-    	$post_format = get_theme_mod( 'ipress_posts_format' );
-	    if ( empty( $post_format ) ) {
-		    set_theme_mod( 'ipress_post_format', 'default' );
-	    }
+        // Final check
+		if ( ! is_array( $json ) || empty( $json ) ) { 
+            if ( $reset ) { self::$structured_data = []; }
+            return; 
+        }
 
-    	// Content position
-	    $ipress_content = get_theme_mod( 'ipress_content' );
-    	if ( empty( $ipress_content ) ) {
-    		set_theme_mod( 'ipress_content', 'left' );
-    	}
+        // Update current data
+        self::$structured_data[] = $json;
     }
+
+	/**
+	 * Outputs structured data
+	 *
+     * @return void
+     */
+    public function get_structured_data() {
+
+        // Only if set        
+        if ( ! self::$structured_data ) { return; }
+
+        // Schemify
+        $structured_data['@context'] = 'http://schema.org/';
+		if ( count( self::$structured_data ) > 1 ) {
+			$structured_data['@graph'] = self::$structured_data;
+		} else {
+			$structured_data = $structured_data + self::$structured_data[0];
+		}
+
+        // Output
+        echo sprintf( '<script type="application/ld+json">%s</script>', wp_json_encode( $this->sanitize_structured_data( $structured_data ) ) );
+	}
+
+	/**
+	 * Sanitizes structured data.
+	 *
+	 * @param  array $data
+	 * @return array
+	 */
+    public function sanitize_structured_data( $data ) {
+
+		$sanitized = [];
+
+		foreach ( $data as $key => $value ) {
+			if ( is_array( $value ) ) {
+				$sanitized_value = $this->sanitize_structured_data( $value );
+			} else {
+				$sanitized_value = sanitize_text_field( $value );
+			}
+
+			$sanitized[ sanitize_text_field( $key ) ] = $sanitized_value;
+		}
+
+		return $sanitized;
+	}
 }
 
 // Instantiate Theme Class

@@ -11,6 +11,13 @@
  * @license     GPL-2.0+
  */
 
+// Access restriction
+if ( ! defined( 'ABSPATH' ) ) {
+    header( 'Status: 403 Forbidden' );
+    header( 'HTTP/1.1 403 Forbidden' );
+    exit;
+}
+
 /**
  * Set up custom post-types & taxonomies
  */ 
@@ -184,7 +191,8 @@ class IPR_Custom {
             // Set up post type support
             $supports = ( isset( $v['supports'] ) && is_array( $v['supports'] ) && !empty( $v['supports'] ) ) ? $v['supports'] : [
                 'title',
-                'editor'
+                'editor',
+                'thumbnail'
             ];
     
             // Set up post type args - common options here, full list at: https://codex.wordpress.org/Function_Reference/register_post_type

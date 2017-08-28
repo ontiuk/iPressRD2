@@ -11,6 +11,13 @@
  * @license     GPL-2.0+
  */
 
+// Access restriction
+if ( ! defined( 'ABSPATH' ) ) {
+    header( 'Status: 403 Forbidden' );
+    header( 'HTTP/1.1 403 Forbidden' );
+    exit;
+}
+
 /**
  * Initialise and set up Layout features
  */ 
@@ -98,7 +105,7 @@ final class IPR_Layout {
         }
     
         // Return attributes
-        return $classes;
+        return apply_filters( 'ipress_body_class', $classes );
     }
 
     /**

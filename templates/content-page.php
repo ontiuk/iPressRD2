@@ -12,9 +12,24 @@
  * @license     GPL-2.0+
  */
 
-?>
+// Access restriction
+if ( ! defined( 'ABSPATH' ) ) {
+    header( 'Status: 403 Forbidden' );
+    header( 'HTTP/1.1 403 Forbidden' );
+    exit;
+}
 
+?>
 <article id="post-<?php the_ID(); ?>" <?php post_class( 'entry' ); ?>>
+
+	<header class="entry-header">
+		<?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
+        <div class="entry-meta">
+            <time datetime="<?php the_time('Y-m-d'); ?> <?php the_time('H:i'); ?>">
+                Posted On: <?php the_date(); ?> <?php the_time(); ?>
+            </time>
+        </div>
+    </header><!-- .entry-header -->
 
     <?php 
     if ( has_post_thumbnail() ) :
@@ -29,15 +44,6 @@
         endif; 
     endif;
     ?>
-
-	<header class="entry-header">
-		<?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
-        <div class="entry-meta">
-            <time datetime="<?php the_time('Y-m-d'); ?> <?php the_time('H:i'); ?>">
-                Posted On: <?php the_date(); ?> <?php the_time(); ?>
-            </time>
-        </div>
-    </header><!-- .entry-header -->
 
 	<section class="entry-content">
 		<?php
@@ -63,5 +69,7 @@
 			?>
 		</footer><!-- .entry-footer -->
 	<?php endif; ?>
+
+    <?php ipress_init_structured_data(); ?>
 
 </article><!-- #post-## -->

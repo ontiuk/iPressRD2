@@ -11,6 +11,13 @@
  * @license     GPL-2.0+
  */
 
+// Access restriction
+if ( ! defined( 'ABSPATH' ) ) {
+    header( 'Status: 403 Forbidden' );
+    header( 'HTTP/1.1 403 Forbidden' );
+    exit;
+}
+
 /**
  * Set up navigation features
  */ 
@@ -90,7 +97,7 @@ final class IPR_Images {
         // Add the file extension to the current mimes
         foreach ( $new_mimes as $k=>$v ) {
             if ( array_key_exists( $k, $existing_mimes ) ) { continue; }
-            $existing_mimes[$k] = $v;
+            $existing_mimes[$k] = sanitize_text_field( $v );
         }
 
         // Call the modified list of extensions
