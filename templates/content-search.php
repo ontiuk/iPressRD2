@@ -36,10 +36,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php the_excerpt(); ?>
 	</div><!-- .entry-summary -->
 
-	<footer class="entry-footer">
-		<?php ipress_entry_footer(); ?>
-	</footer><!-- .entry-footer -->
-
-    <?php ipress_init_structured_data(); ?>
+ <?php ipress_init_structured_data(); ?>
 
 </article><!-- #post-## -->

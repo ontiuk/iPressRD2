@@ -53,7 +53,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
     <?php if ( has_post_thumbnail() ) :
         $image_id = get_post_thumbnail_id( get_the_ID() );
-        $image = wp_get_attachment_image_src( $image_id, 'thumbnail' ); 
+        $image = wp_get_attachment_image_src( $image_id, 'full' ); 
         if ( $image ) : ?>
         <div class="entry-image">
             <a href="<?= esc_url( get_permalink() ); ?>" title="<?php the_title_attribute(); ?>"><img src="<?= $image[0]; ?>" /></a>
@@ -92,10 +92,6 @@ if ( ! defined( 'ABSPATH' ) ) {
         } 
     ?>
 	</section><!-- .entry-content -->
-
-	<footer class="entry-footer">
-		<?php ipress_entry_footer(); ?>
-	</footer><!-- .entry-footer -->
 
     <?php ipress_init_structured_data(); ?>
 

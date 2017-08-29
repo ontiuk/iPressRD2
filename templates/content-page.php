@@ -34,7 +34,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     <?php 
     if ( has_post_thumbnail() ) :
         $image_id = get_post_thumbnail_id( get_the_ID() );
-        $image = wp_get_attachment_image_src( $image_id, 'thumbnail' ); 
+        $image = wp_get_attachment_image_src( $image_id, 'full' ); 
         if ( $image ) :
     ?>
     <div class="entry-image">

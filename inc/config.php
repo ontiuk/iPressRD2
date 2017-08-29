@@ -81,10 +81,9 @@ $ipress_styles = [
     // Core styles: [ 'script-name', 'script-name2' ... ]
     'core' => [],
 
-    // Header styles: [ 'label' => [ 'path_url', (array)dependencies, 'version' ] ... ]
-    'header' => [
-        'normalize'  => [ IPRESS_CSS_URL . '/normalize.min.css', [], NULL ]
-    ],
+    // Header styles: [ 'label' => [ 'path_url', (array)dependencies, 'version' ] ... ] 
+    // 'normalize'  => [ IPRESS_CSS_URL . '/normalize.min.css', [], NULL ]
+    'header' => [],
 
     // Plugin styles: [ 'label' => [ 'path_url', (array)dependencies, 'version' ] ... ]
     'plugins' => [],
