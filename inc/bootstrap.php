@@ -92,6 +92,9 @@ require_once IPRESS_INCLUDES_DIR . '/navigation.php';
 // Shortcodes functionality
 require_once IPRESS_INCLUDES_DIR . '/shortcodes.php';
 
+// Structure & Header Meta functionality
+require_once IPRESS_INCLUDES_DIR . '/structure.php';
+
 // Functions: theme functions, actions & filters
 require_once IPRESS_INCLUDES_DIR . '/template-functions.php';
 
