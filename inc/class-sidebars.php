@@ -6,7 +6,7 @@
  *
  * Theme initialisation for core WordPress features
  * 
- * @package     iPress\Sidebars
+ * @package     iPress\Includes
  * @link        http://on.tinternet.co.uk
  * @license     GPL-2.0+
  */
@@ -74,32 +74,28 @@ final class IPR_Sidebars {
                 'name'          => __( 'Primary Sidebar', 'ipress' ),
                 'description'   => __( 'This is the primary sidebar for two-column and full-width layouts.', 'ipress' )
             ]
-//          'secondary'    => [ 
-//              'name'          => __( 'Secondary Sidebar', 'ipress' ),
-//              'description'   => __( 'This is the secondary sidebar for two-column and full-width layouts.', 'ipress' )
-//          ],
-//          'header'       => [
-//             'name'          => __( 'Header Sidebar', 'ipress' ),
-//             'description'   => __( 'This is the header sidebar.', 'ipress' )
-//          ]
         ] );
 
         // Footer widgets
         $footer_sidebars = apply_filters( 'ipress_footer_sidebars', [] );
-//        $footer_sidebars = apply_filters( 'ipress_footer_sidebars', [
-//            'footer-left'   => [
-//                'name'          => __( 'Footer Left Sidebar', 'ipress' ),
-//                'description'   => __( 'This is the footer left sidebar for all layouts.', 'ipress' )
-//            ],
-//            'footer-center' => [
-//               'name'          => __( 'Footer Center Sidebar', 'ipress' ),
-//               'description'   => __( 'This is the footer center sidebar for all layouts.', 'ipress' )
-//            ],
-//            'footer-right'  => [
-//               'name'          => __( 'Footer Right Sidebar', 'ipress' ),
-//               'description'   => __( 'This is the footer right sidebar for all layouts.', 'ipress' )
-//            ] 
-//        ] );
+        $footer_sidebars = apply_filters( 'ipress_footer_sidebars', [
+            'footer-1'   => [
+                'name'          => __( 'Footer Left Sidebar', 'ipress' ),
+                'description'   => __( 'This is the footer left sidebar for all layouts.', 'ipress' )
+            ],
+            'footer-2' => [
+               'name'          => __( 'Footer Center Left Sidebar', 'ipress' ),
+               'description'   => __( 'This is the footer center left sidebar for all layouts.', 'ipress' )
+            ],
+            'footer-3' => [
+               'name'          => __( 'Footer Center Right Sidebar', 'ipress' ),
+               'description'   => __( 'This is the footer center right sidebar for all layouts.', 'ipress' )
+            ],
+            'footer-4'  => [
+               'name'          => __( 'Footer Right Sidebar', 'ipress' ),
+               'description'   => __( 'This is the footer right sidebar for all layouts.', 'ipress' )
+            ] 
+        ] );
 
         // Custom widgets
         $custom_sidebars = apply_filters( 'ipress_custom_sidebars', [] );

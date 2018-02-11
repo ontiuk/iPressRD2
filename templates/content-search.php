@@ -28,6 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php if ( 'post' === get_post_type() ) : ?>
 		<div class="entry-meta">
 			<?php ipress_posted_on(); ?>
+			<?php ipress_posted_by(); ?>
 		</div><!-- .entry-meta -->
 		<?php endif; ?>
 	</header><!-- .entry-header -->
@@ -36,6 +37,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php the_excerpt(); ?>
 	</div><!-- .entry-summary -->
 
- <?php ipress_init_structured_data(); ?>
+    <footer class="entry-footer"> 
+        <?php ipress_entry_footer(); ?> 
+    </footer><!-- .entry-footer --> 
 
-</article><!-- #post-## -->
+    <?php ipress_init_structured_data(); ?>
+
+</article><!-- #post-<?php the_ID(); ?> -->

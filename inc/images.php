@@ -259,6 +259,58 @@ function ipress_get_post_attachement( $post_id, $att_type ){
 }
 
 /**
+ * Retrieve the post thumbnail url if set
+ */
+function ipress_post_thumbnail_url( $size = 'full' ) { 
+    $thumb_id = get_post_thumbnail_id(); 
+    if ( empty( $thumb_id ) ) { return ''; }
+
+    $thumb_url_src = wp_get_attachment_image_src( $thumb_id, $size, true ); 
+    $thumb_url = $thumb_url_array[0]; 
+    return $thumb_url; 
+} 
+
+/**
+ * Get site title or logo
+ */
+function ipress_site_title_or_logo( $echo = true ) {
+    if ( has_custom_logo() ) {
+   		$logo = get_custom_logo();
+    	$html = is_home() ? sprintf( '<h1 class="logo">%s</h1>', $logo ) : $logo;
+    } else if ( function_exists( 'jetpack_has_site_logo' ) && jetpack_has_site_logo() ) {
+   		$logo    = site_logo()->logo;
+    	$logo_id = get_theme_mod( 'custom_logo' ); 
+		$logo_id = $logo_id ? $logo_id : $logo['id']; 
+   		$size    = site_logo()->theme_size();
+    	$html    = sprintf( '<a href="%1$s" class="site-logo-link" rel="home" itemprop="url">%2$s</a>',
+	    	esc_url( home_url( '/' ) ),
+		    wp_get_attachment_image(
+			    $logo_id,
+   				$size,
+   				false,
+    			[
+	    			'class'     => 'site-logo attachment-' . $size,
+		    		'data-size' => $size,
+			    	'itemprop'  => 'logo'
+                 ]
+		    )
+	    );
+
+		$html = apply_filters( 'jetpack_the_site_logo', $html, $logo, $size );
+    } else {
+        $tag = ( ipress_is_home_page() ) ? 'h1' : 'p';
+        $html = sprintf( '<%s class="site-title"><a href="%s" rel="home">%s</a></%s>', esc_attr( $tag ), esc_url( home_url('/') ), esc_html( get_bloginfo( 'name' ) ), esc_attr( $tag ) );
+        $description = get_bloginfo( 'description', 'display' );
+        if ( $description || is_customize_preview() ) {
+            $html .= sprintf( '<p class="site-description">%s</p>', esc_html( $description ) );
+        } 
+    }
+
+	if ( ! $echo ) { return $html; }
+	echo $html;
+}
+
+/**
  * convert color form hex to rgb 
  *
  * @param   string

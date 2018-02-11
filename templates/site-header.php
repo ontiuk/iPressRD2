@@ -10,18 +10,10 @@
  * @link        http://ipress.uk
  * @license     GPL-2.0+
  */
-
-// Access restriction
-if ( ! defined( 'ABSPATH' ) ) {
-    header( 'Status: 403 Forbidden' );
-    header( 'HTTP/1.1 403 Forbidden' );
-    exit;
-}
-
 ?>
+<a class="skip-link screen-reader-text" href="#content"><?php esc_attr_e( 'Skip to content', 'ipress' ); ?></a>
+
 <header id="masthead" class="site-header" role="banner" <?php ipress_header_style(); ?>>
-   	<a class="skip-link screen-reader-text" href="#site-navigation"><?php esc_attr_e( 'Skip to navigation', 'ipress' ); ?></a>
-    <a class="skip-link screen-reader-text" href="#content"><?php esc_attr_e( 'Skip to content', 'ipress' ); ?></a>
     <div class="wrap">
         <div class="site-branding">
         <?php
@@ -52,8 +44,8 @@ if ( ! defined( 'ABSPATH' ) ) {
                 $tag = ( ipress_is_home_page() ) ? 'h1' : 'p';
                 $html = sprintf( '<%s class="site-title"><a href="%s" rel="home">%s</a></%s>', esc_attr( $tag ), esc_url( home_url('/') ), esc_html( get_bloginfo( 'name' ) ), esc_attr( $tag ) );
                 $description = get_bloginfo( 'description', 'display' );
-                if ( $description ) :
-                    $html .= sprintf( '<h2 class="site-description">%s</h2>', esc_html( $description ) );
+                if ( $description || is_customize_preview() ) :
+                    $html .= sprintf( '<p class="site-description">%s</p>', esc_html( $description ) );
                 endif; 
             endif;
             echo $html;

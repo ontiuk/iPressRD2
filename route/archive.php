@@ -12,14 +12,6 @@
  * @link        http://ipress.uk
  * @license     GPL-2.0+
  */
-
-// Access restriction
-if ( ! defined( 'ABSPATH' ) ) {
-    header( 'Status: 403 Forbidden' );
-    header( 'HTTP/1.1 403 Forbidden' );
-    exit;
-}
-
 ?>
 
 <?php get_header(); ?>
@@ -29,14 +21,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
     <?php if ( have_posts() ) : ?>
 
-        <section class="page-header">
+        <header class="page-header">
             <?php the_archive_title( '<h1 class="page-title archive-title">', '</h1>' ); ?>
             <?php the_archive_description( '<div class="archive-description">', '</div>' ); ?>
-        </section>
+        </header><!-- .page-header -->
                 
         <?php while ( have_posts() ) : the_post(); ?>
   
-            <?php get_template_part( 'templates/content', get_post_format() ); ?>
+            <?php get_template_part( 'templates/content' ); ?>
 
         <?php endwhile; ?>
 

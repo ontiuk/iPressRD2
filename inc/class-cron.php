@@ -6,7 +6,7 @@
  *
  * Theme initialisation for core WordPress features
  * 
- * @package     iPress\Cron
+ * @package     iPress\Includes
  * @link        http://ipress.uk
  * @license     GPL-2.0+
  */
@@ -25,10 +25,22 @@ final class IPR_Cron {
 
     /**
      * Class constructor
-     * - set up hooks
      */
-    public function __construct() {}
+    public function __construct() {
 
+        // Initialize cron functionality
+        $this->init();
+    }
+
+    //----------------------------------------------
+    //  Cron Actions
+    //----------------------------------------------
+
+    /**
+     * Initialise Cron hooks
+     */
+    public function init() {}
+        
     //----------------------------------------------
     //  Cron Functionality
     //----------------------------------------------

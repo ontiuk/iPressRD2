@@ -4,9 +4,9 @@
  * iPress - WordPress Theme Framework                       
  * ==========================================================
  *
- * Theme initialisation for core WordPress features
+ * Theme initialisation for core WordPress page support features
  * 
- * @package     iPress\Page
+ * @package     iPress\Includes
  * @link        http://ipress.uk
  * @license     GPL-2.0+
  */
@@ -70,8 +70,8 @@ final class IPR_Page {
     /**
      * Add custom post types to search
      *  
-     * @param object $query WP_Query
-     * @return object
+     * @param   object $query WP_Query
+     * @return  object
      */
     public function add_cpt_to_search( $query ) { 
 

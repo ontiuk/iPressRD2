@@ -6,7 +6,7 @@
  *
  * Theme starter content
  * 
- * @package     iPress\Content
+ * @package     iPress\Includes
  * @link        http://ipress.uk
  * @see         https://make.wordpress.org/core/2016/11/30/starter-content-for-themes-in-4-7/
  * @license     GPL-2.0+

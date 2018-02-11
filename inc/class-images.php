@@ -6,7 +6,7 @@
  *
  * Theme initialisation for core WordPress features
  * 
- * @package     iPress\Images
+ * @package     iPress\Includes
  * @link        http://ipress.uk
  * @license     GPL-2.0+
  */
@@ -38,12 +38,14 @@ final class IPR_Images {
         // Enable SVG mime type plus filterable other types
         add_filter( 'upload_mimes', [ $this, 'custom_upload_mimes' ] );          
 
-        // remove width and height dynamic attributes to thumbnail
-        add_filter( 'post_thumbnail_html', [ $this, 'remove_thumbnail_dimensions' ], 10 );  
-        add_filter( 'image_send_to_editor', [ $this, 'remove_thumbnail_dimensions' ], 10 );   
-
         // Custom avatar in settings > discussion
         add_filter( 'avatar_defaults', [ $this, 'gravatar' ] ); 
+
+        // Responsive image sizes for theme images
+        add_filter( 'wp_calculate_image_sizes', [ $this, 'image_sizes' ], 10, 2 );
+
+        // Responsive image sizes for thumbnails
+        add_filter( 'wp_get_attachment_image_attributes', [ $this, 'post_thumbnail_sizes' ], 10, 3 );
     }
 
     //----------------------------------------------
@@ -67,7 +69,7 @@ final class IPR_Images {
         ] );
 
         // Test & return
-        return ( empty($sizes) ) ? $sizes : array_merge( $sizes, $custom_sizes );
+        return ( empty( $custom_sizes ) ) ? $sizes : array_merge( $sizes, $custom_sizes );
     }
 
     /**
@@ -84,7 +86,11 @@ final class IPR_Images {
     }
 
     /**
-     * Allow svg mime type
+     * Allow additional mime-types
+     * - default to add SVG support
+     *
+     * - For example, the following line allows PDF uploads 
+     * - $existing_mimes['pdf'] = 'application/pdf'; 
      *
      * @param  array
      * @return array
@@ -100,24 +106,8 @@ final class IPR_Images {
             $existing_mimes[$k] = sanitize_text_field( $v );
         }
 
-        // Call the modified list of extensions
+        // Return the modified list of extensions / mime-types
         return $existing_mimes;
-    }
-
-    /**
-     * Remove thumbnail width and height dimensions that prevent fluid images in the_thumbnail
-     * - defaults to true
-     *
-     * @param  string
-     * @return string
-     */
-    public function remove_thumbnail_dimensions( $html ) {
-
-        // Filterable thumbnail dimensions
-        $thumb_dimensions = (bool)apply_filters( 'ipress_remove_thumbnail_dimensions', '__return_true' ); 
-
-        // Return formatted markup
-        return ( $thumb_dimensions ) ? preg_replace( '/(width|height)=\"\d*\"\s/', '', $html ) : $html;
     }
 
     /**
@@ -140,6 +130,33 @@ final class IPR_Images {
 
         // Return avatar defaults
         return $avatar_defaults;
+    }
+
+    /**
+     * Modify custom image sizes attribute for responsive image functionality
+     * 
+     * @param   string $sizes A source size value for use in a 'sizes' attribute
+     * @param   array  $size  Image size [ width, height ]
+     * @return  string 
+     */
+    public function image_sizes( $sizes, $size ) {
+        
+        global $content_width;
+
+        $width = $size[0]; 
+        return ( is_null( $content_width ) || $width < $content_width ) ? $sizes : '(min-width: ' . $content_width . 'px) ' . $content_width . 'px, 100vw'; 
+    }
+
+    /**
+     * Modify post thumbnail image sizes attribute for responsive image functionality
+     *
+     * @param   array $attr       Attributes for the image markup
+     * @param   int   $attachment Image attachment ID
+     * @param   array $size       Registered image size or [ height, width ]
+     * @return  array 
+     */
+    public function post_thumbnail_sizes( $attr, $attachment, $size ) {
+    	return $attr;
     }
 }
 

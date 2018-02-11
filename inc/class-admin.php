@@ -4,9 +4,9 @@
  * iPress - WordPress Theme Framework                       
  * ==========================================================
  *
- * Theme initialisation for core WordPress features
+ * Theme admin UI functionality
  * 
- * @package     iPress\Admin
+ * @package     iPress\Includes
  * @link        http://ipress.uk
  * @license     GPL-2.0+
  */

@@ -6,7 +6,7 @@
  *
  * Theme initialisation for core WordPress features
  * 
- * @package     iPress\User
+ * @package     iPress\Includes
  * @link        http://ipress.uk
  * @license     GPL-2.0+
  */
@@ -25,9 +25,21 @@ final class IPR_User {
 
     /**
      * Class constructor
-     * - set up hooks
      */
-    public function __construct() {}
+    public function __construct() {
+        
+        // Initialize User functionality
+        $this->init();
+    }
+
+    //----------------------------------------------
+    //  User Actions & Filters
+    //----------------------------------------------
+
+    /**
+     * Initialise User hooks
+     */
+    public function init() {}
 
     //----------------------------------------------
     //  User Functionality 

@@ -4,9 +4,9 @@
  * iPress - WordPress Theme Framework                       
  * ==========================================================
  *
- * Theme initialisation for core WordPress features
+ * Theme ajax functionality
  * 
- * @package     iPress\Ajax
+ * @package     iPress\Includes
  * @link        http://ipress.uk
  * @license     GPL-2.0+
  */
@@ -25,13 +25,25 @@ final class IPR_Ajax {
 
     /**
      * Class constructor
-     * - set up hooks
+     */
+    public function __construct() {
+
+        // Initialize Ajax functionality
+        $this->init();
+    }
+
+    //----------------------------------------------
+    //  Ajax Actions
+    //----------------------------------------------
+
+    /**
+     * Initialise Ajax hooks
      * 
      * - wp_ajax_xxx 
      * - wp_ajax_nopriv_xxx
      */
-    public function __construct() {}
-
+    public function init() {}
+        
     //----------------------------------------------
     //  Ajax Functionality
     //----------------------------------------------

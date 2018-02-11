@@ -4,9 +4,9 @@
  * iPress - WordPress Theme Framework                       
  * ==========================================================
  *
- * Theme initialisation for core WordPress features
+ * Theme initialisation for core WordPress query features
  * 
- * @package     iPress\Query
+ * @package     iPress\Includes
  * @link        http://ipress.uk
  * @license     GPL-2.0+
  */
@@ -174,8 +174,10 @@ final class IPR_Query {
      */
     function post_type_archives( $query ) {
 
+        // Set up filterable post-types
         $post_types = apply_filters( 'ipress_query_post_type_archives', [] );
-
+        if ( empty( $post_types ) ) { return; }
+        
         // Main query & post-types
         if ( $query->is_main_query() && !is_admin() && $query->is_post_type_archive( $post_types ) ) {
 
@@ -235,6 +237,7 @@ final class IPR_Query {
 
         // Set search post types
         $post_types = apply_filters( 'ipress_query_search_include', [] );
+        if ( empty( $post_types ) ) { return; }
 
         // Main query search
         if ( !is_admin() && $query->is_main_query() && $query->is_search && $post_type ) {

@@ -6,7 +6,7 @@
  *
  * Theme initialisation for core WordPress features
  * 
- * @package     iPress\Rewrites
+ * @package     iPress\Includes
  * @link        http://ipress.uk
  * @license     GPL-2.0+
  */

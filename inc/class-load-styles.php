@@ -6,7 +6,7 @@
  *
  * Theme initialisation for core WordPress features
  * 
- * @package     iPress\Loader
+ * @package     iPress\Includes
  * @link        http://ipress.co.uk
  * @license     GPL-2.0+
  */
@@ -102,22 +102,33 @@ final class IPR_Load_Styles {
     public function init( $styles, $fonts ) {
 
         // Core styles: [ 'style-name', 'style-name' ... ];
-        $this->core = ( isset ( $styles['core'] ) && is_array( $styles['core'] ) ) ? $styles['core'] : [];
+        $this->core = $this->set_key( $styles, 'core' );
 
         // Header styles: [ 'label' => [ 'path_url', (array)depn, 'version' ] ... ]
-        $this->header = ( isset ( $styles['header'] ) && is_array( $styles['header'] ) ) ? $styles['header'] : [];
+        $this->header = $this->set_key( $styles, 'header' );
 
         // Plugin styles: [ 'label' => [ 'path_url', (array)depn, 'version' ] ... ]
-        $this->plugins = ( isset ( $styles['plugins'] ) && is_array( $styles['plugins'] ) ) ? $styles['plugins'] : [];
+        $this->plugins = $this->set_key( $styles, 'plugins' );
 
         // Page styles: [ 'label' => [ 'template', 'path_url', (array)dependencies, 'version' ] ... ];
-        $this->page = ( isset ( $styles['page'] ) && is_array( $styles['page'] ) ) ? $styles['page'] : [];
+        $this->page = $this->set_key( $styles, 'page' );
 
         // Theme styles: [ 'label' => [ 'path_url', (array)depn, 'version' ] ... ];
-        $this->theme = ( isset ( $styles['theme'] ) && is_array( $styles['theme'] ) ) ? $styles['theme'] : [];
+        $this->theme = $this->set_key( $styles, 'theme' );
 
         // Theme fonts: [ 'label' => [ 'path_url', (array)depn, 'version' ] ... ];
-        $this->fonts = ( is_array( $fonts ) ) ? $fonts : [];
+        $this->fonts = ( is_array( $fonts ) && !empty( $fonts ) ) ? $fonts : [];
+    }
+
+    /**
+     * Validate and set key
+     *
+     * @param array $styles
+     * @param string $key
+     * @return array
+     */
+    private function set_key( $styles, $key ) {
+        return ( isset ( $styles[$key] ) && is_array( $styles[$key] ) && !empty( $styles[$key] ) ) ? $styles[$key] : [];
     }
 
     //----------------------------------------------
@@ -191,7 +202,7 @@ final class IPR_Load_Styles {
 		$fonts_url = add_query_arg( $query_args, 'https://fonts.googleapis.com/css' );
 
         // Register a css style file for later use 
-        wp_register_style( 'ipress-fonts', $fonts_url, [], null ); 
+        wp_register_style( 'ipress-fonts', esc_url_raw( $fonts_url ), [], null ); 
         
         // Enqueue css style
         wp_enqueue_style( 'ipress-fonts' ); 
@@ -207,6 +218,10 @@ final class IPR_Load_Styles {
     public function conditional_styles() {
 
         global $wp_styles;
+
+        // A bit outdated now...
+        $show_conditional = apply_filters( 'ipress_show_conditional', false );
+        if ( ! $show_conditional ) { return false; }
 
         // Load our stylesheet for IE9
         wp_enqueue_style( 'ie9', IPRESS_CSS_URL . '/ie9.css', [] );

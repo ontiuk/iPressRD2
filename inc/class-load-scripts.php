@@ -6,7 +6,7 @@
  *
  * Theme initialisation for core WordPress features
  * 
- * @package     iPress\Loader
+ * @package     iPress\Includes
  * @link        http://ipress.uk
  * @license     GPL-2.0+
  */
@@ -119,31 +119,42 @@ final class IPR_Load_Scripts {
     public function init( $scripts ) {
 
         // Core scripts: [ 'script-name', 'script-name2' ... ]
-        $this->core = ( isset ( $scripts['core'] ) && is_array( $scripts['core'] ) ) ? $scripts['core'] : [];
+        $this->core = $this->set_key( $scripts, 'core' );
 
         // Header scripts: [ 'label' => [ 'path_url', (array)dependencies, 'version' ] ... ]
-        $this->header = ( isset ( $scripts['header'] ) && is_array( $scripts['header'] ) ) ? $scripts['header'] : [];
+        $this->header = $this->set_key( $scripts, 'header' );
 
         // Footer scripts: [ 'label' => [ 'path_url', (array)dependencies, 'version' ] ... ]
-        $this->footer = ( isset ( $scripts['footer'] ) && is_array( $scripts['footer'] ) ) ? $scripts['footer'] : [];
+        $this->footer = $this->set_key( $scripts, 'footer' );
 
         // Plugin scripts: [ 'label' => [ 'path_url', (array)dependencies, 'version' ] ... ]
-        $this->plugins = ( isset ( $scripts['plugins'] ) && is_array( $scripts['plugins'] ) ) ? $scripts['plugins'] : [];
+        $this->plugins = $this->set_key( $scripts, 'plugins' );
 
         // Page scripts: [ 'label' => [ 'template', 'path_url', (array)dependencies, 'version' ] ... ];
-        $this->page = ( isset ( $scripts['page'] ) && is_array( $scripts['page'] ) ) ? $scripts['page'] : [];
+        $this->page = $this->set_key( $scripts, 'page' );
 
         // Conditional scripts: [ 'label' => [ [ 'callback', [ args ] ], 'path_url', (array)dependencies, 'version' ] ... ];
-        $this->conditional = ( isset ( $scripts['conditional'] ) && is_array( $scripts['conditional'] ) ) ? $scripts['conditional'] : [];
+        $this->conditional = $this->set_key( $scripts, 'conditional' );
 
         // Front Page scripts: [ 'label' => [ 'template', 'path_url', (array)dependencies, 'version' ] ... ];
-        $this->front = ( isset ( $scripts['front'] ) && is_array( $scripts['front'] ) ) ? $scripts['front'] : [];
+        $this->front = $this->set_key( $scripts, 'front' );
 
         // Custom scripts: [ 'label' => [ 'path_url', (array)dependencies, 'version' ] ... ];
-        $this->custom = ( isset ( $scripts['custom'] ) && is_array( $scripts['custom'] ) ) ? $scripts['custom'] : [];
+        $this->custom = $this->set_key( $scripts, 'custom' );
 
         // Localize scripts: [ 'label' => [ 'name' => name, trans => function/path ] ]
-        $this->local = ( isset ( $scripts['local'] ) && is_array( $scripts['local'] ) ) ? $scripts['local'] : [];
+        $this->local = $this->set_key( $scripts, 'local' );
+    }
+
+    /**
+     * Validate and set key
+     *
+     * @param array $scripts
+     * @param string $key
+     * @return array
+     */
+    private function set_key( $scripts, $key ) {
+        return ( isset ( $scripts[$key] ) && is_array( $scripts[$key] ) && !empty( $scripts[$key] ) ) ? $scripts[$key] : [];
     }
 
     //----------------------------------------------

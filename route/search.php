@@ -12,14 +12,6 @@
  * @link        http://ipress.uk
  * @license     GPL-2.0+
  */
-
-// Access restriction
-if ( ! defined( 'ABSPATH' ) ) {
-    header( 'Status: 403 Forbidden' );
-    header( 'HTTP/1.1 403 Forbidden' );
-    exit;
-}
-
 ?>
 
 <?php global $wp_query; ?>
@@ -31,9 +23,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
     <?php if ( have_posts() ) : ?>
 
-        <section class="page-header">
-            <h1 class="page-title search-title"><?= sprintf( __( 'Search: %s Results for ', 'ipress' ), $wp_query->found_posts ); echo get_search_query(); ?></h1>
-        </section>
+        <header class="page-header">
+            <h1 class="page-title search-title"><?php echo sprintf( __( 'Search: %s Results for %s', 'ipress' ), $wp_query->found_posts, '<span>' . get_search_query() . '</span>' ); ?></h1>
+        </header><!-- .page-header -->
 
         <?php while ( have_posts() ) : the_post(); ?>
     

@@ -4,9 +4,9 @@
  * iPress - WordPress Theme Framework                       
  * ==========================================================
  *
- * Theme initialisation for core WordPress features
+ * Theme initialisation for core WordPress widget features
  * 
- * @package     iPress\Widgets
+ * @package     iPress\Includes
  * @link        http://ipress.uk
  * @license     GPL-2.0+
  */
@@ -39,7 +39,6 @@ final class IPR_Widgets {
 
     /**
      * Widget Autoload
-     * - search parent & child theme for widgets
      *
      * @param   string $widget
      * @return  boolean

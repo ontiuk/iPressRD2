@@ -24,26 +24,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<header class="entry-header">
 		<?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
-        <div class="entry-meta">
-            <time datetime="<?php the_time('Y-m-d'); ?> <?php the_time('H:i'); ?>">
-                Posted On: <?php the_date(); ?> <?php the_time(); ?>
-            </time>
-        </div>
     </header><!-- .entry-header -->
 
-    <?php 
-    if ( has_post_thumbnail() ) :
-        $image_id = get_post_thumbnail_id( get_the_ID() );
-        $image = wp_get_attachment_image_src( $image_id, 'full' ); 
-        if ( $image ) :
-    ?>
-    <div class="entry-image">
-        <a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><img src="<?= $image[0]; ?>" /></a>
-    </div>
-    <?php   
-        endif; 
-    endif;
-    ?>
+    <?php ipress_post_thumbnail(); ?>
 
 	<section class="entry-content">
 		<?php
@@ -72,4 +55,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 
     <?php ipress_init_structured_data(); ?>
 
-</article><!-- #post-## -->
+</article><!-- #post-<?php the_ID(); ?> -->

@@ -11,12 +11,6 @@
  * @see         https://developer.wordpress.org/themes/basics/template-files/#template-partials
  * @license     GPL-2.0+
  */
-// Access restriction
-if ( ! defined( 'ABSPATH' ) ) {
-    header( 'Status: 403 Forbidden' );
-    header( 'HTTP/1.1 403 Forbidden' );
-    exit;
-}
 
 ?><!DOCTYPE html>
 <html <?php language_attributes(); ?>>
@@ -29,9 +23,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 </head>
 
 <body <?php body_class(); ?>>
-<div id="page" class="site-container">
+<div id="page" class="site">
 
     <?php get_template_part( 'templates/site-header' ); ?>
 
     <div id="content" class="site-content">
-        <div class="site-inner">

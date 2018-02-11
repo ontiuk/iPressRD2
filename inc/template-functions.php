@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 //----------------------------------------------  
-// Theme Template Support
+// Template Tag Functions
 //----------------------------------------------  
 
 /**
@@ -44,12 +44,121 @@ function ipress_posted_on() {
 		'<a href="' . esc_url( get_permalink() ) . '" rel="bookmark">' . $time_string . '</a>'
 	);
 
-	$byline = sprintf(
-		esc_html_x( 'by %s', 'post author', 'ipress' ),
-		'<span class="author vcard"><a class="url fn n" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '">' . esc_html( get_the_author() ) . '</a></span>'
-	);
-
 	echo sprintf( '<span class="posted-on">%s</span><span class="byline">%s</span>', $posted_on, $byline );
+}
+
+/** 
+ * Prints HTML with meta information for the current author. 
+ */ 
+function ipress_posted_by() { 
+    $byline = sprintf( 
+        /* translators: %s: post author. */ 
+        esc_html_x( 'by %s', 'post author', 'ipress' ), 
+        '<span class="author vcard"><a class="url fn n" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '">' . esc_html( get_the_author() ) . '</a></span>' 
+    ); 
+ 
+    echo sprintf( '<span class="byline">%s</span>', $byline ); // WPCS: XSS OK
+} 
+
+/** 
+ * Displays an optional post thumbnail
+ * 
+ * Wraps the post thumbnail in an anchor element on index views, or a div 
+ * element when on single views. 
+ */ 
+function ipress_post_thumbnail() { 
+
+    // Restrictions    
+    if ( post_password_required() || is_attachment() || ! has_post_thumbnail() ) { return; } 
+
+    // By Type
+    if ( is_singular() ) { 
+?> 
+        <div class="post-thumbnail"> 
+            <?php the_post_thumbnail(); ?> 
+        </div><!-- .post-thumbnail --> 
+<?php 
+    } else { 
+?> 
+        <a class="post-thumbnail" href="<?php the_permalink(); ?>" aria-hidden="true">
+        <?php 
+            the_post_thumbnail( 'post-thumbnail', [ 
+                'alt' => the_title_attribute( [ 'echo' => false ] ), 
+            ] ); 
+        ?>
+        </a> 
+<?php 
+    } 
+} 
+
+/**
+ * Post image display
+ *
+ * @param string $size default 'full'
+ */
+function ipress_loop_image( $size = 'full' ) {
+    if ( ! has_post_thumbnail() ) { return; }
+
+    $image_id = get_post_thumbnail_id( get_the_ID() );
+    $image = wp_get_attachment_image_src( $image_id, $size ); 
+    if ( $image ) {
+?>
+    <div class="entry-image">
+        <a href="<?= esc_url( get_permalink() ); ?>" title="<?php the_title_attribute(); ?>"><img src="<?= $image[0]; ?>" /></a>
+    </div>
+<?php   
+    }
+}
+
+/**
+ * Post Author display
+ */
+function ipress_post_author() {
+?>    
+    <div class="author">
+	<?php
+	    echo get_avatar( get_the_author_meta( 'ID' ), 128 );
+	    echo sprintf( '<div class="label">%s</div>', esc_attr( __( 'Written by', 'ipress' ) ) );
+	    the_author_posts_link();
+    ?>
+    </div>
+<?php
+}
+
+/**
+ * Post Categories list
+ */
+function ipress_post_categories() {
+
+	$categories_list = get_the_category_list( __( ', ', 'ipress' ) );
+    if ( $categories_list ) {
+?>
+	<div class="cat-links">
+	<?php
+		echo sprintf( '<div class="label">%s</div>', esc_attr( __( 'Posted in', 'ipress' ) ) );
+		echo wp_kses_post( $categories_list );
+	?>
+	</div>
+<?php
+    }
+}
+
+/**
+ * Post Tags list
+ */
+function ipress_post_tags() {
+
+	$tags_list = get_the_tag_list( '', __( ', ', 'ipress' ) );
+    if ( $tags_list ) {
+?>
+	<div class="tags-links">
+	<?php
+		echo sprintf( '<div class="label">%s</div>', esc_attr( __( 'Tagged', 'ipress' ) ) );
+		echo wp_kses_post( $tags_list );
+	?>
+	</div>
+<?php
+    }
 }
 
 /**
@@ -84,6 +193,20 @@ function ipress_entry_footer() {
 		'<span class="edit-link">',
 		'</span>'
 	);
+}
+
+/**
+ * Prints comments template if available
+ */
+function ipress_post_comments_link() {
+    if ( ! post_password_required() && ( comments_open() || '0' != get_comments_number() ) ) {
+?>        
+	<div class="comments-link">
+		<?php echo sprintf( '<div class="label">%s</div>', esc_attr( __( 'Comments', 'ipress' ) ) ); ?>
+		<span class="comments-link"><?php comments_popup_link( __( 'Leave a comment', 'ipress' ), __( '1 Comment', 'ipress' ), __( '% Comments', 'ipress' ) ); ?></span>
+	</div>
+<?php 
+    }
 }
 
 /**
@@ -180,7 +303,11 @@ function ipress_header_style() {
 }
 
 //----------------------------------------------  
-// Custom Template Funcions
+// Template Hook Functions
+//----------------------------------------------  
+ 
+//----------------------------------------------  
+// Custom Template Functions
 //----------------------------------------------  
 
 //end

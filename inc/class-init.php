@@ -6,7 +6,7 @@
  *
  * Theme initialisation for core WordPress features
  * 
- * @package     iPress\Init
+ * @package     iPress\Includes
  * @link        http://ipress.co.uk
  * @license     GPL-2.0+
  */
@@ -29,13 +29,13 @@ final class IPR_Init {
     public function __construct() {
 
         // Clean up the messy WordPress header
-        add_action( 'init', [ $this, 'header_clean' ] );
+        add_action( 'init', [ $this, 'clean_header' ] );
 
         // Remove the bloody awful emojicons! Worse than Pokemon!
         add_action( 'init', [ $this, 'disable_emojicons' ] );
 
         // Remove the admin bars
-        // add_action( 'init', [ $this, 'admin_bar' ] );
+        add_action( 'init', [ $this, 'admin_bar' ] );
 
         // Add a pingback url for articles if pings active
         add_action( 'wp_head', [ $this, 'pingback_header' ] );    
@@ -49,12 +49,12 @@ final class IPR_Init {
      * Clean the WordPress Header
      * - The WordPress head contains multiple meta & link records,
      * - many of which are not required, are detrimental, and slow loading
-     * - All are removed here by default. Comment out/remove entries to reactivate
+     * - All are removed by default. Comment out/remove entries to selectively remove features
      */
-    public function header_clean() {
+    public function clean_header() {
     
         // Due process
-        $do_clean = apply_filters( 'ipress_header_clean', true );
+        $do_clean = apply_filters( 'ipress_header_clean', false );
         if ( ! $do_clean ) { return; }
 
         // Post & comment feeds    
@@ -177,6 +177,10 @@ final class IPR_Init {
      */
     public function disable_emojicons() { 
 
+        // Ok, we know you really want to do this!
+        $do_disable = apply_filters( 'ipress_disable_emojicons', true );
+        if ( ! $do_disable ) { return; }
+
         // Remove head/foot styles & scripts    
         remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
         remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
@@ -205,11 +209,15 @@ final class IPR_Init {
      */
     public function admin_bar() {
 
+        // Ok, how much? all, users, false
+        $do_hide = apply_filters( 'ipress_admin_bar', false );
+        if ( ! $do_hide ) { return; }
+
         // admin bar - All Users
-        // $this->hide_adminbar( true );
+        if ( $do_hide === 'all' ) { $this->hide_adminbar( true ); }
     
         // admin bar - Non Admin Users Only
-        // $this->hide_adminbar( false );
+        if ( $do_hide === 'users' ) { $this->hide_adminbar( false ); }
     }
 
     /**

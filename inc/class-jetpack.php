@@ -3,9 +3,9 @@
  * iPress - WordPress Theme Framework                       
  * ==========================================================
  *
- * Theme initialisation for core WordPress features
+ * Theme initialisation for Jetpack features
  * 
- * @package     iPress\Init
+ * @package     iPress\Includes
  * @link        http://ipress.co.uk
  * @license     GPL-2.0+
  */
@@ -37,6 +37,14 @@ final class IPR_Jetpack {
 	 */
     public function jetpack_init() {
 
+        // Add support for the Jetpack Site Logo plugin and the site logo functionality
+        // @see https://github.com/automattic/site-logo
+		// @see http://jetpack.me/
+        add_theme_support( 'site-logo', apply_filters( 'ipress_jetpack_site_logo_args', [ 'size' => 'full' ] ) );
+
+        // Disables auto-activation of Jetpack modules @see: http://jetpack.me/2013/10/07/do-not-automatically-activate-a-jetpack-module/ 
+        add_filter('jetpack_get_default_modules', '__return_empty_array'); 
+
         // Jetpack Reponsive Videos
         add_theme_support( 'jetpack-responsive-videos' );
 
@@ -62,7 +70,7 @@ final class IPR_Jetpack {
             if ( is_search() ) :
 		        get_template_part( 'templates/content', 'search' );
 	        else :
-		        get_template_part( 'templates/content', get_post_format() );
+		        get_template_part( 'templates/content' );
        		endif;
         endwhile;
 	}

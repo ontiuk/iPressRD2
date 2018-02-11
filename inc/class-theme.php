@@ -6,7 +6,7 @@
  *
  * Theme initialisation for core WordPress features
  * 
- * @package     iPress\Theme
+ * @package     iPress\Includes
  * @link        http://ipress.uk
  * @license     GPL-2.0+
  */
@@ -41,6 +41,9 @@ final class IPR_Theme {
 
         // Single post data
         add_action( 'wp_footer', [ $this, 'get_structured_data' ] );
+
+        // Preload fonts
+        add_filter( 'wp_resource_hints', [ $this, 'resource_hints' ], 10, 2 );
     }
 
     //----------------------------------------------
@@ -49,7 +52,7 @@ final class IPR_Theme {
 
     /**
      * Required default content width for image manipulation
-     * - Priority 0 to make it available to lower priority callbacks.
+     * - Priority 0 to make it available to lower priority callbacks
      *
      * @global int $content_width
      */
@@ -62,15 +65,7 @@ final class IPR_Theme {
      */
     public function setup_theme() {
 
-        // Load Localisation files - Uses first available option
-
-		// Localisation Support - Loads from WP location: wp-content/languages/themes/ipress-en_GB.mo
-		load_theme_textdomain( 'ipress', trailingslashit( WP_LANG_DIR ) . 'themes/' );
-
-		// Localisation Support - Loads child theme file: wp-content/themes/ipress-child/languages/en_GB.mo
-		load_theme_textdomain( 'ipress', get_stylesheet_directory() . '/languages' );
-
-        // Localisation Support - Loads parent theme file: wp-content/themes/ipress/languages/en_GB.mo
+        // Localisation Support - Loads file e.g: wp-content/themes/ipress/includes/languages/en_GB.mo
         load_theme_textdomain( 'ipress', IPRESS_LANG_DIR );
 
         // Enables post and comment RSS feed links to head 
@@ -80,7 +75,7 @@ final class IPR_Theme {
         add_theme_support( 'title-tag' );
 
         // Add thumbnail theme support & post type support
-        // @see https://developer.wordpress.org/themes/functionality/featured-images-post-thumbnails/
+        // @link https://developer.wordpress.org/themes/functionality/featured-images-post-thumbnails/
         // - add_theme_support( 'post-thumbnails' ); 
         // - add_theme_support( 'post-thumbnails', $post_types ); 
         add_theme_support( 'post-thumbnails' ); 
@@ -90,49 +85,55 @@ final class IPR_Theme {
         // - set_post_thumbnail_size( 50, 50, true ); // 50px x 50px, hard crop
         // - set_post_thumbnail_size( 50, 50, [ 'left', 'top' ] ); // 50px x 50px, hard crop from top left
         // - set_post_thumbnail_size( 50, 50, [ 'center', 'center' ] ); // 50 px x 50px, crop from center
+        $post_thumb_size = apply_filters( 'ipress_post_thumb_size', [] );
+        if ( !empty( $post_thumb_size ) ) {
+            $this->set_post_thumb_size( $post_thumb_size );
+        }
 
         // Core image sizes overrides
         // - add_image_size( 'large', 1024, '', true ); // Large Image 
         // - add_image_size( 'medium', 768, '', true ); // Medium Image 
         // - add_image_size( 'small', 320, '', true);   // Small Image 
+        $image_size_default = apply_filters( 'ipress_image_size_default', [] );
+        if ( !empty( $image_size_default ) ) {
+            $this->set_add_image_size( $image_size_default );
+        }
  
         // Custom image sizes
         // - add_image_size( 'custom-size', 220 );                  // 220px wide, relative height, soft proportional crop mode
         // - add_image_size( 'custom-size-prop', 220, 180 );        // 220px x 180px, soft proportional crop
         // - add_image_size( 'custom-size-prop-height', 9999, 180); // 180px height: proportion resize 
         // - add_image_size( 'custom-size', 220, 180, true );       // 220 pixels wide by 180 pixels tall, soft proportional crop mode
+        $add_image_size = apply_filters( 'ipress_add_image_size', [] );
+        if ( !empty( $add_image_size ) ) {
+            $this->set_add_image_size( $add_image_size );
+        }
 
         // Add menu support 
         add_theme_support( 'menus' ); 
 
-        // Register main navigation menu location
-        register_nav_menus( [ 
-            'primary'   => __( 'Primary Menu', 'ipress' )
-        ] );
-
-        // Register additional navigation menu locations
+        // Register navigation menu locations
         // register_nav_menus( [ 
+        //   'primary'   => __( 'Primary Menu', 'ipress' ),
         //   'secondary' => __( 'Secondary Menu', 'ipress' ),
         //   'social'    => __( 'Social Menu', 'ipress' ),
         //   'header'    => __( 'Header Menu', 'ipress' ) 
         // ] );
+        $nav_menus = apply_filters( 'ipress_nav_menus', [ 
+            'primary'   => __( 'Primary Menu', 'ipress' )
+        ] );
+        if ( !empty( $nav_menus ) ) { register_nav_menus( $nav_menus ); }
 
         // Enable support for HTML5 markup: 'search-form', 'comment-form', 'comment-list', 'gallery', 'caption', 'widgets'
-        add_theme_support( 'html5', [
+        add_theme_support( 'html5', apply_filters( 'ipress_html5', [
             'search-form',
             'comment-form',
             'comment-list',
             'gallery',
             'caption',
             'widgets'
-        ] );
+        ] ) );
  
-        // Add post-format support: 'aside', 'image', 'video', 'quote', 'link', 'gallery', 'status', 'audio', 'chat'
-        // - add_theme_support( 'post-formats', [ 'image', 'link' ] ); 
-
-        // Add Woocommerce support?
-        // - add_theme_support( 'woocommerce' ); 
-
         // Newer title tag hooks - requires title-tag support above
         add_filter( 'pre_get_document_title',   [ $this, 'pre_get_document_title' ] ); 
         add_filter( 'document_title_separator', [ $this, 'document_title_separator' ], 10, 1 ); 
@@ -140,15 +141,40 @@ final class IPR_Theme {
     }
 
     //----------------------------------------------
+    //  Thumbnail & Image Support
+    //----------------------------------------------
+
+    /**
+     * Set up thumbnail image size
+     *
+     * @param array $size
+     */
+    private function set_post_thumb_size( $size ) {
+        $crop = ( isset( $size['crop'] ) ) ? $size['crop'] : false;
+        set_post_thumbnail_size( $size['width'], $size['height'], $crop );
+    }
+
+    /**
+     * Set up thumbnail image size
+     *
+     * @param array $size
+     */
+    private function set_add_image_size( $sizes ) {
+        foreach ( $sizes as $size ) {
+            $crop = ( isset( $size['crop'] ) ) ? $size['crop'] : false;
+            add_image_size( $size['name'], $size['width'], $size['height'], $crop );
+        }
+    }
+
+    //----------------------------------------------
     //  Title Tag Support
     //  - Make WordPress manage the document title
-    //  - Requires there is no hardcoded title tag in header
     //----------------------------------------------
 
     /**
      * Define the pre_get_document_title callback 
      *  
-     * @return  string
+     * @return string
      */
     public function pre_get_document_title() { 
     
@@ -158,7 +184,7 @@ final class IPR_Theme {
             // Get details
             $title = get_bloginfo( 'name' );        
             $sep = (string)apply_filters( 'ipress_document_title_separator', '-' );
-            $app = (bool)apply_filters( 'ipress_home_doctitle_append', '__return_true' );
+            $app = (bool)apply_filters( 'ipress_home_doctitle_append', true );
 
             // Sanitize title
             $title = wptexturize( $title );
@@ -201,13 +227,31 @@ final class IPR_Theme {
         if ( is_front_page() || ipress_is_home_page() ) { return $title; }
     
         // Append site name?
-        $app_site_name = (bool)apply_filters( 'ipress_append_site_name', '__return_true' );
+        $app_site_name = (bool)apply_filters( 'ipress_append_site_name', true );
         $title['site'] = ( $app_site_name ) ? get_bloginfo( 'name' ) : '';
 
         // Return
         return $title; 
     }
 
+    /**
+     * Add preconnect for Google Fonts
+     *
+     * @param   array   $urls   URLs to print for resource hints
+     * @param   string  $relation_type  The relation type the URLs are printed
+     * @return  array   $urls   URLs to print for resource hints
+     */
+    public function resource_hints( $urls, $relation_type ) {
+  
+        if ( wp_style_is( 'ipress-fonts', 'queue' ) && 'preconnect' === $relation_type ) {
+    		$urls[] = [
+			    'href' => 'https://fonts.gstatic.com',
+			    'crossorigin',
+            ];
+    	}
+
+    	return $urls;
+    }
 
     //----------------------------------------------
     //  Post Structured Data
@@ -255,7 +299,7 @@ final class IPR_Theme {
 	}
 
 	/**
-	 * Sanitizes structured data.
+	 * Sanitizes structured data
 	 *
 	 * @param  array $data
 	 * @return array

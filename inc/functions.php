@@ -23,17 +23,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 //
 //  - ipress_is_home_page
 //  - ipress_is_index
-//  - ipress_code
-//  - ipress_format_kses
-//  - ipress_allowedtags
 //  - ipress_pagination
 //  - ipress_numeric_posts_nav
 //  - ipress_prev_next_post_nav
-//  - ipress_get_params
 //  - ipress_get_permalink_by_page
 //  - ipress_paged_post_url
 //  - ipress_canonical_url
-//  - ipress_index
 //  - ipress_content
 //  - ipress_truncate
 //  - ipress_woocommerce_active
@@ -62,51 +57,6 @@ function ipress_is_home_page() {
  */
 function ipress_is_index( $page ) {
     return ( basename( $page ) === 'index.php' );
-}
-
-/**
- * Mark up content with code tags
- * - escapes all HTML, so `<` gets changed to `&lt;` and displays correctly
- *
- * @param   string $content Content to be wrapped in code tags
- * @return  string Content wrapped in code tags
- */
-function ipress_code( $content ) {
-    return '<code>' . esc_html( $content ) . '</code>';
-}
-
-/**
- * Wrapper for wp_kses() that can be used as a filter function
- *
- * @uses    ipress_format_allowedtags() List of allowed HTML elements
- * @param   string $string Content to filter through kses
- * @return  string
- */
-function ipress_format_kses( $string ) {
-    return wp_kses( $string, ipress_allowedtags() );
-}
-
-/**
- * Return an array of allowed tags for output formatting
- * - Used by wp_kses() for sanitizing output
- *
- * @return array
- */
-function ipress_allowedtags() {
-
-    // Return structured list
-    return [
-            'a'          => [ 'href' => [], 'title' => [] ],
-            'b'          => [],
-            'blockquote' => [],
-            'br'         => [],
-            'div'        => [ 'align' => [], 'class' => [], 'style' => [] ],
-            'em'         => [],
-            'i'          => [],
-            'p'          => [ 'align' => [], 'class' => [], 'style' => [] ],
-            'span'       => [ 'align' => [], 'class' => [], 'style' => [] ],
-            'strong'     => []
-    ];
 }
 
 //----------------------------------------------
@@ -296,25 +246,6 @@ function ipress_prev_next_post_nav() {
 //---------------------------------------------
 
 /**
- * Retrieve function parameters
- *
- * @param  array|string $args
- * @return  array
- */
-function ipress_get_params( $args ) {
-
-    // Passed as normal array or as regular url-compatible arguments - handle associative array for options
-    if ( is_array( $args ) && !empty( $args ) ) {
-        foreach( array_keys( $args ) as $key ) { $params[strtolower( $key )] = $args[$key]; }
-    } else {
-        parse_str( $args, $params );
-    }
-    
-    // Return contruct
-    return $params;
-}
-
-/**
  * Get url by page template 
  *
  * @param   string $template
@@ -414,14 +345,6 @@ function ipress_canonical_url() {
 }
 
 /**
- * Custom Excerpt - callback for index page excerpts
- *
- * @param   integer
- * @return  integer
- */
-function ipress_index( $length ) { return absint( $length ); } 
-  
-/**
  * Create the Custom Excerpt 
  *
  * @param   string $length_callback
@@ -503,7 +426,7 @@ function ipress_truncate( $text, $max_char ) {
  *
  * @return boolean true if WooCommerce plugin active
  */
-function ipress_is_woocommerce() {
+function ipress_woocommerce_active() {
 	return ( class_exists( 'WooCommerce' ) ) ? true : false;
 }
 
@@ -515,10 +438,49 @@ function ipress_is_woocommerce() {
 function ipress_is_product_archive() {
 
     // No woocommerce
-    if ( ! ipress_is_woocommerce() ) { return false; }
+    if ( ! ipress_woocommerce_active() ) { return false; }
 
     // Product archive
     return ( is_shop() || is_product_taxonomy() || is_product_category() || is_product_tag() ) ? true : false;
 }
+
+/** 
+ * Cart Link
+ * 
+ * Displayed a link to the cart including the number of items present and the cart total
+ * 
+ * @return void 
+ */ 
+function ipress_wc_cart_link() { 
+?> 
+    <a class="cart-contents" href="<?php echo esc_url( wc_get_cart_url() ); ?>" title="<?php esc_attr_e( 'View your shopping cart', 'ipress' ); ?>">
+        <?php /* translators: number of items in the mini cart. */ ?>
+        <span class="amount"><?php echo wp_kses_data( WC()->cart->get_cart_subtotal() ); ?></span>
+        <span class="count"><?php echo wp_kses_data( sprintf( _n( '%d item', '%d items', WC()->cart->get_cart_contents_count(), '_s' ), WC()->cart->get_cart_contents_count() ) );?></span>
+    </a> 
+<?php  
+} 
+ 
+/** 
+ * Display Header Cart
+ * 
+ * @return void 
+ */ 
+function ipress_wc_header_cart() { 
+   $class = ( is_cart() ) ? 'current-menu-item' : '';  
+?> 
+    <ul id="site-header-cart" class="site-header-cart"> 
+        <li class="<?php echo esc_attr( $class ); ?>"> 
+            <?php ipress_wc_cart_link(); ?> 
+        </li> 
+        <li> 
+        <?php 
+            $instance = [ 'title' => '' ];
+            the_widget( 'WC_Widget_Cart', $instance ); 
+        ?> 
+        </li> 
+    </ul> 
+<?php 
+} 
 
 //end

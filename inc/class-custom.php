@@ -4,9 +4,9 @@
  * iPress - WordPress Theme Framework                       
  * ==========================================================
  *
- * Theme initialisation for core WordPress features
+ * Theme specific custom post-type and taxonomy initialization
  * 
- * @package     iPress\Custom
+ * @package     iPress\Includes
  * @link        http://ipress.co.uk
  * @license     GPL-2.0+
  */
@@ -83,11 +83,10 @@ class IPR_Custom {
 
     /**
      * Class constructor
-     * - set up hooks
      */
     public function __construct() {
 
-        // Generate & register custom post types
+        // Generate & register custom post-types
         add_action( 'init', [ $this, 'register_post_types' ] ); 
 
         // Generate & register taxonomies
@@ -133,7 +132,7 @@ class IPR_Custom {
      * $post_types = [ 'cpt' => [ 
      *       'name'          => __( 'CPT', 'ipress' ), 
      *       'plural'        => __( 'CPTs', 'ipress' ),
-     *       'description'   => __( 'This is the CPT post type', 'ipress ), 
+     *       'description'   => __( 'This is the CPT post-type', 'ipress ), 
      *       'supports'      => [ 'title', 'editor', 'thumbnail' ],
      *       'taxonomies     => [ 'cpt_tax' ],
      *       'args'          => [], 
@@ -141,13 +140,13 @@ class IPR_Custom {
      */
     public function register_post_types() {
 
-        // Iterate custom post types...
+        // Iterate custom post-types...
         foreach ( $this->post_types as $k=>$v ) {
 
-            // Sanitize post type... a-z_- only
+            // Sanitize post-type... a-z_- only
             $post_type = sanitize_key( str_replace( ' ', '_', $k ) );
 
-            // Sanity checks
+            // Sanity checks - reserved words and max post-type length
             if ( in_array( $post_type, $this->post_type_reserved ) || strlen( $post_type ) > 20 ) { 
                 $this->post_type_errors[] = $post_type;
                 continue; 
@@ -156,9 +155,9 @@ class IPR_Custom {
             // Set up singluar & plural
             $singular       = ( isset( $v['name'] ) && !empty( $v['name'] ) ) ? ucwords( $v['name'] ) : ucwords( str_replace( '_', ' ', $post_type ) );
             $plural         = ( isset( $v['plural'] ) && !empty( $v['plural'] ) ) ? ucwords( $v['plural'] ) : $singular . 's'; 
-            $description    = ( isset( $v['description'] ) && !empty( $v['description'] ) ) ? ucfirst( $v['description'] ) : 'This is the ' . $singular . ' post type';
+            $description    = ( isset( $v['description'] ) && !empty( $v['description'] ) ) ? ucfirst( $v['description'] ) : 'This is the ' . $singular . ' post-type';
         
-            // Set up post type labels - Rename to suit, common options here, full list at: https://codex.wordpress.org/Function_Reference/register_post_type
+            // Set up post-type labels - Rename to suit, common options here @see https://codex.wordpress.org/Function_Reference/register_post_type
             $labels = [
                 'name'					=> sprintf( _x( '%s', 'Post type general name', 'ipress' ), $plural ),
                 'singular_name'		    => sprintf( _x( '%s', 'Post type singular name', 'ipress' ), $singular ),
@@ -182,20 +181,20 @@ class IPR_Custom {
                 'set_featured_image'    => sprintf( __( 'Set %s Featured Image', 'ipress' ), $singular ),
                 'remove_featured_image' => sprintf( __( 'Remove %s Featured Image', 'ipress' ), $singular ),
                 'use_featured_image'    => sprintf( __( 'Use %s Featured Image', 'ipress' ), $singular ),
-                'filter_items_list'     => sprintf( __( 'Filter %s list', 'wpr-cpt' ), $plural ),
-                'items_list_navigation' => sprintf( __( 'Books list navigation', 'wpr-cpt' ), $plural ), 
-                'items_list'            => sprintf( __( 'Books list', 'wpr-cpt' ), $plural ),
+                'filter_items_list'     => sprintf( __( 'Filter %s list', 'ipress' ), $plural ),
+                'items_list_navigation' => sprintf( __( '%s list navigation', 'ipress' ), $plural ), 
+                'items_list'            => sprintf( __( '%s list', 'ipress' ), $plural ),
                 'name_admin_bar'        => sprintf( __( '%s', 'ipress' ), $singular )
             ];
 
-            // Set up post type support
+            // Set up post-type support - default 'title', 'editor', 'thumbnail'
             $supports = ( isset( $v['supports'] ) && is_array( $v['supports'] ) && !empty( $v['supports'] ) ) ? $v['supports'] : [
                 'title',
                 'editor',
                 'thumbnail'
             ];
     
-            // Set up post type args - common options here, full list at: https://codex.wordpress.org/Function_Reference/register_post_type
+            // Set up post-type args - common options here @see https://codex.wordpress.org/Function_Reference/register_post_type
             $defaults = ( isset( $v['args'] ) && is_array( $v['args'] ) && !empty( $v['args'] ) ) ? $v['args'] : [];
             $args = array_merge( [
                 'labels'        => $labels,
@@ -210,7 +209,7 @@ class IPR_Custom {
                 $args['taxonomies'] = $taxonomies;
             }
     
-            // Register new post type
+            // Register new post-type
             register_post_type( $post_type, $args );
         }
     }
@@ -220,7 +219,7 @@ class IPR_Custom {
     //----------------------------------------------
 
     /**
-     * Register taxonomies & assign to post types
+     * Register taxonomies & assign to post-types
      * @see https://codex.wordpress.org/Function_Reference/register_taxonomy
      * 
      *  $taxonomies = [ 'cpt_tax' => [ 
@@ -242,7 +241,7 @@ class IPR_Custom {
             // Sanitize taxonomy... a-z_- only
             $taxonomy = sanitize_key( str_replace( ' ', '_', $k ) );
 
-            // Sanity checks
+            // Sanity checks - reserved words and maximum taxonomy length
             if ( in_array( $taxonomy, $this->taxonomy_reserved ) || strlen( $taxonomy ) > 32 ) { 
                 $this->taxonomy_errors[] = $taxonomy;
                 continue; 
@@ -289,7 +288,7 @@ class IPR_Custom {
     			$args['show_admin_column'] = true;			
             }
 
-            // Assign to post types?
+            // Assign to post-types?
             $post_types = ( isset( $v['post_types'] ) && is_array( $v['post_types'] ) && !empty( $v['post_types'] ) ) ? $v['post_types'] : [];
 
             // Register taxonomy
@@ -309,7 +308,7 @@ class IPR_Custom {
         // Taxonomy columns & filters
         foreach ( $this->taxonomies as $k=>$v ) {
 
-            // Assign to post types required
+            // Assign to post-types required
             if ( !isset( $v['post_types'] ) || !is_array( $v['post_types'] ) || empty( $v['post_types'] ) ) { continue; }
               
             // Sanitize taxonomy... a-z_- only
@@ -446,7 +445,7 @@ class IPR_Custom {
             // Sanitize taxonomy... a-z_- only
             $taxonomy = sanitize_key( str_replace( ' ', '_', $k ) );
 
-            // Assign to post types required
+            // Assign to post-types required
             if ( !isset( $v['post_types'] ) || !is_array( $v['post_types'] ) || empty( $v['post_types'] ) ) { continue; }
               
             // Get post-types
@@ -455,7 +454,7 @@ class IPR_Custom {
                 // Sanitize post-type... a-z_- only
                 $post_type = sanitize_key( str_replace( ' ', '_', $post_type ) );
 
-         		// Only if current post type			
+         		// Only if current post-type			
 	            if ( $typenow !== $post_type ) { continue; }
 
            		// Get current taxonomy			
@@ -525,7 +524,7 @@ class IPR_Custom {
     //----------------------------------------------
 
     /**
-     * Flush rewrite rules for custom post types & taxonomies after switching theme
+     * Flush rewrite rules for custom post-types & taxonomies after switching theme
      */
     public function flush_rewrite_rules() { 
         $this->register_post_types();

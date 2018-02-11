@@ -18,14 +18,15 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-//----------------------------------------------
-//  Theme Configuration
-//----------------------------------------------
-
+// Retrieve theme settings
 global $ipress;
 
 //----------------------------------------------
-//  Set Up Scripts
+//  Theme SetUp & Configuration
+//----------------------------------------------
+
+//----------------------------------------------
+//  Theme Scripts
 //----------------------------------------------
 
 // Set up scripts - filterable array. See definitions for structure
@@ -35,9 +36,7 @@ $ipress_scripts = [
     'core' => [ 'jquery' ],
 
     // Header scripts: [ 'label' => [ 'path_url', (array)dependencies, 'version' ] ... ]
-    'header' => [
-        'modernizr' => [ IPRESS_JS_URL . '/modernizr.min.js', [], NULL ]
-    ],
+    'header' => [],
 
     // Footer scripts: [ 'label' => [ 'path_url', (array)dependencies, 'version' ] ... ]
     'footer' => [],
@@ -72,7 +71,7 @@ $ipress_scripts = [
 $ipress->scripts->init( $ipress_scripts );
 
 //----------------------------------------------
-//  Set Up Styles & Fonts
+//  Theme Styles & Fonts
 //----------------------------------------------
 
 // Set up scripts - filterable array. See definitions for structure
@@ -111,7 +110,8 @@ $ipress_fonts = [
 $ipress->styles->init( $ipress_styles, $ipress_fonts );
 
 //----------------------------------------------
-//  Set Up Custom Post Types & Taxonomies
+//  Theme Custom Post Types & Taxonomies
+//  
 //  @see https://codex.wordpress.org/Function_Reference/register_post_type
 //  @see https://codex.wordpress.org/Function_Reference/register_taxonomy
 //  
@@ -143,14 +143,18 @@ $post_types = $taxonomies = [];
 $ipress->custom->init( $post_types, $taxonomies );
 
 //----------------------------------------------
-//  Custom Hooks & Filters
-//----------------------------------------------
-
-//----------------------------------------------
 //  Shortcode Configuration
 //  - Terms & conditions
 //  - Privacy
 //  - Cookies
+//----------------------------------------------
+
+//----------------------------------------------
+//  Widgets Configuration
+//----------------------------------------------
+
+//----------------------------------------------
+//  Custom Hooks & Filters
 //----------------------------------------------
 
 //------------------------------

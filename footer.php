@@ -20,11 +20,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 ?>
-        </div><!-- .site-inner -->
     </div><!-- #content -->
 
     <?php get_template_part( 'templates/site-footer' ); ?>
-</div><!-- #page / .site-container -->
+</div><!-- #page / .site -->
 
 <?php wp_footer(); ?>
 

@@ -6,7 +6,7 @@
  *
  * Theme compatibility functionality
  * 
- * @package     iPress\Compat
+ * @package     iPress\Includes
  * @link        http://ipress.uk
  * @license     GPL-2.0+
  */
@@ -20,6 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Initialise and set up theme compatibility functionality
+ *
  * - WP Version Check
  * - PHP Version Check
  */ 
