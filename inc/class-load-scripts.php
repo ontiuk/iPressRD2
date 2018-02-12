@@ -323,7 +323,7 @@ final class IPR_Load_Scripts {
     public function header_scripts() {
 
         // Set?
-        $scripts = apply_filters( 'ipress_header_scripts', '' );
+        $scripts = apply_filters( 'ipress_header_scripts', get_theme_mod( 'ipress_header_scripts', '' ) );
         if ( empty( $scripts ) ) { return; }
         
         // Capture output
@@ -337,7 +337,8 @@ final class IPR_Load_Scripts {
     public function footer_scripts() {
 
         // Set?
-        $scripts = apply_filters( 'ipress_footer_scripts', '' );
+        $scripts = apply_filters( 'ipress_footer_scripts', get_theme_mod( 'ipress_footer_scripts', '' ) );
+
         if ( empty( $scripts ) ) { return; }
 
         // Capture output

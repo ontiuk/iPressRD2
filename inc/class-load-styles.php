@@ -213,7 +213,7 @@ final class IPR_Load_Styles {
     //----------------------------------------------
 
     /**
-     * Load conditional styles
+     * Load conditional styles. Deprecated
      */
     public function conditional_styles() {
 
@@ -241,7 +241,7 @@ final class IPR_Load_Styles {
     public function header_styles() {
 
         // Use filter to add styles
-        $styles = apply_filters( 'ipress_header_styles', '' );
+        $styles = apply_filters( 'ipress_header_styles', get_theme_mod( 'ipress_header_styles', '' ) );
         if ( empty( $styles ) ) { return; }
         
         // Capture output   

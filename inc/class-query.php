@@ -229,7 +229,7 @@ final class IPR_Query {
     }
 
     /**
-     * Use deals post type in Search
+     * Customize search post-types
      *
      * @param object $query WP_Query object
      */

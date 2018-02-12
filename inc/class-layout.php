@@ -154,7 +154,7 @@ final class IPR_Layout {
     	if ( is_admin() ) { return $more; }
 
         // Get fiterable link & set markup
-        $view_more = (bool)apply_filters( 'ipress_view_more', '__return_false' );
+        $view_more = (bool)apply_filters( 'ipress_view_more', false );
         $view_article = sprintf( '<a class="view-article" href="%s">%s</a>', 
             esc_url( get_permalink( get_the_ID() ) ), 
             __( 'View Article', 'ipress' ) );
