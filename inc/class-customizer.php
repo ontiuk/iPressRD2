@@ -195,7 +195,7 @@ final class IPR_Customizer {
         } 
          
 		// Change background image section title & priority.
-		$wpm->get_section( 'background_image' )->title     = __( 'Background', 'honeycomb' );
+		$wpm->get_section( 'background_image' )->title     = __( 'Background', 'ipress' );
 		$wpm->get_section( 'background_image' )->priority  = 30;
 
 		// Move background color setting alongside background image.
@@ -203,11 +203,11 @@ final class IPR_Customizer {
 		$wpm->get_control( 'background_color' )->priority  = 20;
 
 		// Change header image section title & priority.
-		$wpm->get_section( 'header_image' )->title         = __( 'Header', 'honeycomb' );
+		$wpm->get_section( 'header_image' )->title         = __( 'Header', 'ipress' );
 		$wpm->get_section( 'header_image' )->priority      = 25;
 
         // Change the default section titles
-        $wpm->get_section( 'colors' )->title = __( 'Theme Colours' );
+        $wpm->get_section( 'colors' )->title = __( 'Theme Colours', 'ipress' );
  
         // Add new Theme Panels, sections & controls
     	$wpm->add_panel( 'theme_panel', [

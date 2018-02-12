@@ -473,7 +473,7 @@ class IPR_Custom {
            		// Dropdown select
            		wp_dropdown_categories(
 		            [ 
-           				'show_option_all' =>  sprintf( __( 'Show All %s' ), $current_taxonomy->label ), 
+           				'show_option_all' =>  sprintf( __( 'Show All %s', 'ipress' ), $current_taxonomy->label ), 
 		            	'taxonomy'		  =>  $taxonomy,     
            				'name'			  =>  $current_taxonomy->name, 
 		            	'orderby'		  =>  'name', 

@@ -22,7 +22,7 @@
     <?php if ( have_posts() ) : ?>
 
         <header class="page-header">
-            <h1 class="page-title tag-title"><?= sprintf( __( 'Tag: %s' ), single_tag_title( '', false ) ); ?></h1>
+            <h1 class="page-title tag-title"><?= sprintf( __( 'Tag: %s', 'ipress' ), single_tag_title( '', false ) ); ?></h1>
             <?php the_archive_description( '<div class="archive-description tag-archive">', '</div>' ); ?>
         </header><!-- .page-header -->
 

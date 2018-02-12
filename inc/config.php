@@ -116,18 +116,18 @@ $ipress->styles->init( $ipress_styles, $ipress_fonts );
 //  @see https://codex.wordpress.org/Function_Reference/register_taxonomy
 //  
 //  $post_types = [ 'cpt' => [ 
-//      'name'          => __( 'CPT', 'maxi' ), 
-//      'plural'        => __( 'CPTs', 'maxi' ),
-//      'description'   => __( 'This is the CPT post type', 'maxi' ), 
+//      'name'          => __( 'CPT', 'ipress' ), 
+//      'plural'        => __( 'CPTs', 'ipress' ),
+//      'description'   => __( 'This is the CPT post type', 'ipress' ), 
 //      'supports'      => [ 'title', 'editor', 'thumbnail' ],
 //      'taxonomies'    => [ 'cpt_tax' ],
 //      'args'          => [], 
 //  ] ];
 //
 //  $taxonomies = [ 'cpt_tax' => [ 
-//      'name'          => __( 'Tax Name', 'maxi' ), 
-//      'plural'        => __( 'Taxes', 'maxi' ),
-//      'description'   => __( 'This is the Taxonomy name', 'maxi' ), 
+//      'name'          => __( 'Tax Name', 'ipress' ), 
+//      'plural'        => __( 'Taxes', 'ipress' ),
+//      'description'   => __( 'This is the Taxonomy name', 'ipress' ), 
 //      'post_types'    => [ 'cpt' ], 
 //      'args'          => [],
 //      'column'        => true, //optional

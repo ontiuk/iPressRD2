@@ -22,7 +22,7 @@
     <?php if ( have_posts() ) : ?>
 
         <header class="page-header">
-            <h1 class="page-title category-title"><?= sprintf( __( 'Category: %s' ), single_cat_title( '', false ) ); ?></h1>
+            <h1 class="page-title category-title"><?= sprintf( __( 'Category: %s', 'ipress' ), single_cat_title( '', false ) ); ?></h1>
             <?php the_archive_description( '<div class="archive-description category-archive">', '</div>' ); ?>
         </header><!-- .page-header -->
    

@@ -22,7 +22,7 @@
      <?php if ( have_posts() ) : the_post();?>
 
         <header class="page-header">
-            <h1 class="page-title author-title"><?= sprintf( __( 'Author: %s' ), '<span class="vcard">' . get_the_author() . '</span>' ); ?></h1>
+            <h1 class="page-title author-title"><?= sprintf( __( 'Author: %s', 'ipress' ), '<span class="vcard">' . get_the_author() . '</span>' ); ?></h1>
         </header><!-- .page-header -->
 
         <?php if ( get_the_author_meta( 'description' ) ) : ?>
