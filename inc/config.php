@@ -61,7 +61,8 @@ $ipress_scripts = [
             'name'  => 'theme', 
             'trans' => [ 
                 'home_url' => home_url(), 
-                'ajax_url' => admin_url( 'admin-ajax.php' ) 
+                'ajax_url' => admin_url( 'admin-ajax.php' ),
+                'rest_url' => rest_url( '/' ) 
             ] 
         ]
     ]
