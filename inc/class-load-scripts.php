@@ -24,11 +24,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class IPR_Load_Scripts {
 
     /**
+     * core scripts for deregistration
+     *
+     * @var array $undo
+     */
+    private $undo = [];
+
+    /**
      * core scripts
      *
      * @var array $core
      */
     private $core = [];
+
+    /**
+     * external scripts
+     *
+     * @var array $external
+     */
+    private $external = [];
 
     /**
      * header scripts
@@ -118,8 +132,14 @@ final class IPR_Load_Scripts {
      */
     public function init( $scripts ) {
 
+        // Core scripts for deregistration: [ 'script-name', 'script-name2' ... ]
+        $this->undo = $this->set_key( $scripts, 'undo' );
+
         // Core scripts: [ 'script-name', 'script-name2' ... ]
         $this->core = $this->set_key( $scripts, 'core' );
+
+        // External scripts: [ 'script-name', 'script-name2' ... ]
+        $this->external = $this->set_key( $scripts, 'external' );
 
         // Header scripts: [ 'label' => [ 'path_url', (array)dependencies, 'version' ] ... ]
         $this->header = $this->set_key( $scripts, 'header' );
@@ -166,8 +186,20 @@ final class IPR_Load_Scripts {
      */
     public function load_scripts() { 
  
+        // Dequeue core scripts - restrict to admin for compatibility
+        if ( !is_admin() ) {
+            foreach ( $this->undo as $k=>$v ) { wp_deregister_script( $v ); }
+        }
+
         // Register & enqueue core scripts
         foreach ( $this->core as $k=>$v ) { wp_enqueue_script( $v ); }
+
+        // Register & enqueue header scripts
+        foreach ( $this->external as $k=>$v ) { 
+            $locale = ( isset( $v[3] ) && $v[3] === true ) ? true : false;
+            wp_register_script( $k, $v[0], $v[1], $v[2], $locale ); 
+            wp_enqueue_script( $k );
+        }
 
         // Register & enqueue header scripts
         foreach ( $this->header as $k=>$v ) { 
