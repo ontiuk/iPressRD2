@@ -1,0 +1,24 @@
+//
+// Layouts - Design patterns, template hierarchy & site structure.
+//
+
+// Align - Class-based undecorated design patterns.
+@import "content-sidebar";
+@import "sidebar-content";
+
+// Posts, pages, hierarchy & site structure
+@import "posts";
+@import 'pages';
+@import 'comments';
+@import 'sidebars';
+@import 'widgets';
+
+// Shop specific pages
+@import "products";
+@import 'product';
+@import 'cart';
+@import 'checkout';
+@import 'account';
+
+// Admin specific layout 
+@import 'admin';
