@@ -50,8 +50,8 @@ Tags:           skeleton theme, wordpress theme, wordpress theme framework
 # Components
     ## Navigation
     ## Media
-		## Captions
-		## Galleries
+        # Captions
+        # Galleries
 # Vendors
     ## Woocommerce
 # Utilities
@@ -66,7 +66,7 @@ Tags:           skeleton theme, wordpress theme, wordpress theme framework
 @import "global/global";
 
 /*--------------------------------------------------------------
-# Elements - Unclassed HTML elements, selectors etc
+# Elements - Core HTML elements & selectors (html, body, hr etc)
 --------------------------------------------------------------*/
 @import "elements/elements";
 
@@ -89,4 +89,3 @@ Tags:           skeleton theme, wordpress theme, wordpress theme framework
 # Utilities - CSS Helpers and overrides.
 --------------------------------------------------------------*/
 @import "utilities/utilities";
-

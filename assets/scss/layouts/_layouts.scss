@@ -2,23 +2,37 @@
 // Layouts - Design patterns, template hierarchy & site structure.
 //
 
-// Align - Class-based undecorated design patterns.
+/*
+ * Content & Sidebar Alignment
+ */
 @import "content-sidebar";
 @import "sidebar-content";
 
-// Posts, pages, hierarchy & site structure
+/**
+ * Core structure - Header & Footer
+ */
+@import "header";
+@import "footer";
+
+/**
+ * Post, Pages, Comments, Sidebars & Widgets
+ */
 @import "posts";
 @import 'pages';
 @import 'comments';
 @import 'sidebars';
 @import 'widgets';
 
-// Shop specific pages
+/**
+ * Shop pages, products, product, cart, checkout, account
+ */
 @import "products";
 @import 'product';
 @import 'cart';
 @import 'checkout';
 @import 'account';
 
-// Admin specific layout 
+/**
+ * Admin UI
+ */
 @import 'admin';

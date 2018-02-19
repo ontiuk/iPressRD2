@@ -49,8 +49,8 @@ Tags:           skeleton theme, wordpress theme, wordpress theme framework
 # Components
     ## Navigation
     ## Media
-		## Captions
-		## Galleries
+        # Captions
+        # Galleries
 # Vendors
     ## Woocommerce
 # Utilities
@@ -58,7 +58,6 @@ Tags:           skeleton theme, wordpress theme, wordpress theme framework
 	## Alignments
 	## Clearings
 --------------------------------------------------------------*/
-
 /*--------------------------------------------------------------
 # Global - Fonts, functions, variables, mixins, config & reset.
 --------------------------------------------------------------*/
@@ -235,10 +234,7 @@ th {
   padding: 0; }
 
 /*--------------------------------------------------------------
-# Elements - Unclassed HTML elements, selectors etc
---------------------------------------------------------------*/
-/*--------------------------------------------------------------
-# Elements - Core HTML tags (html, body, hr etc)
+# Elements - Core HTML elements & selectors (html, body, hr etc)
 --------------------------------------------------------------*/
 html {
   box-sizing: border-box; }
@@ -271,9 +267,6 @@ textarea {
   font-size: 1rem;
   line-height: 1.5; }
 
-/*--------------------------------------------------------------
-# Elements - General core HTML tags 
---------------------------------------------------------------*/
 p {
   margin-bottom: 1.5em; }
 
@@ -313,12 +306,6 @@ mark, ins {
 big {
   font-size: 125%; }
 
-/*--------------------------------------------------------------
-# Elements - Typography.
---------------------------------------------------------------*/
-/*--------------------------------------------------------------
-# Elements - Links ( A tag etc ).
---------------------------------------------------------------*/
 a {
   color: royalblue; }
   a:visited {
@@ -336,9 +323,6 @@ a {
 h1, h2, h3, h4, h5, h6 {
   clear: both; }
 
-/*--------------------------------------------------------------
-# Elements - Lists.
---------------------------------------------------------------*/
 ul, ol {
   margin: 0 0 1.5em 3em; }
 
@@ -359,16 +343,10 @@ dt {
 dd {
   margin: 0 1.5em 1.5em; }
 
-/*--------------------------------------------------------------
-# Elements - Tables.
---------------------------------------------------------------*/
 table {
   margin: 0 0 1.5em;
   width: 100%; }
 
-/*--------------------------------------------------------------
-# Elements - Images.
---------------------------------------------------------------*/
 img {
   height: auto;
   /* Make sure images are scaled correctly. */
@@ -379,9 +357,6 @@ figure {
   margin: 1em 0;
   /* Extra wide images within figure tags don't overflow the content area. */ }
 
-/*--------------------------------------------------------------
-# Elements - Forms.
---------------------------------------------------------------*/
 input[type="text"],
 input[type="email"],
 input[type="url"],
@@ -426,9 +401,6 @@ select {
 textarea {
   width: 100%; }
 
-/*--------------------------------------------------------------
-# Elements - Buttons.
---------------------------------------------------------------*/
 button,
 input[type="button"],
 input[type="reset"],
@@ -459,6 +431,9 @@ input[type="submit"] {
 /*--------------------------------------------------------------
 # Layouts - Posts, pages & custom data layouts
 --------------------------------------------------------------*/
+/*
+ * Content & Sidebar Alignment
+ */
 .content-area {
   float: left;
   margin: 0 -25% 0 0;
@@ -493,12 +468,12 @@ input[type="submit"] {
   clear: both;
   width: 100%; }
 
-/*--------------------------------------------------------------
-# Layouts - Posts, Blog & Single Post
---------------------------------------------------------------*/
-/*--------------------------------------------------------------
-# Layouts - Pages
---------------------------------------------------------------*/
+/**
+ * Core structure - Header & Footer
+ */
+/**
+ * Post, Pages, Comments, Sidebars & Widgets
+ */
 .sticky {
   display: block; }
 
@@ -517,30 +492,21 @@ input[type="submit"] {
   clear: both;
   margin: 0 0 1.5em; }
 
-/*--------------------------------------------------------------
-# Layouts - Comments
---------------------------------------------------------------*/
 .comment-content a {
   word-wrap: break-word; }
 
 .bypostauthor {
   display: block; }
 
-/*--------------------------------------------------------------
-# Layouts - Sidebars
---------------------------------------------------------------*/
-/*--------------------------------------------------------------
-# Layouts - Widgets
---------------------------------------------------------------*/
 .widget {
   margin: 0 0 1.5em;
   /* Make sure select elements fit in widgets. */ }
   .widget select {
     max-width: 100%; }
 
-/*--------------------------------------------------------------
-# Layouts - Products page
---------------------------------------------------------------*/
+/**
+ * Shop pages, products, product, cart, checkout, account
+ */
 ul.products {
   content: "";
   display: table;
@@ -586,12 +552,6 @@ ul.products {
 
   .columns-6 ul.products li.product {
     width: 13.49333%; } }
-/*--------------------------------------------------------------
-# Layouts - Product page
---------------------------------------------------------------*/
-/**
- * Single Product
- */
 .single-product div.product {
   content: "";
   display: table;
@@ -655,9 +615,6 @@ ul.products {
 .stock.out-of-stock {
   color: #e2401c; }
 
-/*--------------------------------------------------------------
-# Layouts - Shop cart / basket
---------------------------------------------------------------*/
 .site-header-cart {
   position: relative;
   margin: 0;
@@ -723,9 +680,6 @@ table.shop_table_responsive tr td {
     display: table-cell; }
     table.shop_table_responsive tr td:before {
       display: none; } }
-/*--------------------------------------------------------------
-# Layouts - Shop checkout
---------------------------------------------------------------*/
 @media screen and (min-width: 768px) {
   .col2-set .form-row-first {
     float: left;
@@ -736,17 +690,11 @@ table.shop_table_responsive tr td {
   .col2-set .form-row-first,
   .col2-set .form-row-last {
     width: 48.1%; } }
-/*--------------------------------------------------------------
-# Layouts - Shop account & customer
---------------------------------------------------------------*/
-/*--------------------------------------------------------------
-# Layouts - Admin UI
---------------------------------------------------------------*/
+/**
+ * Admin UI
+ */
 /*--------------------------------------------------------------
 # Components - Designed components, chunks of UI.
---------------------------------------------------------------*/
-/*--------------------------------------------------------------
-# Components - General Styles
 --------------------------------------------------------------*/
 /**
  * Star rating
@@ -774,12 +722,12 @@ table.shop_table_responsive tr td {
     left: 0;
     position: absolute;
     padding-top: 1.5em; }
-  .star-rating span:before {
-    content: "\53\53\53\53\53";
-    top: 0;
-    position: absolute;
-    left: 0;
-    color: royalblue; }
+    .star-rating span:before {
+      content: "\53\53\53\53\53";
+      top: 0;
+      position: absolute;
+      left: 0;
+      color: royalblue; }
 
 p.stars a {
   position: relative;
@@ -832,9 +780,9 @@ p.stars.selected a:not(.active):before {
 .required {
   color: red; }
 
-/*--------------------------------------------------------------
-# Components - Navigation
---------------------------------------------------------------*/
+/**
+ * Navigation
+ */
 .main-navigation {
   clear: both;
   display: block;
@@ -897,9 +845,9 @@ p.stars.selected a:not(.active):before {
   text-align: right;
   width: 50%; }
 
-/*--------------------------------------------------------------
-# Components - Media ( captions & Galleries )
---------------------------------------------------------------*/
+/**
+ * Media ( captions & Galleries )
+ */
 .page-content .wp-smiley,
 .entry-content .wp-smiley,
 .comment-content .wp-smiley {
@@ -918,9 +866,6 @@ object {
 .custom-logo-link {
   display: inline-block; }
 
-/*--------------------------------------------------------------
-## Captions
---------------------------------------------------------------*/
 .wp-caption {
   margin-bottom: 1.5em;
   max-width: 100%; }
@@ -934,9 +879,6 @@ object {
 .wp-caption-text {
   text-align: center; }
 
-/*--------------------------------------------------------------
-## Galleries
---------------------------------------------------------------*/
 .gallery {
   margin-bottom: 1.5em; }
 
@@ -978,9 +920,9 @@ object {
 .infinity-end.neverending .site-footer {
   display: block; }
 
-/*--------------------------------------------------------------
-# Vendors - Woocommerce
---------------------------------------------------------------*/
+/**
+ * Woocommerce
+ */
 .woocommerce-tabs ul.tabs {
   list-style: none;
   margin: 0;
@@ -1091,9 +1033,6 @@ p.no-comments {
 /*--------------------------------------------------------------
 # Utilities - CSS Helpers and overrides.
 --------------------------------------------------------------*/
-/*--------------------------------------------------------------
-# Utilities - Accessibility
---------------------------------------------------------------*/
 /* Text meant only for screen readers. */
 .screen-reader-text {
   border: 0;
@@ -1132,9 +1071,6 @@ p.no-comments {
 #content[tabindex="-1"]:focus {
   outline: 0; }
 
-/*--------------------------------------------------------------
-# Utilities - Aligments
---------------------------------------------------------------*/
 .alignleft {
   display: inline;
   float: left;
@@ -1151,9 +1087,6 @@ p.no-comments {
   margin-left: auto;
   margin-right: auto; }
 
-/*--------------------------------------------------------------
-# Utilities - Clearings
---------------------------------------------------------------*/
 .clear:before,
 .clear:after,
 .entry-content:before,

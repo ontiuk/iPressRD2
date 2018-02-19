@@ -2,10 +2,9 @@
 // Components - Media ( captions & galleries ) 
 //
 
-/*--------------------------------------------------------------
-# Components - Media ( captions & Galleries )
---------------------------------------------------------------*/
-
+/**
+ * Media ( captions & Galleries )
+ */
 .page-content .wp-smiley,
 .entry-content .wp-smiley,
 .comment-content .wp-smiley {
@@ -27,9 +26,6 @@ object {
 	display: inline-block;
 }
 
-/*--------------------------------------------------------------
-## Captions
---------------------------------------------------------------*/
 .wp-caption {
 	margin-bottom: 1.5em;
 	max-width: 100%;
@@ -46,10 +42,6 @@ object {
 .wp-caption-text {
 	text-align: center;
 }
-
-/*--------------------------------------------------------------
-## Galleries
---------------------------------------------------------------*/
 
 .gallery {
 	margin-bottom: 1.5em;
