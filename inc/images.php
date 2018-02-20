@@ -275,8 +275,7 @@ function ipress_post_thumbnail_url( $size = 'full' ) {
  */
 function ipress_site_title_or_logo( $echo = true ) {
     if ( has_custom_logo() ) {
-   		$logo = get_custom_logo();
-    	$html = is_home() ? sprintf( '<h1 class="logo">%s</h1>', $logo ) : $logo;
+   		$html = get_custom_logo();
     } else if ( function_exists( 'jetpack_has_site_logo' ) && jetpack_has_site_logo() ) {
    		$logo    = site_logo()->logo;
     	$logo_id = get_theme_mod( 'custom_logo' ); 
