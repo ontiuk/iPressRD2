@@ -77,7 +77,6 @@ final class IPR_Sidebars {
         ] );
 
         // Footer widgets
-        $footer_sidebars = apply_filters( 'ipress_footer_sidebars', [] );
         $footer_sidebars = apply_filters( 'ipress_footer_sidebars', [
             'footer-1'   => [
                 'name'          => __( 'Footer Left Sidebar', 'ipress' ),
