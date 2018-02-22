@@ -19,21 +19,14 @@
 <div id="primary" class="content-area">
 	<main id="main" class="site-main" role="main">
 
-    <?php if ( have_posts() ) : ?>
+    <?php if ( have_posts() ) : the_post(); ?>
 
         <header class="page-header">
-            <h1 class="page-title home-title"><?php __( 'Our Latest Posts', 'ipress' ); ?></h1>
-            <?php the_archive_description( '<div class="archive-description home-archive">', '</div>' ); ?>
+             <h1 class="page-title single-title"><?= get_the_title(); ?></h1>
         </header><!-- .page-header -->
 
-        <?php while ( have_posts() ) : the_post(); ?>
+        <?php get_template_part( 'templates/content', 'page' ); ?>
     
-            <?php get_template_part( 'templates/content' ); ?>
-
-        <?php endwhile; ?>
-
-        <?php the_posts_navigation(); ?>
-
     <?php else: ?>
     
         <?php get_template_part( 'templates/content', 'none' ); ?>
@@ -43,5 +36,5 @@
 	</main><!-- #main -->
 </div><!-- #primary -->
 
-<?php get_sidebar(); ?>
+<?php do_action( 'ipress_sidebar' ); ?>
 <?php get_footer(); ?>

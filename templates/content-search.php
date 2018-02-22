@@ -22,25 +22,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class( 'entry' ); ?>>
 
-	<header class="entry-header">
-		<?php the_title( sprintf( '<h2 class="entry-title"><a href="%s" rel="bookmark">', esc_url( get_permalink() ) ), '</a></h2>' ); ?>
-
-		<?php if ( 'post' === get_post_type() ) : ?>
-		<div class="entry-meta">
-			<?php ipress_posted_on(); ?>
-			<?php ipress_posted_by(); ?>
-		</div><!-- .entry-meta -->
-		<?php endif; ?>
-	</header><!-- .entry-header -->
-
-	<div class="entry-summary">
-		<?php the_excerpt(); ?>
-	</div><!-- .entry-summary -->
-
-    <footer class="entry-footer"> 
-        <?php ipress_entry_footer(); ?> 
-    </footer><!-- .entry-footer --> 
-
-    <?php ipress_init_structured_data(); ?>
+	<?php
+	/**
+	 * Functions hooked in to ipress_loop_post action.
+	 *
+	 * @hooked ipress_post_header       - 10
+	 * @hooked ipress_post_meta         - 20
+	 * @hooked ipress_post_excerpt      - 30
+	 * @hooked ipress_post_footer       - 40
+	 */
+    do_action( 'ipress_loop_search' ); ?>
 
 </article><!-- #post-<?php the_ID(); ?> -->

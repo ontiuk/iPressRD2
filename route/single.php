@@ -25,9 +25,11 @@
             <?php the_title( '<h1 class="page-title single-title">', '</h1>'); ?>
         </header><!-- .page-header -->
 
-        <?php get_template_part( 'templates/content' ); ?>
+        <?php do_action( 'ipress_single_post_before' ); ?>
 
-        <?php if ( comments_open() || get_comments_number() ) :	comments_template(); endif; ?>
+        <?php get_template_part( 'content', 'single' ); ?>
+
+        <?php do_action( 'ipress_single_post_after' ); ?>
 
     <?php else: ?>
     
@@ -38,5 +40,5 @@
 	</main><!-- #main -->
 </div><!-- #primary -->
 
-<?php get_sidebar(); ?>
+<?php do_action( 'ipress_sidebar' ); ?>
 <?php get_footer(); ?>

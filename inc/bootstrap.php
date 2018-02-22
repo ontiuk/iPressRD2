@@ -90,6 +90,7 @@ require_once IPRESS_INCLUDES_DIR . '/shortcodes.php';
 // Functions: theme functions, actions & filters
 require_once IPRESS_INCLUDES_DIR . '/template-hooks.php';
 require_once IPRESS_INCLUDES_DIR . '/template-functions.php';
+require_once IPRESS_INCLUDES_DIR . '/template-tags.php';
 
 //----------------------------------------------
 //  Includes - Classes

@@ -25,9 +25,17 @@
              <h1 class="page-title single-title"><?= get_the_title(); ?></h1>
         </header><!-- .page-header -->
 
+        <?php do_action( 'ipress_page_before' ); ?>
+
         <?php get_template_part( 'templates/content', 'page' ); ?>
     
-        <?php if ( comments_open() || get_comments_number() ) : comments_template(); endif; ?>
+        <?php   
+		/**
+		 * Functions hooked in to ipress_page_after action
+		 *
+		 * @hooked ipress_display_comments - 10
+		 */
+        do_action( 'ipress_page_after' ); ?>
 
     <?php else: ?>
     
@@ -38,5 +46,5 @@
 	</main><!-- #main -->
 </div><!-- #primary -->
 
-<?php get_sidebar(); ?>
+<?php do_action( 'ipress_sidebar' ); ?>
 <?php get_footer(); ?>

@@ -4,7 +4,7 @@
  * iPress - WordPress Theme Framework                       
  * ==========================================================
  *
- * Template part for displaying page content in page.php.
+ * Template part for displaying a single post.
  *
  * @package     iPress\Templates
  * @see         https://codex.wordpress.org/Template_Hierarchy
@@ -23,13 +23,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 <article id="post-<?php the_ID(); ?>" <?php post_class( 'entry' ); ?>>
 
 	<?php
+	do_action( 'ipress_single_post_top' );
+
 	/**
-	 * Functions hooked in to ipress_page add_action
+	 * Functions hooked into ipress_single_post add_action
 	 *
-	 * @hooked ipress_page_header       - 10
-	 * @hooked ipress_page_content      - 20
-	 * @hooked ipress_page_footer       - 30
+	 * @hooked ipress_post_header       - 10
+	 * @hooked ipress_post_meta         - 20
+	 * @hooked ipress_post_content      - 30
+	 * @hooked ipress_footer            - 40
 	 */
-	do_action( 'ipress_page' );	?>
+	do_action( 'ipress_single_post' );
+
+	/**
+	 * Functions hooked in to ipress_single_post_bottom action
+	 *
+	 * @hooked ipress_post_nav         - 10
+	 * @hooked ipress_display_comments - 20
+	 */
+	do_action( 'ipress_single_post_bottom' ); ?>
 
 </article><!-- #post-<?php the_ID(); ?> -->

@@ -27,13 +27,7 @@
             <h1 class="page-title search-title"><?php echo sprintf( __( 'Search: %s Results for %s', 'ipress' ), $wp_query->found_posts, '<span>' . get_search_query() . '</span>' ); ?></h1>
         </header><!-- .page-header -->
 
-        <?php while ( have_posts() ) : the_post(); ?>
-    
-            <?php get_template_part( 'templates/content', 'search' ); ?>
-
-        <?php endwhile; ?>
-
-        <?php the_posts_navigation(); ?>
+        <?php get_template_part( 'templates/loop-search' ); ?>
 
     <?php else: ?>
     
@@ -44,5 +38,5 @@
 	</main><!-- #main -->
 </div><!-- #primary -->
 
-<?php get_sidebar(); ?>
+<?php do_action( 'ipress_sidebar' ); ?>
 <?php get_footer(); ?>

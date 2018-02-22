@@ -153,7 +153,6 @@ final class IPR_Customizer {
 
     	// Content position
         $ipress_layout = get_theme_mod( 'ipress_layout' );
-        error_log( 'Layout[' . $ipress_layout . ']' );
     	if ( empty( $ipress_layout ) ) {
     		set_theme_mod( 'ipress_layout', 'left' );
     	}

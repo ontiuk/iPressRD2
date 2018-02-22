@@ -26,13 +26,7 @@
             <?php the_archive_description( '<div class="archive-description date-archive">', '</div>' ); ?>
         </header><!-- .page-header -->
         
-        <?php while ( have_posts() ) : the_post(); ?>
-    
-            <?php get_template_part( 'templates/content' ); ?>
-
-        <?php endwhile; ?>
-
-        <?php the_posts_navigation(); ?>
+        <?php get_template_part( 'templates/loop' ); ?>
 
     <?php else: ?>
     
@@ -43,5 +37,5 @@
 	</main><!-- #main -->
 </div><!-- #primary -->
 
-<?php get_sidebar(); ?>
+<?php do_action( 'ipress_sidebar' ); ?>
 <?php get_footer(); ?>

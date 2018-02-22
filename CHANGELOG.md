@@ -7,3 +7,4 @@
 * (29 August 2017). 1.0.5 Add basic SASS stylesheet
 * (11 February 2018). 1.0.6 Code rework & CSS restyle
 * (18 February 2018). 1.0.7 SASS restructure
+* (22 February 2018). 1.0.8 Template restructure

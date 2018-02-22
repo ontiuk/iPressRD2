@@ -20,10 +20,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 ?>
+    	<?php do_action( 'ipress_after_content' ); ?>
+
     </div><!-- #content -->
 
-    <?php get_template_part( 'templates/site-footer' ); ?>
-</div><!-- #page / .site -->
+    <?php do_action( 'ipress_before_footer' ); ?>
+
+    <footer id="footer" class="site-footer" role="contentinfo">
+        <div class="wrap">
+			<?php
+			/**
+			 * Functions hooked in to ipress_footer action
+			 *
+			 * @hooked ipress_footer_widgets - 10
+			 * @hooked ipress_credit         - 20
+			 */
+			do_action( 'ipress_footer' ); ?>
+        </div>
+    </footer>
+
+    <?php do_action( 'ipress_after_footer' ); ?>
 
 <?php wp_footer(); ?>
 

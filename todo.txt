@@ -1,0 +1,12 @@
+iPress RD2 ToDo
+=====================
+
+Add sections to customizer: analytics, header scripts, header styles
+
+Move to bootstrap theme: https://getbootstrap.com/docs/4.0/examples/blog/
+- cut down version of blog
+- customizer left/right integrated with body_class ok, also with custom theme tag to change col-md-8 etc to col-md-4 i.e. swap orientation.
+
+- bootstrap shortcodes - ready for gutenberg etc.
+- Add bootstrap4 menu class & functionality from maxi etc
+
