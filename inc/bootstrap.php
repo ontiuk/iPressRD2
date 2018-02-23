@@ -87,7 +87,7 @@ require_once IPRESS_INCLUDES_DIR . '/navigation.php';
 // Shortcodes functionality
 require_once IPRESS_INCLUDES_DIR . '/shortcodes.php';
 
-// Functions: theme functions, actions & filters
+// Functions: theme template functions
 require_once IPRESS_INCLUDES_DIR . '/template-tags.php';
 
 //----------------------------------------------
