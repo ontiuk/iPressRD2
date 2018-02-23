@@ -52,7 +52,8 @@ final class iPress_Woocommerce {
         add_action( 'woocommerce_after_main_content',  [ $this, 'wrapper_after' ] ); 
 
         // Cart fragments
-        add_filter( 'woocommerce_add_to_cart_fragments', [ $this, 'cart_link_fragment' ] ); 
+        add_filter( 'woocommerce_add_to_cart_fragments', [ $this, 'header_cart_link_fragment' ], 10, 1 ); 
+        add_filter( 'woocommerce_add_to_cart_fragments', [ $this, 'header_cart_content_fragment' ], 10, 1 ); 
 
         // Single Product Page Hook Modifications
         add_action( 'init', [ $this, 'single_product_markup' ] );
@@ -148,11 +149,31 @@ final class iPress_Woocommerce {
      * 
      * @param   array $fragments Fragments to refresh via AJAX
      * @return  array
+     * @todo    This is template specific but use css attribute
+     * @uses    /woocommerce theme overwrite directory
      */ 
-    public function cart_link_fragment( $fragments ) { 
+    public function header_cart_link_fragment( $fragments ) { 
+
         ob_start(); 
-        ipress_wc_cart_link(); 
-        $fragments['a.cart-contents'] = ob_get_clean(); 
+        wc_get_template_part( 'templates/header-cart-link' );
+        $fragments['a.header-cart-link'] = ob_get_clean(); 
+	 
+    	return $fragments; 
+    } 
+
+    /** 
+     * Keep cart contents update when products are added to the cart via AJAX 
+     * 
+     * @param   array $fragments Fragments to refresh via AJAX
+     * @return  array
+     * @todo    This is template specific but use css attribute
+     * @uses    /woocommerce theme overwrite directory
+     */ 
+    public function header_cart_content_fragment( $fragments ) { 
+
+        ob_start(); 
+        wc_get_template_part( 'templates/header-cart-content' );
+        $fragments['div.header-cart-content'] = ob_get_clean(); 
 
     	return $fragments; 
     } 

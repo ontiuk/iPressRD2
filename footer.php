@@ -27,6 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     <?php do_action( 'ipress_before_footer' ); ?>
 
     <footer id="footer" class="site-footer" role="contentinfo">
+        <?php do_action( 'ipress_footer_top' ); ?>
         <div class="wrap">
 			<?php
 			/**
@@ -37,6 +38,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			 */
 			do_action( 'ipress_footer' ); ?>
         </div>
+        <?php do_action( 'ipress_footer_bottom' ); ?>
     </footer>
 
     <?php do_action( 'ipress_after_footer' ); ?>

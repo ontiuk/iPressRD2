@@ -88,8 +88,6 @@ require_once IPRESS_INCLUDES_DIR . '/navigation.php';
 require_once IPRESS_INCLUDES_DIR . '/shortcodes.php';
 
 // Functions: theme functions, actions & filters
-require_once IPRESS_INCLUDES_DIR . '/template-hooks.php';
-require_once IPRESS_INCLUDES_DIR . '/template-functions.php';
 require_once IPRESS_INCLUDES_DIR . '/template-tags.php';
 
 //----------------------------------------------
@@ -165,6 +163,9 @@ require_once IPRESS_INCLUDES_DIR . '/class-ajax.php';
 
 // REST API Functionality: actions & filters
 require_once IPRESS_INCLUDES_DIR . '/class-api.php';
+
+// Hooks Support: actions & filters
+require_once IPRESS_INCLUDES_DIR . '/class-hooks.php';
 
 // Content Functionality: actions & filters
 require_once IPRESS_INCLUDES_DIR . '/class-content.php';
