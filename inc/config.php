@@ -33,7 +33,13 @@ global $ipress;
 $ipress_scripts = [
 
     // Core scripts: [ 'script-name', 'script-name2' ... ]
+    'undo' => [],
+
+    // Core scripts: [ 'script-name', 'script-name2' ... ]
     'core' => [ 'jquery' ],
+
+    // External scripts: [ 'label' => [ 'path_url', (array)dependencies, 'version', 'locale' ] ... ]
+    'external' => [],
 
     // Header scripts: [ 'label' => [ 'path_url', (array)dependencies, 'version' ] ... ]
     'header' => [],

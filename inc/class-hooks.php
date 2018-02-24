@@ -45,7 +45,7 @@ final class IPR_Hooks {
     /**
      * WordPress core hooks - actions & filters
      */
-    private function init_core();
+    private function init_core() {};
 
     //----------------------------------------------
     //  Theme Hooks - Actions & Filters

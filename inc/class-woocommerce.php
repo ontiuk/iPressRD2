@@ -41,10 +41,6 @@ final class iPress_Woocommerce {
         // Related product settings
         add_filter( 'woocommerce_output_related_products_args', [ $this, 'related_products_args' ] ); 
 
-        // Shop product columns
-        add_action( 'woocommerce_before_shop_loop', [ $this, 'product_columns_wrapper' ], 40 ); 
-        add_action( 'woocommerce_after_shop_loop',  [ $this, 'product_columns_wrapper_close' ], 40 ); 
-
         // Default WooCommerce wrapper
         remove_action( 'woocommerce_before_main_content', 'woocommerce_output_content_wrapper', 10 ); 
         remove_action( 'woocommerce_after_main_content', 'woocommerce_output_content_wrapper_end', 10 ); 
