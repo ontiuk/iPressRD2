@@ -203,7 +203,7 @@ function ipress_image_sizes( $additional=true ) {
  * @param   string      $size
  * @return  array
  */
-function ipress_get_attachment_meta( $attachment_id, $size ){
+function ipress_get_attachment_meta( $attachment_id, $size = '' ){
 
     // Set up data
     $data = [
@@ -222,7 +222,8 @@ function ipress_get_attachment_meta( $attachment_id, $size ){
     if ( empty( $attachment ) ) { return $data; }
     
     // Get image data
-    $att_data_thumb = wp_get_attachment_image_src( $attachment_id, $size );
+    $att_data_thumb = ( empty( $size ) ) ? wp_get_attachment_image_src( $attachment_id ) :
+                                           wp_get_attachment_image_src( $attachment_id, $size );
     if ( ! $att_data_thumb ) { return $data; }
     
     // Construct data
