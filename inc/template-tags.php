@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Prints HTML with meta information for the current post-date/time and author.
  */
-function ipress_posted_on() {
+function ipress_posted_on( $byline=false) {
     
 	$time_string = '<time class="entry-date published updated" datetime="%1$s">%2$s</time>';
 	if ( get_the_time( 'U' ) !== get_the_modified_time( 'U' ) ) {
@@ -39,12 +39,20 @@ function ipress_posted_on() {
 		esc_html( get_the_modified_date() )
 	);
 
+	// Get the author name; wrap it in a link.
+	$byline = sprintf(
+		/* translators: %s: post author */
+		__( 'by %s', 'twentyseventeen' ),
+		'<span class="author vcard"><a class="url fn n" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '">' . get_the_author() . '</a></span>'
+	);
+
 	$posted_on = sprintf(
 		esc_html_x( 'Posted on %s', 'post date', 'ipress' ),
 		'<a href="' . esc_url( get_permalink() ) . '" rel="bookmark">' . $time_string . '</a>'
 	);
 
-	echo sprintf( '<span class="posted-on">%s</span><span class="byline">%s</span>', $posted_on, $byline );
+	echo ( $byline ) ? sprintf( '<span class="posted-on">%s</span><span class="byline">%s</span>', $posted_on, $byline ) :
+	                   sprintf( '<span class="posted-on">%s</span>', $posted_on);
 }
 
 /** 
