@@ -12,6 +12,8 @@
  * @license     GPL-2.0+
  */
 ?>
+<?php do_action( 'ipress_loop_post_before' ); ?>
+
 <article id="post-<?php the_ID(); ?>" <?php post_class( 'entry' ); ?>>
 
 	<?php
@@ -26,3 +28,5 @@
 	 */
 	do_action( 'ipress_loop_post' ); ?>
 </article><!-- #post-<?php the_ID(); ?> -->
+
+<?php do_action( 'ipress_loop_post_after' ); ?>
