@@ -4,7 +4,7 @@
  * iPress - WordPress Theme Framework                       
  * ==========================================================
  *
- * Template for displaying generic category archives
+ * Template for displaying generic author archives
  * 
  * @see https://codex.wordpress.org/Template_Hierarchy
  * 
@@ -17,15 +17,27 @@
 <?php get_header(); ?>
 
 <div id="primary" class="content-area">
+
+<?php do_action( 'ipress_before_main_content' ); ?>
+
 	<main id="main" class="site-main" role="main">
 
-    <?php if ( have_posts() ) : ?>
+    <?php do_action( 'ipress_archive_before' ); ?>
+
+     <?php if ( have_posts() ) : the_post();?>
 
         <header class="page-header">
-            <h1 class="page-title category-title"><?= sprintf( __( 'Category: %s', 'ipress' ), single_cat_title( '', false ) ); ?></h1>
-            <?php the_archive_description( '<div class="archive-description category-archive">', '</div>' ); ?>
+            <h1 class="page-title author-title"><?= sprintf( __( 'Author: %s', 'ipress' ), '<span class="vcard">' . get_the_author() . '</span>' ); ?></h1>
         </header><!-- .page-header -->
-   
+
+        <?php if ( get_the_author_meta( 'description' ) ) : ?>
+        <section class="content-author">
+            <?= wpautop( get_the_author_meta( 'description' ) ); ?>
+        </section>    
+        <?php endif; ?>
+    
+        <?php rewind_posts(); ?>
+
         <?php get_template_part( 'templates/loop' ); ?>
 
     <?php else: ?>
@@ -34,7 +46,12 @@
 
     <?php endif; ?>
 
+    <?php do_action( 'ipress_archive_after' ); ?>
+
 	</main><!-- #main -->
+
+<?php do_action( 'ipress_after_main_content' ); ?>
+
 </div><!-- #primary -->
 
 <?php do_action( 'ipress_sidebar' ); ?>

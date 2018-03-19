@@ -4,7 +4,8 @@
  * iPress - WordPress Theme Framework                       
  * ==========================================================
  *
- * Template for displaying search content
+ * Template for displaying custom post-type archives
+ * - Amend as required
  * 
  * @see https://codex.wordpress.org/Template_Hierarchy
  *
@@ -14,28 +15,37 @@
  */
 ?>
 
-<?php global $wp_query; ?>
-
 <?php get_header(); ?>
 
 <div id="primary" class="content-area">
+
+<?php do_action( 'ipress_before_main_content' ); ?>
+
 	<main id="main" class="site-main" role="main">
 
-    <?php if ( have_posts() ) : ?>
+    <?php do_action( 'ipress_archive_before' ); ?>
+
+        <?php if ( have_posts() ) : ?>
 
         <header class="page-header">
-            <h1 class="page-title search-title"><?php echo sprintf( __( 'Search: %s Results for %s', 'ipress' ), $wp_query->found_posts, '<span>' . get_search_query() . '</span>' ); ?></h1>
+            <?php the_archive_title( '<h1 class="page-title archive-title">', '</h1>' ); ?>
+            <?php the_archive_description( '<div class="archive-description">', '</div>' ); ?>
         </header><!-- .page-header -->
-
-        <?php get_template_part( 'templates/loop-search' ); ?>
+        
+        <?php get_template_part( 'templates/loop' ); ?>
 
     <?php else: ?>
     
         <?php get_template_part( 'templates/content', 'none' ); ?>
 
     <?php endif; ?>
-        
+
+    <?php do_action( 'ipress_archive_after' ); ?>
+
 	</main><!-- #main -->
+
+<?php do_action( 'ipress_after_main_content' ); ?>
+
 </div><!-- #primary -->
 
 <?php do_action( 'ipress_sidebar' ); ?>

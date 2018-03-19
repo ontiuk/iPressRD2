@@ -8,3 +8,4 @@
 * (11 February 2018). 1.0.6 Code rework & CSS restyle
 * (18 February 2018). 1.0.7 SASS restructure
 * (22 February 2018). 1.0.8 Template restructure
+* (18 March 2018). 1.0.9 Template directory reset

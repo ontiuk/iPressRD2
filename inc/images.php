@@ -239,13 +239,13 @@ function ipress_get_attachment_meta( $attachment_id, $size = '' ){
 }
 
 /**
- * get post attachements by attachement mime type 
+ * get post attachements by attachment mime type 
  *
  * @param   integer     $post_id
  * @param   string      $att_type
  * @return  array
  */
-function ipress_get_post_attachement( $post_id, $att_type ){
+function ipress_get_post_attachment( $post_id, $att_type ){
 
     // Get attachment data
     $attachments = get_posts( [
@@ -263,12 +263,8 @@ function ipress_get_post_attachement( $post_id, $att_type ){
  * Retrieve the post thumbnail url if set
  */
 function ipress_post_thumbnail_url( $size = 'full' ) { 
-    $thumb_id = get_post_thumbnail_id(); 
-    if ( empty( $thumb_id ) ) { return ''; }
-
-    $thumb_url_src = wp_get_attachment_image_src( $thumb_id, $size, true ); 
-    $thumb_url = $thumb_url_array[0]; 
-    return $thumb_url; 
+    $thumb_id = (int) get_post_thumbnail_id(); 
+    return ( $thumb_id > 0 ) ? wp_get_attachment_image_src( $thumb_id, $size, true )[0] : ''; 
 } 
 
 /**

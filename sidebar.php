@@ -4,7 +4,7 @@
  * iPress - WordPress Theme Framework                       
  * ==========================================================
  *
- * Sidebar containing the main widget area.
+ * Sidebar containing the main widget area
  * 
  * @package     iPress
  * @link        http://ipress.uk

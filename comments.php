@@ -1,6 +1,6 @@
 <?php
 /**
- * The template for displaying comments
+ * The template for displaying comments list and comment form
  *
  * @see https://codex.wordpress.org/Template_Hierarchy
  *
@@ -20,6 +20,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( post_password_required() ) { return; }
 
 ?>
+<?php do_action( 'ipress_before_comments' ); ?>
+
 <div id="comments" class="comments-area" aria-label="Post Comments">
 
 	<?php
@@ -55,6 +57,8 @@ if ( post_password_required() ) { return; }
 
 	endif; // Check for have_comments().
 
+    do_action( 'ipress_before_comments' );
+
 	$args = apply_filters( 'ipress_comment_form_args', [
 		'title_reply_before' => '<span id="reply-title" class="comment-reply-title">',
 		'title_reply_after'  => '</span>',
@@ -63,3 +67,5 @@ if ( post_password_required() ) { return; }
 	?>
 
 </div><!-- #comments -->
+
+<?php do_action( 'ipress_after_comments' );

@@ -45,7 +45,7 @@ final class IPR_Hooks {
     /**
      * WordPress core hooks - actions & filters
      */
-    private function init_core() {};
+    private function init_core() {}
 
     //----------------------------------------------
     //  Theme Hooks - Actions & Filters
@@ -69,14 +69,14 @@ final class IPR_Hooks {
         add_action( 'ipress_footer',        [ $this, 'credit_info' ],       20 );
 
         // Posts
-        add_action( 'ipress_loop_post',     [ $this, 'post_sticky' ],       5 );
-        add_action( 'ipress_loop_post',     [ $this, 'post_header' ],       10 );
-        add_action( 'ipress_loop_post',     [ $this, 'post_meta' ],         20 );
-        add_action( 'ipress_loop_post',     [ $this, 'post_content' ],      30 );
-        add_action( 'ipress_loop_post',     [ $this, 'post_footer' ],       40 );
+        add_action( 'ipress_loop_post',     [ $this, 'loop_sticky' ],       5 );
+        add_action( 'ipress_loop_post',     [ $this, 'loop_header' ],       10 );
+        add_action( 'ipress_loop_post',     [ $this, 'loop_meta' ],         20 );
+        add_action( 'ipress_loop_post',     [ $this, 'loop_excerpt' ],      30 );
+        add_action( 'ipress_loop_post',     [ $this, 'loop_footer' ],       40 );
 
         add_action( 'ipress_loop_after',            [ $this, 'paging_nav' ],        10 );
-        add_action( 'ipress_post_content_before',   'ipress_post_thumbnail',        10 );
+        add_action( 'ipress_loop_excerpt_before',   'ipress_post_thumbnail',        10 );
 
         // Single Post
         add_action( 'ipress_single_post',         [ $this, 'post_header' ],         10 );
@@ -85,20 +85,20 @@ final class IPR_Hooks {
         add_action( 'ipress_single_post',         [ $this, 'post_footer' ],         40 );
         add_action( 'ipress_single_post_bottom',  [ $this, 'post_nav' ],            10 );
         add_action( 'ipress_single_post_bottom',  [ $this, 'display_comments' ],    20 );
+        add_action( 'ipress_post_content_before',   'ipress_post_thumbnail',        10 );
 
         // Pages
         add_action( 'ipress_page',                  [ $this, 'page_header' ],       10 );
         add_action( 'ipress_page',                  [ $this, 'page_content' ],      20 );
         add_action( 'ipress_page',                  [ $this, 'page_footer' ],       30 );
         add_action( 'ipress_page_after',            [ $this, 'display_comments' ],  10 );
-        add_action( 'ipress_post_content_before',   'ipress_post_thumbnail',        10 );
+        add_action( 'ipress_page_content_before',   'ipress_post_thumbnail',        10 );
 
         // Search
-        add_action( 'ipress_loop_search',     [ $this, 'post_header' ],     10 );
-        add_action( 'ipress_loop_search',     [ $this, 'post_meta' ],       20 );
-        add_action( 'ipress_loop_search',     [ $this, 'post_excerpt' ],    30 );
-        add_action( 'ipress_loop_search',     [ $this, 'post_footer' ],     40 );
-        add_action( 'ipress_loop_after',      [ $this, 'paging_nav' ],      10 );
+        add_action( 'ipress_loop_search',     [ $this, 'loop_header' ],     10 );
+        add_action( 'ipress_loop_search',     [ $this, 'loop_meta' ],       20 );
+        add_action( 'ipress_loop_search',     [ $this, 'loop_excerpt' ],    30 );
+        add_action( 'ipress_loop_search',     [ $this, 'loop_footer' ],     40 );
     }
 
     //----------------------------------------------
@@ -130,8 +130,12 @@ final class IPR_Hooks {
      *
      * @uses get_sidebar()
      */
-    public function get_sidebar() {
-	    get_sidebar();
+    public function get_sidebar( $sidebar='' ) {
+	    if ( empty( $sidebar ) ) {
+            get_sidebar();
+        } else {
+            get_sidebar( $sidebar );
+        }
     }
 
     //----------------------------------------------
@@ -177,42 +181,35 @@ final class IPR_Hooks {
     /**
      * Display the post sticky link
      */
-    public function post_sticky() {
+    public function loop_sticky() {
         get_template_part( 'templates/loop-sticky' );
     }
 
     /**
      * Display the post header 
      */
-    public function post_header() {
+    public function loop_header() {
         get_template_part( 'templates/loop-header' );
     }
 
     /**
      * Display the post meta data
      */
-    public function post_meta() {
+    public function loop_meta() {
         get_template_part( 'templates/loop-meta' );
     }
 
     /**
      * Display the post content
      */
-    public function post_content() {
-        get_template_part( 'templates/loop-content' );
-    }
-
-    /**
-     * Display the post content
-     */
-    public function post_excerpt() {
+    public function loop_excerpt() {
         get_template_part( 'templates/loop-excerpt' );
     }
 
     /**
      * Display the post footer
      */
-    public function post_footer() {
+    public function loop_footer() {
         get_template_part( 'templates/loop-footer' );
     }
 
@@ -235,6 +232,34 @@ final class IPR_Hooks {
     //----------------------------------------------
     //  Template Hook Functions - Single Post
     //----------------------------------------------
+
+    /**
+     * Display the post header 
+     */
+    public function post_header() {
+        get_template_part( 'templates/post-header' );
+    }
+
+    /**
+     * Display the post meta data
+     */
+    public function post_meta() {
+        get_template_part( 'templates/post-meta' );
+    }
+
+    /**
+     * Display the post content
+     */
+    public function post_content() {
+        get_template_part( 'templates/post-content' );
+    }
+
+    /**
+     * Display the post footer
+     */
+    public function post_footer() {
+        get_template_part( 'templates/post-footer' );
+    }
 
     /**
      * Display the comments form

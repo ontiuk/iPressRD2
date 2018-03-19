@@ -1,6 +1,17 @@
-<form role="search" method="get" id="searchform" class="search-box" action="<?= esc_url( home_url('/') ); ?>">
-	<div class="form-group has-feedback">
-		<input type="text" class="form-control" type="search" name="s" placeholder="<?= __( 'Search', 'ipress' ); ?>">
-		<i class="fa fa-search form-control-feedback" id="search-submit" role="button"></i>
-	</div>
+<?php
+/**
+ * Template for displaying search forms 
+ *
+ * @package     iPress
+ * @link        http://ipress.uk
+ * @license     GPL-2.0+
+ */
+?>
+
+<?php $unique_id = esc_attr( uniqid( 'search-form-' ) ); ?>
+
+<form role="search" method="get" class="search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+	<label class="screen-reader-text" for="<?php echo $unique_id; ?>"><?php echo _x( 'Search for:', 'label', 'ipress' ); ?></label>
+	<input type="search" id="<?php echo $unique_id; ?>" class="search-field" placeholder="<?php echo esc_attr_x( 'Search &hellip;', 'placeholder', 'ipress' ); ?>" value="<?php echo get_search_query(); ?>" name="s" />
+    <button type="submit" class="search-submit"><?php echo _x( 'Search', 'ipress' ); ?><span class="screen-reader-text"><?php echo _x( 'Search', 'submit button', 'ipress' ); ?></span></button>
 </form>

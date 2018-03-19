@@ -4,7 +4,7 @@
  * iPress - WordPress Theme Framework                       
  * ==========================================================
  *
- * Theme header - displays <footer> section content and containers
+ * Theme footer - displays <footer> section content and containers
  * 
  * @package     iPress
  * @link        http://ipress.uk

@@ -4,16 +4,18 @@
  * iPress - WordPress Theme Framework                       
  * ==========================================================
  *
- * Template for displaying the post loop excerpt
+ * Template for displaying the post loop meta data
  * 
  * @package     iPress\Templates
  * @link        http://ipress.uk
  * @license     GPL-2.0+
  */
 ?>
-<?php /** @hooked ipress_post_thumbnail - 10 */
-do_action( 'ipress_loop_excerpt_before' ); ?>
-
-<section class="entry-summary">
-	<?php the_excerpt(); ?>
-</section><!-- .entry-summary -->
+<?php if ( 'post' == get_post_type() ) : ?>
+<section class="entry-meta">
+<?php
+    ipress_posted_on();
+    ipress_posted_by();
+?>
+</section>
+<?php endif;

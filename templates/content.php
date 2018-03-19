@@ -20,13 +20,13 @@
 	/**
 	 * Functions hooked in to ipress_loop_post action.
 	 *
-	 * @hooked ipress_post_sticky       - 5
-	 * @hooked ipress_post_header       - 10
-	 * @hooked ipress_post_meta         - 20
-	 * @hooked ipress_post_content      - 30
-	 * @hooked ipress_post_footer       - 40
+	 * @hooked ipress_loop_sticky       - 5
+	 * @hooked ipress_loop_header       - 10
+	 * @hooked ipress_loop_meta         - 20
+	 * @hooked ipress_loop_excerpt      - 30
+	 * @hooked ipress_loop_footer       - 40
 	 */
 	do_action( 'ipress_loop_post' ); ?>
 </article><!-- #post-<?php the_ID(); ?> -->
 
-<?php do_action( 'ipress_loop_post_after' ); ?>
+<?php do_action( 'ipress_loop_post_after' );

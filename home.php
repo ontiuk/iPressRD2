@@ -4,7 +4,7 @@
  * iPress - WordPress Theme Framework                       
  * ==========================================================
  *
- * Post list template when static file set as home page
+ * Posts lists template override when static page set as posts page
  * 
  * @see https://codex.wordpress.org/Template_Hierarchy
  *
@@ -17,23 +17,33 @@
 <?php get_header(); ?>
 
 <div id="primary" class="content-area">
-	<main id="main" class="site-main" role="main">
 
-    <?php if ( have_posts() ) : the_post(); ?>
+<?php do_action( 'ipress_before_main_content' ); ?>
 
+    <main id="main" class="site-main" role="main">
+
+    <?php do_action( 'ipress_archive_before' ); ?>
+
+    <?php if ( have_posts() ) : ?>
+   
         <header class="page-header">
-             <h1 class="page-title single-title"><?= get_the_title(); ?></h1>
+		    <h1 class="page-title single-title"><?php single_post_title(); ?></h1>
         </header><!-- .page-header -->
 
-        <?php get_template_part( 'templates/content', 'page' ); ?>
-    
+        <?php get_template_part( 'templates/loop' ); ?>
+
     <?php else: ?>
     
         <?php get_template_part( 'templates/content', 'none' ); ?>
 
     <?php endif; ?>
-        
+
+    <?php do_action( 'ipress_archive_after' ); ?>
+
 	</main><!-- #main -->
+
+<?php do_action( 'ipress_after_main_content' ); ?>
+
 </div><!-- #primary -->
 
 <?php do_action( 'ipress_sidebar' ); ?>

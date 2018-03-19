@@ -4,10 +4,8 @@
  * iPress - WordPress Theme Framework                       
  * ==========================================================
  *
- * Template for displaying the 404 page
+ * Template for displaying the 500 page if possible
  * 
- * @see https://codex.wordpress.org/Creating_an_Error_404_Page
- *
  * @package     iPress\Templates
  * @link        http://ipress.uk
  * @license     GPL-2.0+
@@ -24,12 +22,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <?php get_header(); ?>
 
-	<div id="primary" class="content-area">
-		<main id="main" class="site-main" role="main">
+<div id="primary" class="content-area">
 
-            <?php get_template_part( 'templates/404' ); ?>
+<?php do_action( 'ipress_before_main_content' ); ?>
 
-		</main><!-- #main -->
-	</div><!-- #primary -->
+    <main id="main" class="site-main" role="main">
+
+        <?php get_template_part( 'templates/500' ); ?>
+
+	</main><!-- #main -->
+
+<?php do_action( 'ipress_after_main_content' ); ?>
+
+</div><!-- #primary -->
 
 <?php get_footer(); ?>

@@ -11,9 +11,6 @@
  * @license     GPL-2.0+
  */
 ?>
-
-<?php do_action( 'ipress_post_header_before' ); ?>
-
 <header class="entry-header">
 <?php
     if ( is_singular() ) :

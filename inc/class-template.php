@@ -20,6 +20,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Set up template & template heirarchy features
+ * - hook: template_include
+ * - hook: template_redirect
  */ 
 final class IPR_Template {
 
@@ -27,30 +29,12 @@ final class IPR_Template {
      * Class constructor
      * - set up hooks
      */
-    public function __construct() {
-
-        // Reset path for main template files, except index.php
-        add_filter( 'template_include', [ $this, 'template_include' ], 99 );
-    }
+    public function __construct() {}
 
     //---------------------------------------------
     // Theme Template Functionality  
     //---------------------------------------------
 
-    /**
-     * Reset path for main template files, except index.php
-     *
-     * @param   string
-     * @return  string
-     */
-    public function template_include( $template ) {
-    
-        // WooCommerce override: allow Woocommerce version of template_include to take priority if set
-        if ( class_exists( 'Woocommerce' ) && is_woocommerce() ) { return $template; }
-
-        // Test restrictions
-        return ( is_child_theme() ) ? $template : IPRESS_ROUTE_DIR . '/' . basename( $template );
-    }
 }
 
 // Instantiate Template Class

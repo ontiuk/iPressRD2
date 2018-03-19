@@ -13,6 +13,8 @@
  */
 ?>
 
+<?php do_action( 'ipress_page_before' ); ?>
+
 <article id="post-<?php the_ID(); ?>" <?php post_class( 'entry' ); ?>>
 
 	<?php
@@ -26,3 +28,7 @@
 	do_action( 'ipress_page' );	?>
 
 </article><!-- #post-<?php the_ID(); ?> -->
+
+<?php 
+/** @hooked ipress_display_comments - 10 */
+do_action( 'ipress_page_after' );
