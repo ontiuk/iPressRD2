@@ -48,9 +48,9 @@ See https://core.trac.wordpress.org/ticket/13239 for potential/hopeful changes o
 ## Other Stuff
 
 This is he precursor to 3 additional themes:
-iPress-PT   - Parent Theme. As iPress-RD but with filterable / customisable theme options and a more refined file structure. To be used as a parent theme with customization / setup / styling via a child theme
-iPress-PT2  - Parent Theme. As iPress-PT but primary options moved to the theme customizer for greater admin micro management.
-iPress-NGx  - Theme Framework integrating iPress with Angular and the WosrPress WP-API
+iPress-PT	- Parent Theme. As iPress-RD but with filterable / customisable theme options and a more refined file structure. To be used as a parent theme with customization / setup / styling via a child theme
+iPress-PT2	- Parent Theme. As iPress-PT but primary options moved to the theme customizer for greater admin micro management.
+iPress-NGx	- Theme Framework integrating iPress with Angular and the WosrPress WP-API
 
 ## Hooks - Filters
 

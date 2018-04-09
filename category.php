@@ -1,17 +1,24 @@
 <?php 
 
 /**
- * iPress - WordPress Theme Framework                       
+ * iPress - WordPress Theme Framework						
  * ==========================================================
  *
  * Template for displaying generic category archives
  * 
  * @see https://codex.wordpress.org/Template_Hierarchy
  * 
- * @package     iPress\Templates
- * @link        http://ipress.uk
- * @license     GPL-2.0+
+ * @package		iPress\Templates
+ * @link		http://ipress.uk
+ * @license		GPL-2.0+
  */
+
+// Access restriction
+if ( ! defined( 'ABSPATH' ) ) {
+	header( 'Status: 403 Forbidden' );
+	header( 'HTTP/1.1 403 Forbidden' );
+	exit;
+}
 ?>
 
 <?php get_header(); ?>
@@ -22,24 +29,24 @@
 
 	<main id="main" class="site-main" role="main">
 
-    <?php do_action( 'ipress_archive_before' ); ?>
+	<?php do_action( 'ipress_archive_before' ); ?>
 
-    <?php if ( have_posts() ) : ?>
+	<?php if ( have_posts() ) : ?>
 
-        <header class="page-header">
-            <h1 class="page-title category-title"><?= sprintf( __( 'Category: %s', 'ipress' ), single_cat_title( '', false ) ); ?></h1>
-            <?php the_archive_description( '<div class="archive-description category-archive">', '</div>' ); ?>
-        </header><!-- .page-header -->
+		<header class="page-header">
+			<h1 class="page-title category-title"><?php echo sprintf( __( 'Category: %s', 'ipress' ), single_cat_title( '', false ) ); ?></h1>
+			<?php the_archive_description( '<div class="archive-description category-archive">', '</div>' ); ?>
+		</header><!-- .page-header -->
    
-        <?php get_template_part( 'templates/loop' ); ?>
+		<?php get_template_part( 'templates/loop' ); ?>
 
-    <?php else: ?>
+	<?php else: ?>
 
-        <?php get_template_part( 'templates/content', 'none' ); ?>
+		<?php get_template_part( 'templates/content', 'none' ); ?>
 
-    <?php endif; ?>
+	<?php endif; ?>
 
-    <?php do_action( 'ipress_archive_after' ); ?>
+	<?php do_action( 'ipress_archive_after' ); ?>
 
 	</main><!-- #main -->
 

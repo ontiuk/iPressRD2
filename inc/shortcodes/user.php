@@ -1,138 +1,138 @@
 <?php 
 
 /**
- * iPress - WordPress Theme Framework                       
+ * iPress - WordPress Theme Framework						
  * ==========================================================
  *
  * User functionality shortcodes
  *
- * @package     iPress\Shortcodes
- * @link        http://ipress.uk
- * @license     GPL-2.0+
+ * @package		iPress\Shortcodes
+ * @link		http://ipress.uk
+ * @license		GPL-2.0+
  */
 
 // Access restriction
 if ( ! defined( 'ABSPATH' ) ) {
-    header( 'Status: 403 Forbidden' );
-    header( 'HTTP/1.1 403 Forbidden' );
-    exit;
+	header( 'Status: 403 Forbidden' );
+	header( 'HTTP/1.1 403 Forbidden' );
+	exit;
 }
 
 //---------------------------------------------
-//  User Shortcodes 
+//	User Shortcodes 
 //---------------------------------------------
 
 /**
- *  Retrieve current user info
+ *	Retrieve current user info
  *
- * @param   array|string $atts 
- * @return  string
+ * @param	array|string $atts 
+ * @return	string
  */
 function ipress_user_info_shortcode( $atts ) {
 
-    global $userdata;
-    get_currentuserinfo();
+	$defaults = [
+		'after'    => '',
+		'before'   => ''
+	];
 
-    $defaults = [
-        'after'    => '',
-        'before'   => ''
-    ];
-    
-    // Get shortcode attributes
-    $atts = shortcode_atts( $defaults, $atts, 'ipress_user_info' );
+	// Get user data
+	$userdata = wp_get_current_user();
 
-    // Generate output
-    $output = sprintf( '<span class="ipress-user-info">%s</span>', $atts['before'] . print_r( $userdata, true ) . $atts['after'] );
+	// Get shortcode attributes
+	$atts = shortcode_atts( $defaults, $atts, 'ipress_user_info' );
 
-    // Return filterable output
-    return apply_filters( 'ipress_user_info_shortcode', $output, $atts );
+	// Generate output
+	$output = sprintf( '<span class="ipress-user-info">%s</span>', $atts['before'] . join( ' ', $userdata ) . $atts['after'] );
+
+	// Return filterable output
+	return apply_filters( 'ipress_user_info_shortcode', $output, $atts );
 }
 
 // Get current user - should be used via do_shortcode
 add_shortcode( 'ipress_user_info', 'ipress_user_info_shortcode' );
 
 /**
- *  Retrieve current user ID
+ *	Retrieve current user ID
  *
- * @param   array|string $atts 
- * @return  string
+ * @param	array|string $atts 
+ * @return	string
  */
 function ipress_user_id_shortcode( $atts ) {
 
-    global $userdata;
-    get_currentuserinfo();
+	$defaults = [
+		'after'    => '',
+		'before'   => ''
+	];
+	
+	// Get user data
+	$userdata = wp_get_current_user();
 
-    $defaults = [
-        'after'    => '',
-        'before'   => ''
-    ];
-    
-    // Get shortcode attributes
-    $atts = shortcode_atts( $defaults, $atts, 'ipress_user_id' );
+	// Get shortcode attributes
+	$atts = shortcode_atts( $defaults, $atts, 'ipress_user_id' );
 
-    // Generate output
-    $output = sprintf( '<span class="ipress-user-id">%s</span>', $atts['before'] . $userdata->ID . $atts['after'] );
+	// Generate output
+	$output = sprintf( '<span class="ipress-user-id">%s</span>', $atts['before'] . $userdata->ID . $atts['after'] );
 
-    // Return filterable output
-    return apply_filters( 'ipress_user_id_shortcode', $output, $atts );
+	// Return filterable output
+	return apply_filters( 'ipress_user_id_shortcode', $output, $atts );
 }
 
 // Get current user id 
 add_shortcode( 'ipress_user_id', 'ipress_user_id_shortcode' );
 
 /**
- *  Retrieve current user name
+ *	Retrieve current user name
  *
- * @param   array|string $atts 
- * @return  string
+ * @param	array|string $atts 
+ * @return	string
  */
 function ipress_user_name_shortcode( $atts ) {
 
-    global $userdata;
-    get_currentuserinfo();
+	$defaults = [
+		'after'    => '',
+		'before'   => ''
+	];
 
-    $defaults = [
-        'after'    => '',
-        'before'   => ''
-    ];
+	// Get user data
+	$userdata = wp_get_current_user();
 
-    // Get shortcode attributes
-    $atts = shortcode_atts( $defaults, $atts, 'ipress_user_name' );
+	// Get shortcode attributes
+	$atts = shortcode_atts( $defaults, $atts, 'ipress_user_name' );
 
-    // Generate output
-    $output = sprintf( '<span class="ipress-user-name">%s</span>', $atts['before'] . $userdata->user_login . $atts['after'] );
+	// Generate output
+	$output = sprintf( '<span class="ipress-user-name">%s</span>', $atts['before'] . $userdata->user_login . $atts['after'] );
 
-    // Return filterable output
-    return apply_filters( 'ipress_user_name_shortcode', $output, $atts );
+	// Return filterable output
+	return apply_filters( 'ipress_user_name_shortcode', $output, $atts );
 }
 
 // Get current user name 
 add_shortcode( 'ipress_user_name', 'ipress_user_name_shortcode' );
 
 /**
- *  Retrieve current user level
+ *	Retrieve current user level
  *
- * @param   array|string $atts 
- * @return  string
+ * @param	array|string $atts 
+ * @return	string
  */
 function ipress_user_level_shortcode( $atts ) {
 
-    global $userdata;
-    get_currentuserinfo();
+	$defaults = [
+		'after'    => '',
+		'before'   => ''
+	];
 
-    $defaults = [
-        'after'    => '',
-        'before'   => ''
-    ];
+	// Get user data
+	$userdata = wp_get_current_user();
 
-    // Get shortcode attributes
-    $atts = shortcode_atts( $defaults, $atts, 'ipress_user_level' );
+	// Get shortcode attributes
+	$atts = shortcode_atts( $defaults, $atts, 'ipress_user_level' );
 
-    // Generate output
-    $output = sprintf( '<span class="ipress-user-level">%s</span>', $atts['before'] . $userdata->user_level . $atts['after'] );
+	// Generate output
+	$output = sprintf( '<span class="ipress-user-level">%s</span>', $atts['before'] . $userdata->user_level . $atts['after'] );
 
-    // Return filterable output
-    return apply_filters( 'ipress_user_level_shortcode', $output, $atts );
+	// Return filterable output
+	return apply_filters( 'ipress_user_level_shortcode', $output, $atts );
 }
 
 // Get current user level 

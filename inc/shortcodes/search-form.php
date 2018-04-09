@@ -1,42 +1,42 @@
 <?php 
 
 /**
- * iPress - WordPress Theme Framework                       
+ * iPress - WordPress Theme Framework						
  * ==========================================================
  *
  * Search form functionality shortcodes
  *
- * @package     iPress\Shortcodes
- * @link        http://ipress.uk
- * @license     GPL-2.0+
+ * @package		iPress\Shortcodes
+ * @link		http://ipress.uk
+ * @license		GPL-2.0+
  */
 
 // Access restriction
 if ( ! defined( 'ABSPATH' ) ) {
-    header( 'Status: 403 Forbidden' );
-    header( 'HTTP/1.1 403 Forbidden' );
-    exit;
+	header( 'Status: 403 Forbidden' );
+	header( 'HTTP/1.1 403 Forbidden' );
+	exit;
 }
 
 //---------------------------------------------
-//  Search Form 
+//	Search Form 
 //---------------------------------------------
 
 /**
  * Retrieve current user info
  *
- * @param   array|string $atts 
- * @return  string
+ * @param	array|string $atts 
+ * @return	string
  */
 function ipress_search_form_shortcode( $atts ) {
 
-    // Capture output
-    ob_start();
-    get_search_form( );
-    $html = ob_get_contents();
-    ob_end_clean();
-        
-    return $html;
+	// Capture output
+	ob_start();
+	get_search_form( );
+	$html = ob_get_contents();
+	ob_end_clean();
+		
+	return $html;
 }
 
 // Construct search form

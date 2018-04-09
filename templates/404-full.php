@@ -15,11 +15,11 @@
 	<div id="post-404" class="page-content">
 
     	<header class="page-header">
-	    	<h1 class="page-title"><?= esc_html__( 'Oops! That page can&rsquo;t be found.', 'ipress' ); ?></h1>
-            <p><a href="<?= home_url(); ?>"><?= __( 'Return home?', 'ipress' ); ?></a></p>
+	    	<h1 class="page-title"><?php echo esc_html__( 'Oops! That page can&rsquo;t be found.', 'ipress' ); ?></h1>
+            <p><a href="<?php echo home_url(); ?>"><?php echo __( 'Return home?', 'ipress' ); ?></a></p>
     	</header><!-- .page-header -->
 
-		<p><?= esc_html__( 'Nothing found at this location.', 'ipress' ); ?></p>
+		<p><?php echo esc_html__( 'Nothing found at this location.', 'ipress' ); ?></p>
 
         <?php the_widget( 'WP_Widget_Recent_Posts' ); ?>
 
@@ -32,7 +32,7 @@
 
         <?php if ( ipress_has_categories() ) : ?>
 		<div class="widget widget_categories">
-			<h2 class="widget-title"><?= esc_html__( 'Popular Categories', 'ipress' ); ?></h2>
+			<h2 class="widget-title"><?php echo esc_html__( 'Popular Categories', 'ipress' ); ?></h2>
 			<ul>
 			<?php
 				wp_list_categories( [

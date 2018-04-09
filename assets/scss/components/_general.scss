@@ -31,14 +31,14 @@
 		left: 0;
 		position: absolute;
 		padding-top: 1.5em;
-        &:before {
-    		content: "\53\53\53\53\53";
-	    	top: 0;
-		    position: absolute;
-		    left: 0;
-		    color: $color__link;
-	    }
-    }
+		&:before {
+			content: "\53\53\53\53\53";
+			top: 0;
+			position: absolute;
+			left: 0;
+			color: $color__link;
+		}
+	}
 }
 p.stars {
 	a {
@@ -126,5 +126,28 @@ p.stars {
 
 .required {
 	color: red;
+}
+
+/*----------------------------------------------------------
+/* Miscellaneous
+/*---------------------------------------------------------*/
+
+.scroll-top {
+    position: fixed;
+    bottom: 50px;
+    right: 50px;
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    cursor: pointer;
+    background-image: url( 'assets/images/scroll_top.png' );
+    background-repeat: no-repeat;
+    background-position: top left;
+    background-size: 100% 100%;
+}
+
+.img-fluid-height {
+    width: auto;
+    height: 100%;
 }
 

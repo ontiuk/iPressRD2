@@ -1,21 +1,21 @@
 <?php
 
 /**
- * iPress - WordPress Theme Framework                       
+ * iPress - WordPress Theme Framework						
  * ==========================================================
  *
  * Theme ajax functionality
  * 
- * @package     iPress\Includes
- * @link        http://ipress.uk
- * @license     GPL-2.0+
+ * @package		iPress\Includes
+ * @link		http://ipress.uk
+ * @license		GPL-2.0+
  */
 
 // Access restriction
 if ( ! defined( 'ABSPATH' ) ) {
-    header( 'Status: 403 Forbidden' );
-    header( 'HTTP/1.1 403 Forbidden' );
-    exit;
+	header( 'Status: 403 Forbidden' );
+	header( 'HTTP/1.1 403 Forbidden' );
+	exit;
 }
 
 /**
@@ -23,30 +23,30 @@ if ( ! defined( 'ABSPATH' ) ) {
  */ 
 final class IPR_Ajax {
 
-    /**
-     * Class constructor
-     */
-    public function __construct() {
+	/**
+	 * Class constructor
+	 */
+	public function __construct() {
 
-        // Initialize Ajax functionality
-        $this->init();
-    }
+		// Initialize Ajax functionality
+		$this->init();
+	}
 
-    //----------------------------------------------
-    //  Ajax Actions
-    //----------------------------------------------
+	//----------------------------------------------
+	//	Ajax Actions
+	//----------------------------------------------
 
-    /**
-     * Initialise Ajax hooks
-     * 
-     * - wp_ajax_xxx 
-     * - wp_ajax_nopriv_xxx
-     */
-    public function init() {}
-        
-    //----------------------------------------------
-    //  Ajax Functionality
-    //----------------------------------------------
+	/**
+	 * Initialise Ajax hooks
+	 * 
+	 * - wp_ajax_xxx 
+	 * - wp_ajax_nopriv_xxx
+	 */
+	public function init() {}
+		
+	//----------------------------------------------
+	//	Ajax Functionality
+	//----------------------------------------------
 
 }
 

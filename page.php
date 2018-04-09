@@ -1,17 +1,24 @@
 <?php 
 
 /**
- * iPress - WordPress Theme Framework                       
+ * iPress - WordPress Theme Framework						
  * ==========================================================
  *
  * Main page template
  * 
  * @see https://codex.wordpress.org/Template_Hierarchy
  *
- * @package     iPress\Templates
- * @link        http://ipress.uk
- * @license     GPL-2.0+
+ * @package		iPress\Templates
+ * @link		http://ipress.uk
+ * @license		GPL-2.0+
  */
+
+// Access restriction
+if ( ! defined( 'ABSPATH' ) ) {
+	header( 'Status: 403 Forbidden' );
+	header( 'HTTP/1.1 403 Forbidden' );
+	exit;
+}
 ?>
 
 <?php get_header(); ?>
@@ -20,21 +27,21 @@
 
 <?php do_action( 'ipress_before_main_content' ); ?>
 
-    <main id="main" class="site-main" role="main">
+	<main id="main" class="site-main" role="main">
 
-    <?php if ( have_posts() ) : the_post(); ?>
+	<?php if ( have_posts() ) : the_post(); ?>
 
-        <header class="page-header">
-             <h1 class="page-title single-title"><?= get_the_title(); ?></h1>
-        </header><!-- .page-header -->
+		<header class="page-header">
+			 <h1 class="page-title single-title"><?php echo get_the_title(); ?></h1>
+		</header><!-- .page-header -->
 
-        <?php get_template_part( 'templates/content', 'page' ); ?>
-    
-    <?php else: ?>
-    
-        <?php get_template_part( 'templates/content', 'none' ); ?>
+		<?php get_template_part( 'templates/content', 'page' ); ?>
+	
+	<?php else: ?>
+	
+		<?php get_template_part( 'templates/content', 'none' ); ?>
 
-    <?php endif; ?>
+	<?php endif; ?>
 
 	</main><!-- #main -->
 

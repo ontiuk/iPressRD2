@@ -1,18 +1,25 @@
 <?php 
 
 /**
- * iPress - WordPress Theme Framework                       
+ * iPress - WordPress Theme Framework						
  * ==========================================================
  *
  * Template for displaying custom post-type archives
- * - Amend as required
+ * - Amend as required, for example archive-book.php for 'book' custom post type archives
  * 
  * @see https://codex.wordpress.org/Template_Hierarchy
  *
- * @package     iPress\Templates
- * @link        http://ipress.uk
- * @license     GPL-2.0+
+ * @package		iPress\Templates
+ * @link		http://ipress.uk
+ * @license		GPL-2.0+
  */
+
+// Access restriction
+if ( ! defined( 'ABSPATH' ) ) {
+	header( 'Status: 403 Forbidden' );
+	header( 'HTTP/1.1 403 Forbidden' );
+	exit;
+}
 ?>
 
 <?php get_header(); ?>
@@ -23,24 +30,24 @@
 
 	<main id="main" class="site-main" role="main">
 
-    <?php do_action( 'ipress_archive_before' ); ?>
+	<?php do_action( 'ipress_archive_before' ); ?>
 
-        <?php if ( have_posts() ) : ?>
+		<?php if ( have_posts() ) : ?>
 
-        <header class="page-header">
-            <?php the_archive_title( '<h1 class="page-title archive-title">', '</h1>' ); ?>
-            <?php the_archive_description( '<div class="archive-description">', '</div>' ); ?>
-        </header><!-- .page-header -->
-        
-        <?php get_template_part( 'templates/loop' ); ?>
+		<header class="page-header">
+			<?php the_archive_title( '<h1 class="page-title archive-title">', '</h1>' ); ?>
+			<?php the_archive_description( '<div class="archive-description">', '</div>' ); ?>
+		</header><!-- .page-header -->
+		
+		<?php get_template_part( 'templates/loop' ); ?>
 
-    <?php else: ?>
-    
-        <?php get_template_part( 'templates/content', 'none' ); ?>
+	<?php else: ?>
+	
+		<?php get_template_part( 'templates/content', 'none' ); ?>
 
-    <?php endif; ?>
+	<?php endif; ?>
 
-    <?php do_action( 'ipress_archive_after' ); ?>
+	<?php do_action( 'ipress_archive_after' ); ?>
 
 	</main><!-- #main -->
 

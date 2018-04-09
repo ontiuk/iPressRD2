@@ -1,21 +1,21 @@
 <?php
 
 /**
- * iPress - WordPress Theme Framework                       
+ * iPress - WordPress Theme Framework						
  * ==========================================================
  *
  * Theme template hooks - actions and filters
  * 
- * @package     iPress\Includes
- * @link        http://ipress.uk
- * @license     GPL-2.0+
+ * @package		iPress\Includes
+ * @link		http://ipress.uk
+ * @license		GPL-2.0+
  */
 
 // Access restriction
 if ( ! defined( 'ABSPATH' ) ) {
-    header( 'Status: 403 Forbidden' );
-    header( 'HTTP/1.1 403 Forbidden' );
-    exit;
+	header( 'Status: 403 Forbidden' );
+	header( 'HTTP/1.1 403 Forbidden' );
+	exit;
 }
 
 /**
@@ -23,295 +23,303 @@ if ( ! defined( 'ABSPATH' ) ) {
  */ 
 final class IPR_Hooks {
 
-    /**
-     * Class constructor
-     */
-    public function __construct() {
-        
-        // Place core hooks here, e.g. after_setup_theme, enqueue_scripts
-        $this->init_core();
-        
-        // Hooks - Remove hooks, add new hooks 
-        add_action( 'init', [ $this, 'init_markup' ] );
+	/**
+	 * Class constructor
+	 */
+	public function __construct() {
+		
+		// Place core hooks here, e.g. after_setup_theme, enqueue_scripts
+		$this->init_core();
+		
+		// Hooks - Remove hooks, add new hooks 
+		add_action( 'init', [ $this, 'init_markup' ] );
 
-        // Homepage - Remove hooks, add new hooks
-        add_action( 'init', [ $this, 'homepage_markup' ] );
-    }
+		// Homepage - Remove hooks, add new hooks
+		add_action( 'init', [ $this, 'homepage_markup' ] );
+	}
 
-    //----------------------------------------------
-    //  Core Actions & Filters
-    //----------------------------------------------
+	//----------------------------------------------
+	//	Core Actions & Filters
+	//----------------------------------------------
 
-    /**
-     * WordPress core hooks - actions & filters
-     */
-    private function init_core() {}
+	/**
+	 * WordPress core hooks - actions & filters
+	 */
+	private function init_core() {}
 
-    //----------------------------------------------
-    //  Theme Hooks - Actions & Filters
-    //----------------------------------------------
+	//----------------------------------------------
+	//	Theme Hooks - Actions & Filters
+	//----------------------------------------------
 
-    /**
-     * Initialise theme hooks
-     */
-    public function init_markup() {
-    
-        // General
-        add_action( 'ipress_before_header', [ $this, 'skip_links' ],    10 );
-        add_action( 'ipress_sidebar',       [ $this, 'get_sidebar' ],   10 );
-    
-        // Header
-        add_action( 'ipress_header',        [ $this, 'site_branding' ],         10 );
-        add_action( 'ipress_header',        [ $this, 'primary_navigation' ],    20 );
+	/**
+	 * Initialise theme hooks
+	 */
+	public function init_markup() {
+	
+		// General
+		add_action( 'ipress_before_header', [ $this, 'skip_links' ],	10 );
+		add_action( 'ipress_sidebar',		[ $this, 'get_sidebar' ],	10 );
+		add_action( 'ipress_after_content',	[ $this, 'scroll_top', 		10 );
+	
+		// Header
+		add_action( 'ipress_header',		[ $this, 'site_branding' ],			10 );
+		add_action( 'ipress_header',		[ $this, 'primary_navigation' ],	20 );
 
-        // Footer
-        add_action( 'ipress_footer',        [ $this, 'footer_widgets' ],    10 );
-        add_action( 'ipress_footer',        [ $this, 'credit_info' ],       20 );
+		// Footer
+		add_action( 'ipress_footer',		[ $this, 'footer_widgets' ],	10 );
+		add_action( 'ipress_footer',		[ $this, 'credit_info' ],		20 );
 
-        // Posts
-        add_action( 'ipress_loop_post',     [ $this, 'loop_sticky' ],       5 );
-        add_action( 'ipress_loop_post',     [ $this, 'loop_header' ],       10 );
-        add_action( 'ipress_loop_post',     [ $this, 'loop_meta' ],         20 );
-        add_action( 'ipress_loop_post',     [ $this, 'loop_excerpt' ],      30 );
-        add_action( 'ipress_loop_post',     [ $this, 'loop_footer' ],       40 );
+		// Posts
+		add_action( 'ipress_loop_post',		[ $this, 'loop_sticky' ],		5 );
+		add_action( 'ipress_loop_post',		[ $this, 'loop_header' ],		10 );
+		add_action( 'ipress_loop_post',		[ $this, 'loop_meta' ],			20 );
+		add_action( 'ipress_loop_post',		[ $this, 'loop_excerpt' ],		30 );
+		add_action( 'ipress_loop_post',		[ $this, 'loop_footer' ],		40 );
 
-        add_action( 'ipress_loop_after',            [ $this, 'paging_nav' ],        10 );
-        add_action( 'ipress_loop_excerpt_before',   'ipress_post_thumbnail',        10 );
+		add_action( 'ipress_loop_after',			[ $this, 'paging_nav' ],		10 );
+		add_action( 'ipress_loop_excerpt_before',	'ipress_post_thumbnail',		10 );
 
-        // Single Post
-        add_action( 'ipress_single_post',         [ $this, 'post_header' ],         10 );
-        add_action( 'ipress_single_post',         [ $this, 'post_meta' ],           20 );
-        add_action( 'ipress_single_post',         [ $this, 'post_content' ],        30 );
-        add_action( 'ipress_single_post',         [ $this, 'post_footer' ],         40 );
-        add_action( 'ipress_single_post_bottom',  [ $this, 'post_nav' ],            10 );
-        add_action( 'ipress_single_post_bottom',  [ $this, 'display_comments' ],    20 );
-        add_action( 'ipress_post_content_before',   'ipress_post_thumbnail',        10 );
+		// Single Post
+		add_action( 'ipress_single_post',		  [ $this, 'post_header' ],			10 );
+		add_action( 'ipress_single_post',		  [ $this, 'post_meta' ],			20 );
+		add_action( 'ipress_single_post',		  [ $this, 'post_content' ],		30 );
+		add_action( 'ipress_single_post',		  [ $this, 'post_footer' ],			40 );
+		add_action( 'ipress_single_post_bottom',  [ $this, 'post_nav' ],			10 );
+		add_action( 'ipress_single_post_bottom',  [ $this, 'display_comments' ],	20 );
+		add_action( 'ipress_post_content_before',	'ipress_post_thumbnail',		10 );
 
-        // Pages
-        add_action( 'ipress_page',                  [ $this, 'page_header' ],       10 );
-        add_action( 'ipress_page',                  [ $this, 'page_content' ],      20 );
-        add_action( 'ipress_page',                  [ $this, 'page_footer' ],       30 );
-        add_action( 'ipress_page_after',            [ $this, 'display_comments' ],  10 );
-        add_action( 'ipress_page_content_before',   'ipress_post_thumbnail',        10 );
+		// Pages
+		add_action( 'ipress_page',					[ $this, 'page_header' ],		10 );
+		add_action( 'ipress_page',					[ $this, 'page_content' ],		20 );
+		add_action( 'ipress_page',					[ $this, 'page_footer' ],		30 );
+		add_action( 'ipress_page_after',			[ $this, 'display_comments' ],	10 );
+		add_action( 'ipress_page_content_before',	'ipress_post_thumbnail',		10 );
 
-        // Search
-        add_action( 'ipress_loop_search',     [ $this, 'loop_header' ],     10 );
-        add_action( 'ipress_loop_search',     [ $this, 'loop_meta' ],       20 );
-        add_action( 'ipress_loop_search',     [ $this, 'loop_excerpt' ],    30 );
-        add_action( 'ipress_loop_search',     [ $this, 'loop_footer' ],     40 );
-    }
+		// Search
+		add_action( 'ipress_loop_search',	  [ $this, 'loop_header' ],		10 );
+		add_action( 'ipress_loop_search',	  [ $this, 'loop_meta' ],		20 );
+		add_action( 'ipress_loop_search',	  [ $this, 'loop_excerpt' ],	30 );
+		add_action( 'ipress_loop_search',	  [ $this, 'loop_footer' ],		40 );
+	}
 
-    //----------------------------------------------
-    //  Homepage Hooks - Actions & Filters
-    //----------------------------------------------
+	//----------------------------------------------
+	//	Homepage Hooks - Actions & Filters
+	//----------------------------------------------
 
-    /**
-     * Initialise theme hooks
-     */
-    public function homepage_markup() {}
+	/**
+	 * Initialise theme hooks
+	 */
+	public function homepage_markup() {}
 
-    //----------------------------------------------
-    //  Core Hooks Functionality
-    //----------------------------------------------
+	//----------------------------------------------
+	//	Core Hooks Functionality
+	//----------------------------------------------
 
-    //----------------------------------------------
-    //  Template Hook Functions - General
-    //----------------------------------------------
+	//----------------------------------------------
+	//	Template Hook Functions - General
+	//----------------------------------------------
 
-    /**
-     * Add skip links html
-    */
-    public function skip_links() {
-        get_template_part( 'templates/skip-links' );
-    }    
+	/**
+	 * Add skip links html
+	*/
+	public function skip_links() {
+		get_template_part( 'templates/skip-links' );
+	}	 
 
-    /**
-     * Display sidebar
-     *
-     * @uses get_sidebar()
-     */
-    public function get_sidebar( $sidebar='' ) {
-	    if ( empty( $sidebar ) ) {
-            get_sidebar();
-        } else {
-            get_sidebar( $sidebar );
-        }
-    }
+	/**
+	 * Display sidebar
+	 *
+	 * @uses get_sidebar()
+	 */
+	public function get_sidebar( $sidebar='' ) {
+		if ( empty( $sidebar ) ) {
+			get_sidebar();
+		} else {
+			get_sidebar( $sidebar );
+		}
+	}
 
-    //----------------------------------------------
-    //  Template Hook Functions - Header
-    //----------------------------------------------
+	/**
+	 * Scroll to top link
+	 */
+	public function scroll_top() {
+		echo '<div class="scroll-top"></div>';
+	}
 
-    /**
-     * Site branding wrapper and display
-     */
-    public function site_branding() {
-        get_template_part( 'templates/site-branding' );
-    }
+	//----------------------------------------------
+	//	Template Hook Functions - Header
+	//----------------------------------------------
 
-    /**
-     * Site navigation
-     */
-    public function primary_navigation() {
-        get_template_part( 'templates/site-navigation' );
-    }
-    
-    //----------------------------------------------
-    //  Template Hook Functions - Footer
-    //----------------------------------------------
+	/**
+	 * Site branding wrapper and display
+	 */
+	public function site_branding() {
+		get_template_part( 'templates/site-branding' );
+	}
 
-    /**
-     * Display the footer widget regions
-     */
-    public function footer_widgets() {
-        get_template_part( 'templates/footer-widgets' );
-    }
+	/**
+	 * Site navigation
+	 */
+	public function primary_navigation() {
+		get_template_part( 'templates/site-navigation' );
+	}
+	
+	//----------------------------------------------
+	//	Template Hook Functions - Footer
+	//----------------------------------------------
 
-    /**
-     * Display the theme credit
-     */
-    public function credit_info() {
-        get_template_part( 'templates/site-credit' );
-    }
+	/**
+	 * Display the footer widget regions
+	 */
+	public function footer_widgets() {
+		get_template_part( 'templates/footer-widgets' );
+	}
 
-    //----------------------------------------------
-    //  Template Hook Functions - Posts
-    //----------------------------------------------
+	/**
+	 * Display the theme credit
+	 */
+	public function credit_info() {
+		get_template_part( 'templates/site-credit' );
+	}
 
-    /**
-     * Display the post sticky link
-     */
-    public function loop_sticky() {
-        get_template_part( 'templates/loop-sticky' );
-    }
+	//----------------------------------------------
+	//	Template Hook Functions - Posts
+	//----------------------------------------------
 
-    /**
-     * Display the post header 
-     */
-    public function loop_header() {
-        get_template_part( 'templates/loop-header' );
-    }
+	/**
+	 * Display the post sticky link
+	 */
+	public function loop_sticky() {
+		get_template_part( 'templates/loop-sticky' );
+	}
 
-    /**
-     * Display the post meta data
-     */
-    public function loop_meta() {
-        get_template_part( 'templates/loop-meta' );
-    }
+	/**
+	 * Display the post header 
+	 */
+	public function loop_header() {
+		get_template_part( 'templates/loop-header' );
+	}
 
-    /**
-     * Display the post content
-     */
-    public function loop_excerpt() {
-        get_template_part( 'templates/loop-excerpt' );
-    }
+	/**
+	 * Display the post meta data
+	 */
+	public function loop_meta() {
+		get_template_part( 'templates/loop-meta' );
+	}
 
-    /**
-     * Display the post footer
-     */
-    public function loop_footer() {
-        get_template_part( 'templates/loop-footer' );
-    }
+	/**
+	 * Display the post content
+	 */
+	public function loop_excerpt() {
+		get_template_part( 'templates/loop-excerpt' );
+	}
 
-    /**
-     * Display navigation to next/previous set of posts when applicable.
-     */
-    public function paging_nav() {
-    
-        global $wp_query;
+	/**
+	 * Display the post footer
+	 */
+	public function loop_footer() {
+		get_template_part( 'templates/loop-footer' );
+	}
 
-    	$args = [
-	    	'type' 	    => 'list',
-		    'next_text' => _x( 'Next', 'Next post', 'ipress' ),
-		    'prev_text' => _x( 'Previous', 'Previous post', 'ipress' ),
-        ];
+	/**
+	 * Display navigation to next/previous set of posts when applicable.
+	 */
+	public function paging_nav() {
+	
+		global $wp_query;
 
-    	the_posts_pagination( $args );
-    }
+		$args = [
+			'type'		=> 'list',
+			'next_text' => _x( 'Next', 'Next post', 'ipress' ),
+			'prev_text' => _x( 'Previous', 'Previous post', 'ipress' ),
+		];
 
-    //----------------------------------------------
-    //  Template Hook Functions - Single Post
-    //----------------------------------------------
+		the_posts_pagination( $args );
+	}
 
-    /**
-     * Display the post header 
-     */
-    public function post_header() {
-        get_template_part( 'templates/post-header' );
-    }
+	//----------------------------------------------
+	//	Template Hook Functions - Single Post
+	//----------------------------------------------
 
-    /**
-     * Display the post meta data
-     */
-    public function post_meta() {
-        get_template_part( 'templates/post-meta' );
-    }
+	/**
+	 * Display the post header 
+	 */
+	public function post_header() {
+		get_template_part( 'templates/post-header' );
+	}
 
-    /**
-     * Display the post content
-     */
-    public function post_content() {
-        get_template_part( 'templates/post-content' );
-    }
+	/**
+	 * Display the post meta data
+	 */
+	public function post_meta() {
+		get_template_part( 'templates/post-meta' );
+	}
 
-    /**
-     * Display the post footer
-     */
-    public function post_footer() {
-        get_template_part( 'templates/post-footer' );
-    }
+	/**
+	 * Display the post content
+	 */
+	public function post_content() {
+		get_template_part( 'templates/post-content' );
+	}
 
-    /**
-     * Display the comments form
-     */
-    public function display_comments() {
-    
-        // If comments are open or we have at least one comment, load up the comment template.
-	    if ( comments_open() || '0' != get_comments_number() ) :
-		    comments_template();
-	    endif;
-    }
+	/**
+	 * Display the post footer
+	 */
+	public function post_footer() {
+		get_template_part( 'templates/post-footer' );
+	}
 
-    /**
-     * Display navigation to next/previous post when applicable.
-     */
-    public function post_nav() {
-    
-        $args = [
-    		'next_text' => '%title',
-	    	'prev_text' => '%title',
-        ];
-	    the_post_navigation( $args );
-    }
+	/**
+	 * Display the comments form
+	 */
+	public function display_comments() {
+	
+		// If comments are open or we have at least one comment, load up the comment template.
+		if ( comments_open() || '0' != get_comments_number() ) :
+			comments_template();
+		endif;
+	}
 
-    //----------------------------------------------
-    //  Template Hook Functions - Pages
-    //----------------------------------------------
+	/**
+	 * Display navigation to next/previous post when applicable.
+	 */
+	public function post_nav() {
+	
+		$args = [
+			'next_text' => '%title',
+			'prev_text' => '%title',
+		];
+		the_post_navigation( $args );
+	}
 
-    /**
-     * Display the page header 
-     */
-    public function page_header() {
-        get_template_part( 'templates/page-header' );
-    }
+	//----------------------------------------------
+	//	Template Hook Functions - Pages
+	//----------------------------------------------
 
-    /**
-     * Display the page content
-     */
-    public function page_content() {
-        get_template_part( 'templates/page-content' );
-    }
+	/**
+	 * Display the page header 
+	 */
+	public function page_header() {
+		get_template_part( 'templates/page-header' );
+	}
 
-    /**
-     * Display the page footer 
-     */
-    public function page_footer() {
-        get_template_part( 'templates/page-footer' );
-    }
+	/**
+	 * Display the page content
+	 */
+	public function page_content() {
+		get_template_part( 'templates/page-content' );
+	}
 
-    //----------------------------------------------
-    //  Homepage Hooks Functionality
-    //----------------------------------------------
+	/**
+	 * Display the page footer 
+	 */
+	public function page_footer() {
+		get_template_part( 'templates/page-footer' );
+	}
+
+	//----------------------------------------------
+	//	Homepage Hooks Functionality
+	//----------------------------------------------
 }
 
 // Instantiate Hooks Class

@@ -36,7 +36,7 @@ if ( $widget_columns === 0 ) { return; }
 	while ( $i < $widget_columns ) : $i++;
 		if ( is_active_sidebar( 'footer-' . $i ) ) : ?>
 
-			<div class="block footer-widget-<?= intval( $i ); ?>">
+			<div class="block footer-widget-<?php echo intval( $i ); ?>">
 				<?php dynamic_sidebar( 'footer-' . intval( $i ) ); ?>
 			</div>
 

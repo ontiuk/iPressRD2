@@ -12,8 +12,8 @@
  */
 ?>
 <div class="site-info">
-    <?= sprintf( '<span class="copy">&copy; %s %s</span>', esc_html ( get_bloginfo( 'name' ) ), date('Y') ) ; ?>
+    <?php echo sprintf( '<span class="copy">&copy; %s %s</span>', esc_html ( get_bloginfo( 'name' ) ), date('Y') ) ; ?>
     <span class="site-name">
-        <?= sprintf( esc_attr__( 'Theme %1$s by %2$s.', 'ipress' ), 'iPress', '<a href="https://ipress.uk" title="iPress - WordPress Theme Framework" rel="author">iPress</a>' ); ?>
+        <?php echo sprintf( esc_attr__( 'Theme %1$s by %2$s.', 'ipress' ), 'iPress', '<a href="https://ipress.uk" title="iPress - WordPress Theme Framework" rel="author">iPress</a>' ); ?>
     </span>
 </div>

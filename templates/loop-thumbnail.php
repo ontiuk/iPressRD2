@@ -28,6 +28,6 @@ if ( $image ) :
     $src            = $meta['src'];
 ?>
 <div class="thumbnail d-flex-align-items-center justify-content-center">
-    <a href="<?= esc_url( get_permalink() ); ?>" title="<?php the_title_attribute(); ?>" ><img src="<?= $image[0]; ?>" class="img-fluid" <?= $alt; ?> /></a>
+    <a href="<?php echo esc_url( get_permalink() ); ?>" title="<?php the_title_attribute(); ?>" ><img src="<?php echo $image[0]; ?>" class="img-fluid" <?php echo $alt; ?> /></a>
 </div>
 <?php endif;

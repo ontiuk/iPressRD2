@@ -12,7 +12,7 @@
  */
 ?>
 <nav id="site-navigation" class="main-navigation" role="navigation" aria-label="<?php esc_html_e( 'Primary Navigation', 'ipress' ); ?>">
-    <button class="menu-toggle" aria-controls="primary-navigation" aria-expanded="false"><span><?= esc_attr( 'Menu', 'ipress' ); ?></span></button>
+    <button class="menu-toggle" aria-controls="primary-navigation" aria-expanded="false"><span><?php echo esc_attr( 'Menu', 'ipress' ); ?></span></button>
     <?php 
         wp_nav_menu( [
             'theme_location'    => 'primary', 
