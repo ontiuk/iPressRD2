@@ -11,27 +11,19 @@
  * @license		GPL-2.0+
  */
 
-// Access restriction
-if ( ! defined( 'ABSPATH' ) ) {
-	header( 'Status: 403 Forbidden' );
-	header( 'HTTP/1.1 403 Forbidden' );
-	exit;
-}
-
 //----------------------------------------------
 //	Theme Defines
 //----------------------------------------------
 
 // Theme Name & Versioning
 define( 'IPRESS_THEME_NAME', 'iPress' );
-define( 'IPRESS_THEME_WP', 4.7 );
-define( 'IPRESS_THEME_PHP', 5.4 );
+define( 'IPRESS_THEME_WP', 4.9 );
+define( 'IPRESS_THEME_PHP', 5.6 );
 
 // Directory Structure
-define( 'IPRESS_DIR', get_parent_theme_file_path() );
+define( 'IPRESS_DIR', 			get_parent_theme_file_path() );
 define( 'IPRESS_ASSETS_DIR',	IPRESS_DIR . '/assets' );
 define( 'IPRESS_INCLUDES_DIR',	IPRESS_DIR . '/inc' );
-define( 'IPRESS_ROUTE_DIR',		IPRESS_DIR . '/route' );
 define( 'IPRESS_TEMPLATES_DIR', IPRESS_DIR . '/templates' );
 
 // Assets Directory Structure
@@ -78,16 +70,12 @@ if ( true === $ipress_version_error->get_error() ) { return; }
 // Functions
 require_once IPRESS_INCLUDES_DIR . '/functions.php';
 
-// Images & Media template functions
-require_once IPRESS_INCLUDES_DIR . '/images.php';
-
-// Navigation template functions
-require_once IPRESS_INCLUDES_DIR . '/navigation.php';
-
 // Shortcodes functionality
 require_once IPRESS_INCLUDES_DIR . '/shortcodes.php';
 
-// Functions: theme template functions
+// Functions: theme template hooks & functions
+require_once IPRESS_INCLUDES_DIR . '/template-hooks.php';
+require_once IPRESS_INCLUDES_DIR . '/template-functions.php';
 require_once IPRESS_INCLUDES_DIR . '/template-tags.php';
 
 //----------------------------------------------
@@ -134,6 +122,9 @@ if ( is_admin() ) {
 // Layout template functions
 require_once IPRESS_INCLUDES_DIR . '/class-layout.php';
 
+// Mavigation functions
+require_once IPRESS_INCLUDES_DIR . '/class-navigation.php';
+
 // Images & Media template functions
 require_once IPRESS_INCLUDES_DIR . '/class-images.php';
 
@@ -164,9 +155,6 @@ require_once IPRESS_INCLUDES_DIR . '/class-ajax.php';
 // REST API Functionality: actions & filters
 require_once IPRESS_INCLUDES_DIR . '/class-api.php';
 
-// Hooks Support: actions & filters
-require_once IPRESS_INCLUDES_DIR . '/class-hooks.php';
-
 // Content Functionality: actions & filters
 require_once IPRESS_INCLUDES_DIR . '/class-content.php';
 
@@ -182,6 +170,11 @@ if ( defined( 'JETPACK__VERSION' ) ) {
 // Woocommerce
 if ( ipress_woocommerce_active() ) {
 	$ipress->woocommerce = require_once IPRESS_INCLUDES_DIR . '/class-woocommerce.php';
+}
+
+// ACF
+if ( class_exists( 'acf' ) ) {
+	$ipress->acf = require_once IPRESS_INCLUDES_DIR . '/class-acf.php';
 }
 
 //----------------------------------------------

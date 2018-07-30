@@ -10,20 +10,13 @@
  * @license		GPL-2.0+
  */
 
-// Access restriction
-if ( ! defined( 'ABSPATH' ) ) {
-	header( 'Status: 403 Forbidden' );
-	header( 'HTTP/1.1 403 Forbidden' );
-	exit;
-}
-
 // Password protected?
 if ( post_password_required() ) { return; }
 ?>
 
 <?php do_action( 'ipress_before_comments' ); ?>
 
-<div id="comments" class="comments-area" aria-label="Post Comments">
+<section id="comments" class="comments-area" aria-label="Post Comments">
 
 	<?php
 	if ( have_comments() ) : ?>
@@ -50,23 +43,22 @@ if ( post_password_required() ) { return; }
 
 		<?php the_comments_navigation();
 
-		// Comments closed massage
-		if ( ! comments_open() && '0' != get_comments_number() && post_type_supports( get_post_type(), 'comments' ) ) : ?>
-			<p class="no-comments"><?php esc_html_e( 'Comments are closed.', 'ipress' ); ?></p>
-		<?php
-		endif;
-
 	endif; // Check for have_comments().
 
-	do_action( 'ipress_before_comments' );
+	// Comments closed massage
+	if ( ! comments_open() && '0' != get_comments_number() && post_type_supports( get_post_type(), 'comments' ) ) :
+		echo sprintf( '<p class="no-comments">%s</p>', esc_html_e( 'Comments are closed.', 'ipress' ) );
+	endif;
+
+	do_action( 'ipress_before_comment_form' );
 
 	$args = apply_filters( 'ipress_comment_form_args', [
 		'title_reply_before' => '<span id="reply-title" class="comment-reply-title">',
 		'title_reply_after'  => '</span>',
 	] );
-	comment_form( $args );
-	?>
+	
+	comment_form( $args ); ?>
 
-</div><!-- #comments -->
+</section><!-- #comments -->
 
 <?php do_action( 'ipress_after_comments' );

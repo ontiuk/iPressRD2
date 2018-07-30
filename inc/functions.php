@@ -11,28 +11,20 @@
  * @license		GPL-2.0+
  */
 
-// Access restriction
-if ( ! defined( 'ABSPATH' ) ) {
-	header( 'Status: 403 Forbidden' );
-	header( 'HTTP/1.1 403 Forbidden' );
-	exit;
-}
+/**
+ * Theme
+ * Pagination
+ * Miscellaneous
+ * Images & Media
+ * Menu & Navigation
+ * WooCommerce
+ */
 
 //----------------------------------------------
-//	Theme Functions
-//
+//	Theme
+//	
 //	- ipress_is_home_page
 //	- ipress_is_index
-//	- ipress_pagination
-//	- ipress_numeric_posts_nav
-//	- ipress_prev_next_post_nav
-//	- ipress_get_permalink_by_page
-//	- ipress_paged_post_url
-//	- ipress_canonical_url
-//	- ipress_content
-//	- ipress_truncate
-//	- ipress_woocommerce_active
-//	- ipress_product_archive
 //----------------------------------------------
 
 /**
@@ -60,10 +52,12 @@ function ipress_is_index( $page ) {
 }
 
 //----------------------------------------------
-// Pagination - Next & Previous Links
+// Pagination 
 // 
-// - ipress_prev_next_posts_nav
-// - ipress_prev_next_post_nav
+//  - ipress_prev_next_posts_nav
+//	- ipress_prev_next_post_nav
+//	- ipress_pagination
+//	- ipress_numeric_posts_nav
 //----------------------------------------------
 
 /**
@@ -128,12 +122,6 @@ function ipress_prev_next_post_nav() {
 	// Send output
 	if ( $echo ) { echo $output; } else { return $output; }
 }
-
-//----------------------------------------------
-// Pagination - Numerical Links
-// 
-// - ipress_pagination
-//----------------------------------------------
 
 /**
  * Pagination for archives 
@@ -273,7 +261,14 @@ function ipress_numeric_posts_nav( $echo = true ) {
 }
 
 //---------------------------------------------
-//	Miscellaneous Functions			 
+//	Miscellaneous
+//	
+//	- ipress_canonical_url
+//	- ipress_paged_post_url
+//	- ipress_get_permalink_by_page
+//	- ipress_excerpt
+//	- ipress_content
+//	- ipress_truncate
 //---------------------------------------------
 
 /**
@@ -323,6 +318,56 @@ function ipress_canonical_url() {
 
 	// Return generated code
 	return $canonical;
+}
+
+/**
+ * Return the special URL of a paged post 
+ * - adapted from _wp_link_page() in WP core
+ *
+ * @param   int     $i The page number to generate the URL from
+ * @param   int     $post_id The post ID
+ * @return  string  Unescaped URL
+ */
+function ipress_paged_post_url( $i, $post_id = 0 ) {
+
+    global $wp_rewrite;
+
+    // Get post by ID
+    $post = get_post( $post_id );
+
+    // Paged?
+    if ( 1 == $i ) {
+        $url = get_permalink( $post_id );
+    } else {
+        if ( '' == get_option( 'permalink_structure' ) || in_array( $post->post_status, [ 'draft', 'pending' ] ) ) {
+            $url = add_query_arg( 'page', $i, get_permalink( $post_id ) );
+        } elseif ( 'page' == get_option( 'show_on_front' ) && get_option( 'page_on_front' ) == $post->ID ) {
+            $url = trailingslashit( get_permalink( $post_id ) ) . user_trailingslashit( $wp_rewrite->pagination_base . '/' . $i, 'single_paged' );
+        } else {
+            $url = trailingslashit( get_permalink( $post_id ) ) . user_trailingslashit( $i, 'single_paged' );
+        }
+    }
+
+    // Return link
+    return $url;
+}
+
+/**
+ * Get url by page template 
+ *
+ * @param   string $template
+ * @return  string
+ */
+function ipress_get_permalink_by_page( $template ) {
+
+    // Get pages
+    $page = get_pages( [
+        'meta_key'      => '_wp_page_template',
+        'meta_value'    => $template . '.php'
+    ] );
+
+    // Get the url
+    return ( empty( $page ) ) ? '' : get_permalink( $page[0]->ID );
 }
 
 /**
@@ -399,7 +444,431 @@ function ipress_truncate( $text, $max_char ) {
 }
 
 //----------------------------------------------
+//	Images & Media
+//
+//	- ipress_post_image_id
+//	- ipress_post_image
+//	- ipress_additional_image_sizes
+//	- ipress_image_sizes
+//	- ipress_get_attachment_meta
+//	- ipress_get_post_attachement
+//	- ipress_post_thumbnail_url
+//	- ipress_site_title_or_logo
+//	- ipress_hex2rgb
+//----------------------------------------------
+
+/**
+ * Pull an attachment ID from a post, if one exists
+ *
+ * @param  integer $index 
+ * @param  integer $post_id 
+ * @return integer|boolean 
+ */
+function ipress_post_image_id( $index = 0, $post_id = null ) {
+
+	// Get image_ids for current or passed post
+	$image_ids = array_keys(
+		get_children(
+			[
+				'post_parent'	 => $post_id ? $post_id : get_the_ID(),
+				'post_type'		 => 'attachment',
+				'post_mime_type' => 'image',
+				'orderby'		 => 'menu_order',
+				'order'			 => 'ASC',
+			]
+		)
+	);
+
+	// Set or not?
+	return ( isset( $image_ids[ $index ] ) ) ? $image_ids[ $index ] : false;
+}
+
+/**
+ * Return an image pulled from the media gallery
+ *
+ * Supported $args keys are:
+ *
+ *	- format   - string, default is 'html'
+ *	- size	   - string, default is 'full'
+ *	- num	   - integer, default is 0
+ *	- attr	   - string, default is ''
+ *	- fallback - mixed, default is 'first-attached'
+ *
+ * Applies ipress_post_image_args, ipress_pre_post_image and ipress_get_image filters.
+ *
+ * @uses	ipress_post_image_id() 
+ * @param	array|string $args 
+ * @return	string|boolean 
+ */
+function ipress_post_image( $args = [] ) {
+
+	$defaults = [
+		'post_id'  => null,
+		'format'   => 'html',
+		'size'	   => 'full',
+		'num'	   => 0,
+		'attr'	   => '',
+		'fallback' => 'first-attached',
+		'context'  => '',
+		'echo'	   => false
+	];
+
+	// Filter default parameters used by ipress_post_image()
+	$defaults = apply_filters( 'ipress_post_image_args', $defaults, $args );
+	$args = wp_parse_args( $args, $defaults );
+
+	// Allow child theme to short-circuit this function
+	$pre = apply_filters( 'ipress_pre_post_image', false, $args, get_post() );
+	if ( false !== $pre ) { return $pre; }
+
+	// If post thumbnail exists, use its id
+	if ( has_post_thumbnail( $args['post_id'] ) && ( $args['num'] === 0 ) ) {
+		$id = get_post_thumbnail_id( $args['post_id'] );
+	}
+
+	// Else if the first (default) image attachment is the fallback, use its id
+	elseif ( 'first-attached' === $args['fallback'] ) {
+		$id = ipress_post_image_id( $args['num'], $args['post_id'] );
+	}
+
+	// Else if fallback id is supplied, use it
+	elseif ( is_int( $args['fallback'] ) ) {
+		$id = $args['fallback'];
+	}
+
+	// If we have an id, get the html and url
+	if ( isset( $id ) && is_int( $id ) ) {
+		$html = wp_get_attachment_image( $id, $args['size'], false, $args['attr'] );
+		list( $url ) = wp_get_attachment_image_src( $id, $args['size'], false, $args['attr'] );
+	}
+
+	// Else if fallback html and url exist, use them
+	elseif ( is_array( $args['fallback'] ) ) {
+		$id   = 0;
+		$html = $args['fallback']['html'];
+		$url  = $args['fallback']['url'];
+	}
+
+	// Else, return false (no image)
+	else { return false; }
+
+	// Source path, relative to the root
+	$src = str_replace( home_url(), '', $url );
+
+	// Determine output
+	if ( 'html' === strtolower( $args['format'] ) ) {
+		$output = $html;
+	} elseif ( 'url' === strtolower( $args['format'] ) ) {
+		$output = $url;
+	} else {
+		$output = $src;
+	}
+
+	// Return false if $url is blank
+	if ( empty( $url ) ) { $output = false; }
+
+	// Return data, filtered
+	$output = apply_filters( 'ipress_post_image', $output, $args, $id, $html, $url, $src );
+
+	// Output or return
+	if ( $echo ) {
+		if ( $image ) {
+			echo $image;
+		} else {
+			return false;
+		}
+	} else {  
+		return $output;
+	}  
+}
+
+/**
+ * Returns additionally registered image sizes via add_image_size: width, height and crop sub-keys
+ *
+ * @global array $_wp_additional_image_sizes 
+ * @return array 
+ */
+function ipress_additional_image_sizes() {
+	global $_wp_additional_image_sizes;
+	return ( $_wp_additional_image_sizes ) ? $_wp_additional_image_sizes : [];
+}
+
+/**
+ * Return all registered image sizes arrays, including the standard sizes
+ * - two-dimensional array of standard and additionally registered image sizes, with width, height and crop sub-keys
+ *
+ * @uses	ipress_additional_image_sizes()
+ * @param	boolean $additional
+ * @return	array 
+ */
+function ipress_image_sizes( $additional=true ) {
+
+	$builtin_sizes = [
+		'large'		=> [
+			'width'  => get_option( 'large_size_w' ),
+			'height' => get_option( 'large_size_h' ),
+		],
+		'medium'	=> [
+			'width'  => get_option( 'medium_size_w' ),
+			'height' => get_option( 'medium_size_h' ),
+		],
+		'thumbnail' => [
+			'width'  => get_option( 'thumbnail_size_w' ),
+			'height' => get_option( 'thumbnail_size_h' ),
+			'crop'	 => get_option( 'thumbnail_crop' ),
+		],
+	];
+
+	$additional_sizes = ( $additional ) ? ipress_additional_image_sizes() : [];
+	return array_merge( $builtin_sizes, $additional_sizes );
+}
+
+/**
+ * Get the image meta data
+ *
+ * @param	integer		$attachment_id
+ * @param	string		$size
+ * @return	array
+ */
+function ipress_get_attachment_meta( $attachment_id, $size = '' ){
+
+	// Set up data
+	$data = [
+		'alt'			=> '',
+		'caption'		=> '',
+		'description'	=> '',
+		'href'			=> '',
+		'src'			=> '',
+		'title'			=> ''
+	];
+
+	// Get attachment data
+	$attachment = get_post( $attachment_id );
+
+	// Not valid
+	if ( empty( $attachment ) ) { return $data; }
+	
+	// Get image data
+	$att_data_thumb = ( empty( $size ) ) ? wp_get_attachment_image_src( $attachment_id ) :
+										   wp_get_attachment_image_src( $attachment_id, $size );
+	if ( ! $att_data_thumb ) { return $data; }
+	
+	// Construct data
+	$data['alt']			= get_post_meta( $attachment->ID, '_wp_attachment_image_alt', true );
+	$data['caption']		= $attachment->post_excerpt;
+	$data['description']	= $attachment->post_content;
+	$data['href']			= $attachment->guid;
+	$data['src']			= $att_data_thumb[0];
+	$data['title']			= $attachment->post_title;
+
+	// Return image data	
+	return $data;
+}
+
+/**
+ * get post attachements by attachment mime type 
+ *
+ * @param	integer		$post_id
+ * @param	string		$att_type
+ * @return	array
+ */
+function ipress_get_post_attachment( $post_id, $att_type ){
+
+	// Get attachment data
+	$attachments = get_posts( [
+		'post_type'			=> 'attachment',
+		'post_mime_type'	=> $att_type,
+		'numberposts'		=> -1,
+		'post_parent'		=> $post_id
+	] );
+
+	// Return attachments	 
+	return $attachments;
+}
+
+/**
+ * Retrieve the post thumbnail url if set
+ */
+function ipress_post_thumbnail_url( $size = 'full' ) { 
+	$thumb_id = (int) get_post_thumbnail_id(); 
+	return ( $thumb_id > 0 ) ? wp_get_attachment_image_src( $thumb_id, $size, true )[0] : ''; 
+} 
+
+/**
+ * Get site title or logo
+ */
+function ipress_site_title_or_logo( $echo = true ) {
+	if ( has_custom_logo() ) {
+		$html = get_custom_logo();
+	} else if ( function_exists( 'jetpack_has_site_logo' ) && jetpack_has_site_logo() ) {
+		$logo	 = site_logo()->logo;
+		$logo_id = get_theme_mod( 'custom_logo' ); 
+		$logo_id = $logo_id ? $logo_id : $logo['id']; 
+		$size	 = site_logo()->theme_size();
+		$html	 = sprintf( '<a href="%1$s" class="site-logo-link" rel="home" itemprop="url">%2$s</a>',
+			esc_url( home_url( '/' ) ),
+			wp_get_attachment_image(
+				$logo_id,
+				$size,
+				false,
+				[
+					'class'		=> 'site-logo attachment-' . $size,
+					'data-size' => $size,
+					'itemprop'	=> 'logo'
+				 ]
+			)
+		);
+
+		$html = apply_filters( 'jetpack_the_site_logo', $html, $logo, $size );
+	} else {
+		$tag = ( ipress_is_home_page() ) ? 'h1' : 'p';
+		$html = sprintf( '<%s class="site-title"><a href="%s" rel="home">%s</a></%s>', esc_attr( $tag ), esc_url( home_url('/') ), esc_html( get_bloginfo( 'name' ) ), esc_attr( $tag ) );
+		$description = get_bloginfo( 'description', 'display' );
+		if ( $description || is_customize_preview() ) {
+			$html .= sprintf( '<p class="site-description">%s</p>', esc_html( $description ) );
+		} 
+	}
+
+	if ( ! $echo ) { return $html; }
+	echo $html;
+}
+
+/**
+ * convert color form hex to rgb 
+ *
+ * @param	string
+ * @return	string
+ */
+function ipress_hex2rgb( $hex ) {
+
+	// Convert hex...		 
+	$hex = str_replace( '#', '', $hex );
+
+	// ...to rgb
+	$r = hexdec( substr( $hex, 0, 2 ) );
+	$g = hexdec( substr( $hex, 2, 2 ) );
+	$b = hexdec( substr( $hex, 4, 2 ) );
+
+	// Return rgb value
+	return $r . ', ' . $g . ', ' . $b; 
+}
+
+//----------------------------------------------
+//	Menu & Navigation
+// 
+// - ipress_has_nav_menu
+// - ipress_has_nav_location_menu
+// - ipress_has_menu
+// - ipress_get_nav_menu_items
+//----------------------------------------------
+
+/**
+ * Determine if a theme supports a particular menu location 
+ * - Case sensitive, so camel-case location
+ * - Alternative to has_nav_menu
+ *
+ * @param  string $location
+ * @return boolean 
+ */
+function ipress_has_nav_menu( $location ) {
+
+	// Set the menu name
+	if ( empty( $location ) ) { return false; }
+
+	// Retrieve registered menu locations
+	$locations = array_keys( get_nav_menu_locations() );
+
+	// Test location correctly registered
+	return in_array( $location, $locations );
+}
+
+/**
+ * Determine if a theme supports a particular menu location & menu combination
+ * - Case sensitive, so camel-case location & menu
+ *
+ * @param	string $location
+ * @param	string $menu 
+ * @param	string $route slug or name default name
+ * @return boolean 
+ */
+function ipress_has_nav_location_menu( $location, $menu, $route='name' ) {
+
+	// Set the menu name
+	if ( empty( $location ) || empty( $menu ) ) { return false; }
+
+	// Retrieve registered menu locations
+	$locations = get_nav_menu_locations();
+
+	// Test location correctly registered
+	if ( !array_key_exists( $location, $locations ) ) { return false; }
+
+	// Get location menu 
+	$term = get_term( (int)$locations[$location], 'nav_menu' );
+
+	// Test menu
+	return ( 'slug' == $route ) ? ( $term->slug === $menu ) : ( $term->name === $menu ); 
+}
+
+/**
+ * Determine if a theme has a particular menu registered
+ * - Case sensitive, so camel-case menu
+ *
+ * @param  string $menu
+ * @return boolean 
+ */
+function ipress_has_menu( $menu ) {
+
+	// Set the menu name
+	if ( empty( $menu ) ) { return false; }
+
+	// Retrieve registered menu locations
+	$menus = wp_get_nav_menus();
+
+	// None registered
+	if ( empty( $menus ) ) { return false; }
+
+	// Registered
+	foreach ( $menus as $m ) {
+		if ( $menu === $m->name ) { return true; }
+	}
+
+	// Default
+	return false;
+}
+
+/**
+ * Retrieve menu items for a menu by location
+ *
+ * @param  string $menu Name of the menu location
+ * @return array
+ */
+function ipress_get_nav_menu_items( $menu ) {
+
+	// Set the menu name
+	if ( empty( $menu ) ) { return false; }
+
+	// Retrieve registered menu locations
+	$locations = get_nav_menu_locations();
+
+	// Test menu is correctly registered
+	if ( !isset( $locations[ $menu ] ) ) { return false; }
+
+	// Retrieve menu set against location
+	$menu = wp_get_nav_menu_object( $locations[ $menu ] );
+	if ( false === $menu ) { return false; }
+
+	// Retrieve menu items from menu
+	$menu_items = wp_get_nav_menu_items( $menu->term_id );
+
+	// No menu items?
+	return ( empty( $menu_items ) ) ? false : $menu_items;
+}
+
+//----------------------------------------------
 //	WooCommerce Functions
+//	
+//	- ipress_woocommerce_active
+//	- ipress_is_product_archive
 //----------------------------------------------
 
 /**
@@ -424,44 +893,5 @@ function ipress_is_product_archive() {
 	// Product archive
 	return ( is_shop() || is_product_taxonomy() || is_product_category() || is_product_tag() ) ? true : false;
 }
-
-/** 
- * Cart Link
- * 
- * Displayed a link to the cart including the number of items present and the cart total
- * 
- * @return void 
- */ 
-function ipress_wc_cart_link() { 
-?> 
-	<a class="cart-contents" href="<?php echo esc_url( wc_get_cart_url() ); ?>" title="<?php esc_attr_e( 'View your shopping cart', 'ipress' ); ?>">
-		<?php /* translators: number of items in the mini cart. */ ?>
-		<span class="amount"><?php echo wp_kses_data( WC()->cart->get_cart_subtotal() ); ?></span>
-		<span class="count"><?php echo wp_kses_data( sprintf( _n( '%d item', '%d items', WC()->cart->get_cart_contents_count(), '_s' ), WC()->cart->get_cart_contents_count() ) );?></span>
-	</a> 
-<?php  
-} 
- 
-/** 
- * Display Header Cart
- * 
- * @return void 
- */ 
-function ipress_wc_header_cart() { 
-   $class = ( is_cart() ) ? 'current-menu-item' : '';  
-?> 
-	<ul id="site-header-cart" class="site-header-cart"> 
-		<li class="<?php echo esc_attr( $class ); ?>"> 
-			<?php ipress_wc_cart_link(); ?> 
-		</li> 
-		<li> 
-		<?php 
-			$instance = [ 'title' => '' ];
-			the_widget( 'WC_Widget_Cart', $instance ); 
-		?> 
-		</li> 
-	</ul> 
-<?php 
-} 
 
 //end

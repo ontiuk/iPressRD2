@@ -9,3 +9,4 @@
 * (18 February 2018). 1.0.7 SASS restructure
 * (22 February 2018). 1.0.8 Template restructure
 * (18 March 2018). 1.0.9 Template directory reset
+* (27 July 2018). 1.1.0 Template refactor & code changes

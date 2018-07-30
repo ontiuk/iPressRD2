@@ -11,131 +11,127 @@
  * @license		GPL-2.0+
  */
 
-// Access restriction
-if ( ! defined( 'ABSPATH' ) ) {
-	header( 'Status: 403 Forbidden' );
-	header( 'HTTP/1.1 403 Forbidden' );
-	exit;
-}
-
-/**
- * Set up sidebar / widget areas
- */ 
-final class IPR_Sidebars {
+if ( ! class_exists( 'IPR_Sidebars' ) ) :
 
 	/**
-	 * Class constructor
-	 * - set up hooks
-	 */
-	public function __construct() {
+	 * Set up sidebar / widget areas
+	 */ 
+	final class IPR_Sidebars {
 
-		// Core sidebar initialisation
-		add_action( 'widgets_init', [ $this, 'sidebars_init' ] );	 
-	}
+		/**
+		 * Class constructor
+		 * - set up hooks
+		 */
+		public function __construct() {
 
-	//----------------------------------------------
-	// Sidebar Functionality
-	//----------------------------------------------
+			// Core sidebar initialisation
+			add_action( 'widgets_init', [ $this, 'sidebars_init' ] );	 
+		}
 
-	/**
-	 * Set sidebar defaults
-	 *
-	 * @param	array	$sidebar
-	 * @return	array
-	 */
-	private function sidebar_defaults ( $args ) {
+		//----------------------------------------------
+		// Sidebar Functionality
+		//----------------------------------------------
 
-		// Set default wrappers
-		$defaults = apply_filters( 'ipress_sidebar_defaults', [
-			'before_widget' => '<section id="%1$s" class="widget %2$s"><div class="widget-wrap">',
-			'after_widget'	=> '</div></section>' . PHP_EOL,
-			'before_title'	=> '<h4 class="widget-title widgettitle">',
-			'after_title'	=> '</h4>' . PHP_EOL
-		] );
+		/**
+		 * Set sidebar defaults
+		 *
+		 * @param	array	$sidebar
+		 * @return	array
+		 */
+		private function sidebar_defaults ( $args ) {
 
-		// Filterable sidebar defaults
-		$defaults = apply_filters( 'ipress_sidebar_' . $args['id'] . '_defaults', $defaults );
-		$args = wp_parse_args( $args, $defaults );
+			// Set default wrappers
+			$defaults = apply_filters( 'ipress_sidebar_defaults', [
+				'before_widget' => '<section id="%1$s" class="widget %2$s"><div class="widget-wrap">',
+				'after_widget'	=> '</div></section>' . PHP_EOL,
+				'before_title'	=> '<h4 class="widget-title widgettitle">',
+				'after_title'	=> '</h4>' . PHP_EOL
+			] );
 
-		// Return sidebar params
-		return $args;
-	}	
+			// Filterable sidebar defaults
+			$defaults = apply_filters( 'ipress_sidebar_' . $args['id'] . '_defaults', $defaults );
+			$args = wp_parse_args( $args, $defaults );
 
-	/**
-	 * Register theme sidebars
-	 *
-	 * @return array
-	 */
-	private function register_sidebars() {
+			// Return sidebar params
+			return $args;
+		}	
 
-		// Default sidebars
-		$default_sidebars = apply_filters( 'ipress_default_sidebars', [
-			'primary'		=> [ 
-				'name'			=> __( 'Primary Sidebar', 'ipress' ),
-				'description'	=> __( 'This is the primary sidebar for two-column and full-width layouts.', 'ipress' )
-			]
-		] );
+		/**
+		 * Register theme sidebars
+		 *
+		 * @return array
+		 */
+		private function register_sidebars() {
 
-		// Footer widgets
-		$footer_sidebars = apply_filters( 'ipress_footer_sidebars', [
-			'footer-1'	 => [
-				'name'			=> __( 'Footer Left Sidebar', 'ipress' ),
-				'description'	=> __( 'This is the footer left sidebar for all layouts.', 'ipress' )
-			],
-			'footer-2' => [
-			   'name'		   => __( 'Footer Center Sidebar', 'ipress' ),
-			   'description'   => __( 'This is the footer center sidebar for all layouts.', 'ipress' )
-			],
-			'footer-3' => [
-			   'name'		   => __( 'Footer Right Sidebar', 'ipress' ),
-			   'description'   => __( 'This is the footer right sidebar for all layouts.', 'ipress' )
-			]
-		] );
+			// Default sidebars
+			$default_sidebars = apply_filters( 'ipress_default_sidebars', [
+				'primary'		=> [ 
+					'name'			=> __( 'Primary Sidebar', 'ipress' ),
+					'description'	=> __( 'This is the primary sidebar for two-column and full-width layouts.', 'ipress' )
+				]
+			] );
 
-		// Custom widgets
-		$custom_sidebars = apply_filters( 'ipress_custom_sidebars', [] );
+			// Footer widgets - default 3, false or 0 for none
+			$footer_widget_areas = apply_filters( 'ipress_footer_widget_areas', 3 );
+			if ( $footer_widget_areas ) {
+				$footer_sidebars = [];
 
-		// Set default sidebars
-		return array_merge( $default_sidebars, $footer_sidebars, $custom_sidebars );
-	}
+				for ( $i = 1; $i <= intval( $footer_widget_areas ); $i++ ) {
+					$footer = sprintf( 'footer-%d', $i );
+	
+					$footer_sidebars[ $footer ] = [
+						'name'        => sprintf( __( 'Footer %d', 'ipress' ), $i ),
+						'description' => sprintf( __( 'Footer sidebar area %d.', 'ipress' ), $i )
+					];
+				}
+			} else { $footer_sidebars = []; }
 
-	//----------------------------------------------
-	// Sidebars Action & Filter Functions
-	//----------------------------------------------
+			// Custom widgets
+			$custom_sidebars = apply_filters( 'ipress_custom_sidebars', [] );
 
-	/**
-	 * Kickstart sidebar widget areas
-	 *
-	 * @global	$ipress_sidebars
-	 * @uses	register_sidebar()
-	 */
-	public function sidebars_init() {
+			// Set default sidebars
+			return array_merge( $default_sidebars, $footer_sidebars, $custom_sidebars );
+		}
 
-		// Get sidebars
-		$ipress_sidebars = $this->register_sidebars();
+		//----------------------------------------------
+		// Sidebars Action & Filter Functions
+		//----------------------------------------------
 
-		// Register widget areas
-		foreach ( $ipress_sidebars as $id => $sidebar ) {
+		/**
+		 * Kickstart sidebar widget areas
+		 *
+		 * @global	$ipress_sidebars
+		 * @uses	register_sidebar()
+		 */
+		public function sidebars_init() {
 
-			// Reasign sidebar ID
-			$sidebar['id'] = $id;
+			// Get sidebars
+			$ipress_sidebars = $this->register_sidebars();
 
-			// Need name...
-			if ( !isset( $sidebar['name'] ) || empty( $sidebar['name'] ) ) { continue; }
- 
-			// ...and description
-			if ( !isset( $sidebar['description'] ) || empty( $sidebar['description'] ) ) {
-				$sidebar['description'] = sprintf( __( 'This is the %s sidebar description', 'ipress' ), $sidebar['name'] );
+			// Register widget areas
+			foreach ( $ipress_sidebars as $id => $sidebar ) {
+
+				// Reasign sidebar ID
+				$sidebar['id'] = $id;
+
+				// Need name...
+				if ( !isset( $sidebar['name'] ) || empty( $sidebar['name'] ) ) { continue; }
+	 
+				// ...and description
+				if ( !isset( $sidebar['description'] ) || empty( $sidebar['description'] ) ) {
+					$sidebar['description'] = sprintf( __( 'This is the %s sidebar description', 'ipress' ), $sidebar['name'] );
+				}
+
+				// Set up defaults for each sidebar
+				$sidebar = $this->sidebar_defaults( $sidebar );    
+
+				// Register sidebar
+				register_sidebar( $sidebar );	 
 			}
-
-			// Set up defaults for each sidebar
-			$sidebar = $this->sidebar_defaults( $sidebar );    
-
-			// Register sidebar
-			register_sidebar( $sidebar );	 
 		}
 	}
-}
+
+endif;
 
 // Instantiate Sidebars Class
 return new IPR_Sidebars;

@@ -11,26 +11,19 @@
  * @license		GPL-2.0+
  */
 
-// Access restriction
-if ( ! defined( 'ABSPATH' ) ) {
-	header( 'Status: 403 Forbidden' );
-	header( 'HTTP/1.1 403 Forbidden' );
-	exit;
-}
-
 //----------------------------------------------  
 // Shortcodes
 //----------------------------------------------  
 
 // Include shortcode files by type
-include_once( IPRESS_SHORTCODES_DIR . '/analytics.php' );
-include_once( IPRESS_SHORTCODES_DIR . '/category.php' );
-include_once( IPRESS_SHORTCODES_DIR . '/date.php' );
-include_once( IPRESS_SHORTCODES_DIR . '/links.php' );
-include_once( IPRESS_SHORTCODES_DIR . '/media.php' );
-include_once( IPRESS_SHORTCODES_DIR . '/post.php' );
-include_once( IPRESS_SHORTCODES_DIR . '/search-form.php' );
-include_once( IPRESS_SHORTCODES_DIR . '/user.php' );
+include_once IPRESS_SHORTCODES_DIR . '/analytics.php';
+include_once IPRESS_SHORTCODES_DIR . '/category.php';
+include_once IPRESS_SHORTCODES_DIR . '/date.php';
+include_once IPRESS_SHORTCODES_DIR . '/links.php';
+include_once IPRESS_SHORTCODES_DIR . '/media.php';
+include_once IPRESS_SHORTCODES_DIR . '/post.php';
+include_once IPRESS_SHORTCODES_DIR . '/search-form.php';
+include_once IPRESS_SHORTCODES_DIR . '/user.php';
 
 //---------------------------------------------
 //	Shortcode Actions

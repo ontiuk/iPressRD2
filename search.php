@@ -12,13 +12,6 @@
  * @link		http://ipress.uk
  * @license		GPL-2.0+
  */
-
-// Access restriction
-if ( ! defined( 'ABSPATH' ) ) {
-	header( 'Status: 403 Forbidden' );
-	header( 'HTTP/1.1 403 Forbidden' );
-	exit;
-}
 ?>
 
 <?php global $wp_query; ?>
@@ -36,14 +29,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php if ( have_posts() ) : ?>
 
 		<header class="page-header">
-			<h1 class="page-title search-title"><?php echo sprintf( __( 'Search: %s Results for <span>%s</span>', 'ipress' ), $wp_query->found_posts, get_search_query() ); ?></h1>
+			<h1 class="page-title search-title">
+			<?php 
+				/* translators: %s: search query. */
+				echo sprintf( esc_html__( 'Search: %s Results for <span>%s</span>', 'ipress' ), $wp_query->found_posts, get_search_query() ); ?>
+			</h1>
 		</header><!-- .page-header -->
 
-		<?php get_template_part( 'templates/loop-search' ); ?>
+		<?php get_template_part( 'templates/search' ); ?>
 
 	<?php else: ?>
 	
-		<?php get_template_part( 'templates/content', 'none' ); ?>
+		<?php get_template_part( 'templates/global/none' ); ?>
 
 	<?php endif; ?>
 
@@ -55,5 +52,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 </div><!-- #primary -->
 
-<?php do_action( 'ipress_sidebar' ); ?>
-<?php get_footer(); ?>
+<?php
+do_action( 'ipress_sidebar' );
+get_footer();

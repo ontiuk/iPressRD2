@@ -12,13 +12,6 @@
  * @link		http://ipress.uk
  * @license		GPL-2.0+
  */
-
-// Access restriction
-if ( ! defined( 'ABSPATH' ) ) {
-	header( 'Status: 403 Forbidden' );
-	header( 'HTTP/1.1 403 Forbidden' );
-	exit;
-}
 ?>
 
 <?php get_header(); ?>
@@ -34,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	 <?php if ( have_posts() ) : the_post(); ?>
 
 		<header class="page-header">
-			<h1 class="page-title author-title"><?= sprintf( __( 'Author: <span class="vcard">%s</span>', 'ipress' ), get_the_author() ); ?></h1>
+			<h1 class="page-title author-title"><?php echo sprintf( __( 'Author: <span class="vcard">%s</span>', 'ipress' ), get_the_author() ); ?></h1>
 		</header><!-- .page-header -->
 
 		<?php if ( get_the_author_meta( 'description' ) ) : ?>
@@ -45,11 +38,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	
 		<?php rewind_posts(); ?>
 
-		<?php get_template_part( 'templates/loop' ); ?>
+		<?php get_template_part( 'templates/archive' ); ?>
 
 	<?php else: ?>
 
-		<?php get_template_part( 'templates/content', 'none' ); ?>
+		<?php get_template_part( 'templates/global/none' ); ?>
 
 	<?php endif; ?>
 
@@ -61,5 +54,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 </div><!-- #primary -->
 
-<?php do_action( 'ipress_sidebar' ); ?>
-<?php get_footer(); ?>
+<?php 
+do_action( 'ipress_sidebar' );
+get_footer();

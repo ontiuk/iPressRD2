@@ -13,13 +13,6 @@
  * @link		http://ipress.uk
  * @license		GPL-2.0+
  */
-
-// Access restriction
-if ( ! defined( 'ABSPATH' ) ) {
-	header( 'Status: 403 Forbidden' );
-	header( 'HTTP/1.1 403 Forbidden' );
-	exit;
-}
 ?>
 
 <?php get_header(); ?>
@@ -39,11 +32,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php the_archive_description( '<div class="archive-description">', '</div>' ); ?>
 		</header><!-- .page-header -->
 				
-		<?php get_template_part( 'templates/loop' ); ?>
+		<?php get_template_part( 'templates/archive' ); ?>
 
 	<?php else: ?>
 	
-		<?php get_template_part( 'templates/content', 'none' ); ?>
+		<?php get_template_part( 'templates/global/none' ); ?>
 
 	<?php endif; ?>
 
@@ -55,5 +48,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 </div><!-- #primary -->
 
-<?php do_action( 'ipress_sidebar' ); ?>
-<?php get_footer(); ?>
+<?php 
+do_action( 'ipress_sidebar' );
+get_footer();
