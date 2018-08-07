@@ -68,7 +68,12 @@ if ( true === $ipress_version_error->get_error() ) { return; }
 //----------------------------------------------
 
 // Functions
-require_once IPRESS_INCLUDES_DIR . '/functions.php';
+require_once IPRESS_INCLUDES_DIR . '/theme-functions.php';
+require_once IPRESS_INCLUDES_DIR . '/image-functions.php';
+require_once IPRESS_INCLUDES_DIR . '/pagination-functions.php';
+require_once IPRESS_INCLUDES_DIR . '/navigation-functions.php';
+require_once IPRESS_INCLUDES_DIR . '/miscellaneous-functions.php';
+require_once IPRESS_INCLUDES_DIR . '/wc-functions.php';
 
 // Shortcodes functionality
 require_once IPRESS_INCLUDES_DIR . '/shortcodes.php';

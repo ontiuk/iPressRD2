@@ -19,6 +19,13 @@ if ( ! class_exists( 'IPR_Load_Styles' ) ) :
 	final class IPR_Load_Styles {
 
 		/**
+		 * admin styles 
+		 *
+		 * @var array $admin
+		 */
+		private $admin = [];
+
+		/**
 		 * Core styles
 		 *
 		 * @var array $core
@@ -68,10 +75,22 @@ if ( ! class_exists( 'IPR_Load_Styles' ) ) :
 		private $fonts = [];
 
 		/**
+		 * login styles
+		 *
+		 * @var array $login
+		 */
+		private $login = [];
+
+		/**
 		 * Class constructor
-		 * - set up hooks
 		 */
 		public function __construct() {
+
+			// Load admin styles
+			add_action( 'admin_enqueue_scripts', 				[ $this, 'load_admin_styles' ] ); 
+
+			// Login page styles
+			add_action( 'login_enqueue_scripts', 				[ $this, 'load_login_styles' ], 10 );			
 
 			// Customiser custom css
 			add_action( 'customize_controls_enqueue_scripts', 	[ $this, 'customizer_styles' ] );
@@ -91,7 +110,7 @@ if ( ! class_exists( 'IPR_Load_Styles' ) ) :
 			// Conditional header styles
 			add_action( 'wp_enqueue_scripts', 					[ $this, 'conditional_styles' ] ); 
 
-			// Embed scripts
+			// Embed styles
 			add_action( 'enqueue_embed_scripts',				[ $this, 'print_embed_styles' ] );
 
 			// Header Inline CSS
@@ -106,37 +125,69 @@ if ( ! class_exists( 'IPR_Load_Styles' ) ) :
 		 */
 		public function init( $styles, $fonts ) {
 
+			// Admin styles: [ 'label' => [ 'hook', 'src', (array)deps, 'ver' ] ... ]
+			$this->admin = $this->set_key( $styles, 'admin' );
+
 			// Core styles: [ 'style-name', 'style-name' ... ];
 			$this->core = $this->set_key( $styles, 'core' );
 
-			// External styles: [ 'script-name', 'script-name2' ... ]
+			// External styles: [ 'style-name', 'style-name2' ... ]
 			$this->external = $this->set_key( $styles, 'external' );
 
-			// Header styles: [ 'label' => [ 'path_url', (array)depn, 'version' ] ... ]
+			// Header styles: [ 'label' => [ 'src', (array)deps, 'ver', 'media' ] ... ]
 			$this->header = $this->set_key( $styles, 'header' );
 
-			// Plugin styles: [ 'label' => [ 'path_url', (array)depn, 'version' ] ... ]
+			// Plugin styles: [ 'label' => [ 'src', (array)deps, 'ver', 'media' ] ... ]
 			$this->plugins = $this->set_key( $styles, 'plugins' );
 
-			// Page styles: [ 'label' => [ 'template', 'path_url', (array)dependencies, 'version' ] ... ];
+			// Page styles: [ 'label' => [ 'template', 'src', (array)deps, 'version', 'media' ] ... ];
 			$this->page = $this->set_key( $styles, 'page' );
 
-			// Theme styles: [ 'label' => [ 'path_url', (array)depn, 'version' ] ... ];
+			// Theme styles: [ 'label' => [ 'src', (array)deps, 'ver', 'media' ] ... ];
 			$this->theme = $this->set_key( $styles, 'theme' );
 
-			// Theme fonts: [ 'label' => [ 'path_url', (array)depn, 'version' ] ... ];
+			// Login style: [ 'label' => [ 'src', (array)deps, 'ver', ' ] ... ]
+			$this->login = $this->set_key( $styles, 'login' );
+
+			// Theme fonts: [ 'label' => [ 'src', (array)deps, 'ver' ] ... ];
 			$this->fonts = ( is_array( $fonts ) && ! empty( $fonts ) ) ? $fonts : [];
 		}
 
 		/**
 		 * Validate and set key
 		 *
-		 * @param array $styles
-		 * @param string $key
-		 * @return array
+		 * @param 	array 	$styles
+		 * @param 	string 	$key
+		 * @return 	array
 		 */
 		private function set_key( $styles, $key ) {
 			return ( isset ( $styles[$key] ) && is_array( $styles[$key] ) && ! empty( $styles[$key] ) ) ? $styles[$key] : [];
+		}
+
+		//----------------------------------------------
+		//	Admin Styles
+		//----------------------------------------------
+
+		/**
+		 * Load admin styles
+		 *
+		 * @param	string	$hook	Current admin page
+		 */
+		public function load_admin_styles( $hook ) {
+
+			// Initial validation
+			if ( empty( $this->admin ) ) { return; }
+
+			// Register & enqueue admin styles
+			foreach ( $this->admin as $k=>$v ) { 
+				
+				// Test hook dependency
+				if ( !empty( $v[0] ) && $hook != $v[0] ) { continue; }
+
+				// Register and enqueue style
+				wp_register_style( $k, $v[1], $v[2], $v[3] );
+        		wp_enqueue_style( $k );
+			}
 		}
 
 		//----------------------------------------------
@@ -162,27 +213,31 @@ if ( ! class_exists( 'IPR_Load_Styles' ) ) :
 
 			// Register & enqueue css in order
 			foreach ( $this->header as $k=>$v ) {
-				wp_register_style( $k, $v[0], $v[1], $v[2] ); 
+				$m = ( isset( $v[3] ) && ! empty( $v[3] ) ) ? $v[3] : 'all';
+				wp_register_style( $k, $v[0], $v[1], $v[2], $m ); 
 				wp_enqueue_style( $k ); 
 			}
 		
 			// Register & enqueue plugin styles 
 			foreach ( $this->plugins as $k=>$v ) { 
-				wp_register_style( $k, $v[0], $v[1], $v[2] ); 
+				$m = ( isset( $v[3] ) && ! empty( $v[3] ) ) ? $v[3] : 'all';
+				wp_register_style( $k, $v[0], $v[1], $v[2], $m ); 
 				wp_enqueue_style( $k ); 
 			}
 
 			// Page templates in footer head
 			foreach ( $this->page as $k=>$v ) {
 				if ( is_page_template( $v[0] ) ) {
-					wp_register_style( $k, $v[1], $v[2], $v[3] ); 
+					$m = ( isset( $v[4] ) && ! empty( $v[4] ) ) ? $v[4] : 'all';
+					wp_register_style( $k, $v[1], $v[2], $v[3], $m ); 
 					wp_enqueue_style( $k );
 				}
 			}
 
 			// Register & enqueue core styles last
 			foreach ( $this->theme as $k=>$v ) { 
-				wp_register_style( $k, $v[0], $v[1], $v[2] ); 
+				$m = ( isset( $v[3] ) && ! empty( $v[3] ) ) ? $v[3] : 'all';
+				wp_register_style( $k, $v[0], $v[1], $v[2], $m ); 
 				wp_enqueue_style( $k ); 
 				wp_style_add_data( $k, 'rtl', 'replace' );
 			}
@@ -213,10 +268,8 @@ if ( ! class_exists( 'IPR_Load_Styles' ) ) :
 			// Set fonts url
 			$fonts_url = add_query_arg( $query_args, 'https://fonts.googleapis.com/css' );
 
-			// Register a css style file for later use 
+			// Register & enqueue css style file for later use 
 			wp_register_style( 'ipress-fonts', esc_url_raw( $fonts_url ), [], null ); 
-			
-			// Enqueue css style
 			wp_enqueue_style( 'ipress-fonts' ); 
 		}
 
@@ -225,7 +278,7 @@ if ( ! class_exists( 'IPR_Load_Styles' ) ) :
 		//----------------------------------------------
 
 		/**
-		 * Load conditional styles. Deprecated
+		 * Load conditional styles for old IE support. Deprecated
 		 */
 		public function conditional_styles() {
 
@@ -327,6 +380,27 @@ if ( ! class_exists( 'IPR_Load_Styles' ) ) :
 		 */
 		public function editor_styles() {
 			add_editor_style( IPRESS_CSS_URL . '/editor.css' );
+		}
+
+		//----------------------------------------------
+		//	Login Page Scripts
+		//----------------------------------------------
+
+		/**
+		 * Load login styles
+		 */
+		public function load_login_styles() {
+
+			// Initial validation
+			if ( empty( $this->login ) ) { return; }
+
+			// Register & enqueue admin styles
+			foreach ( $this->login as $k=>$v ) { 
+				
+				// Register and enqueue style
+				wp_register_style( $k, $v[0], $v[1], $v[2] ); 
+				wp_enqueue_style( $k );
+			}
 		}
 	}
 

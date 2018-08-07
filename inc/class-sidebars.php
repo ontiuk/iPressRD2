@@ -64,7 +64,7 @@ if ( ! class_exists( 'IPR_Sidebars' ) ) :
 		private function register_sidebars() {
 
 			// Default sidebars
-			$default_sidebars = apply_filters( 'ipress_default_sidebars', [
+			$default_sidebars = (array) apply_filters( 'ipress_default_sidebars', [
 				'primary'		=> [ 
 					'name'			=> __( 'Primary Sidebar', 'ipress' ),
 					'description'	=> __( 'This is the primary sidebar for two-column and full-width layouts.', 'ipress' )
@@ -72,8 +72,8 @@ if ( ! class_exists( 'IPR_Sidebars' ) ) :
 			] );
 
 			// Footer widgets - default 3, false or 0 for none
-			$footer_widget_areas = apply_filters( 'ipress_footer_widget_areas', 3 );
-			if ( $footer_widget_areas ) {
+			$footer_widget_areas = (int) apply_filters( 'ipress_footer_widget_areas', 3 );
+			if ( $footer_widget_areas > 0 ) {
 				$footer_sidebars = [];
 
 				for ( $i = 1; $i <= intval( $footer_widget_areas ); $i++ ) {
@@ -87,7 +87,7 @@ if ( ! class_exists( 'IPR_Sidebars' ) ) :
 			} else { $footer_sidebars = []; }
 
 			// Custom widgets
-			$custom_sidebars = apply_filters( 'ipress_custom_sidebars', [] );
+			$custom_sidebars = (array)apply_filters( 'ipress_custom_sidebars', [] );
 
 			// Set default sidebars
 			return array_merge( $default_sidebars, $footer_sidebars, $custom_sidebars );

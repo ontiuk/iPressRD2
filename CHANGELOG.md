@@ -11,3 +11,4 @@
 * (18 March 2018). 1.0.9 Template directory reset
 * (27 July 2018). 1.1.0 Template refactor & code changes
 * (30 July 2018). 1.1.1 Theme compatibility filters 
+* (07 August 2018). 1.1.2 Admin & login scripts/styles, minor refactorins

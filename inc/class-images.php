@@ -115,13 +115,12 @@ if ( ! class_exists( 'IPR_Images' ) ) :
 		public function gravatar ( $avatar_defaults ) {
 
 			// Filterable markup
-			$custom_avatar = apply_filters( 'ipress_gravatar', '' );
+			$custom_avatar = (array) apply_filters( 'ipress_gravatar', [] );
+			if ( empty( $custom_avatar ) ) { return $avatar_defaults; }
 
-			// Set avatar
-			if ( is_array( $custom_avatar ) && ! empty( $custom_avatar ) ) { 
-				$avatar_path = esc_url( $custom_avatar['path'], false);
-				$avatar_defaults[ $avatar_path ] = $custom_avatar['name'];
-			}
+			// Set avatar - with caveats for index keys
+			$avatar_path = esc_url( $custom_avatar['path'], false );
+			$avatar_defaults[ $avatar_path ] = $custom_avatar['name'];
 
 			// Return avatar defaults
 			return $avatar_defaults;

@@ -41,12 +41,11 @@ if ( ! class_exists( 'IPR_Content' ) ) :
 		public function starter_content_init() {
 
 			// Filterable starter content
-			$starter_content = apply_filters( 'ipress_starter_content', [] );
+			$starter_content = (array) apply_filters( 'ipress_starter_content', [] );
+			if ( empty( $starter_content ) ) { return; }
 
 			// Add theme support if required
-			if ( is_array( $starter_content ) && !empty( $starter_content ) ) {
-				add_theme_support( 'starter-content', $starter_content );
-			}
+			add_theme_support( 'starter-content', $starter_content );
 		}
 	}
 

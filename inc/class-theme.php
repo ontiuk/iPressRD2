@@ -111,9 +111,9 @@ if ( ! class_exists( 'IPR_Theme' ) ) :
 			add_theme_support( 'menus' ); 
 
 			// Register main navigation menu location
-			register_nav_menus( [ 
+			register_nav_menus( apply_filters( 'ipress_nav_menu_primary', [ 
 				'primary'   => __( 'Primary Menu', 'ipress' )
-			] );
+			] ) );
 
 			// Register additional navigation menu locations
 			// register_nav_menus( [ 

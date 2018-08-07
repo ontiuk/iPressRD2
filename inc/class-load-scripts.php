@@ -19,6 +19,13 @@ if ( ! class_exists( 'IPR_Load_Scripts' ) ) :
 	final class IPR_Load_Scripts {
 
 		/**
+		 * admin scripts 
+		 *
+		 * @var array $admin
+		 */
+		private $admin = [];
+
+		/**
 		 * core scripts for deregistration
 		 *
 		 * @var array $undo
@@ -89,6 +96,13 @@ if ( ! class_exists( 'IPR_Load_Scripts' ) ) :
 		private $custom = [];
 
 		/**
+		 * login scripts
+		 *
+		 * @var array $login
+		 */
+		private $login = [];
+
+		/**
 		 * localize scripts
 		 *
 		 * @var array $local
@@ -101,23 +115,29 @@ if ( ! class_exists( 'IPR_Load_Scripts' ) ) :
 		 */
 		public function __construct() {
 
+			// Load adminscripts
+			add_action( 'admin_enqueue_scripts', 	[ $this, 'load_admin_scripts' ] ); 
+
+			// Login page scripts
+			add_action( 'login_enqueue_scripts', 	[ $this, 'load_login_scripts' ], 1 );			
+
 			// Front end only
 			if ( is_admin() ) { return; }
 
 			// Load scripts
-			add_action( 'wp_enqueue_scripts', 	[ $this, 'load_scripts' ] ); 
+			add_action( 'wp_enqueue_scripts', 		[ $this, 'load_scripts' ] ); 
 
 			// Conditional header scripts
-			add_action( 'wp_enqueue_scripts', 	[ $this, 'conditional_scripts' ] ); 
+			add_action( 'wp_enqueue_scripts', 		[ $this, 'conditional_scripts' ] ); 
 
 			// Inline header scripts 
-			add_action( 'wp_head', 				[ $this, 'header_scripts' ], 99 );
+			add_action( 'wp_head', 					[ $this, 'header_scripts' ], 99 );
 
-			// Footer Scripts
-			add_action( 'wp_footer', 			[ $this, 'footer_scripts' ], 99 );
+			// Footer scripts
+			add_action( 'wp_footer', 				[ $this, 'footer_scripts' ], 99 );
 
 			// Analytics
-			add_action( 'wp_head', 				[ $this, 'analytics_script' ], 100 );
+			add_action( 'wp_head', 					[ $this, 'analytics_script' ], 100 );
 		}
 
 		/**
@@ -126,6 +146,9 @@ if ( ! class_exists( 'IPR_Load_Scripts' ) ) :
 		 * @param array $scripts
 		 */
 		public function init( $scripts ) {
+
+			// Admin scripts: [ 'label' => [ 'hook', 'src', (array)deps, 'ver' ] ... ]
+			$this->admin = $this->set_key( $scripts, 'admin' );
 
 			// Core scripts for deregistration: [ 'script-name', 'script-name2' ... ]
 			$this->undo = $this->set_key( $scripts, 'undo' );
@@ -136,40 +159,69 @@ if ( ! class_exists( 'IPR_Load_Scripts' ) ) :
 			// External scripts: [ 'script-name', 'script-name2' ... ]
 			$this->external = $this->set_key( $scripts, 'external' );
 
-			// Header scripts: [ 'label' => [ 'path_url', (array)dependencies, 'version' ] ... ]
+			// Header scripts: [ 'label' => [ 'src', (array)deps, 'ver' ] ... ]
 			$this->header = $this->set_key( $scripts, 'header' );
 
-			// Footer scripts: [ 'label' => [ 'path_url', (array)dependencies, 'version' ] ... ]
+			// Footer scripts: [ 'label' => [ 'src', (array)deps, 'ver' ] ... ]
 			$this->footer = $this->set_key( $scripts, 'footer' );
 
-			// Plugin scripts: [ 'label' => [ 'path_url', (array)dependencies, 'version' ] ... ]
+			// Plugin scripts: [ 'label' => [ 'src', (array)deps, 'ver' ] ... ]
 			$this->plugins = $this->set_key( $scripts, 'plugins' );
 
-			// Page scripts: [ 'label' => [ 'template', 'path_url', (array)dependencies, 'version' ] ... ];
+			// Page scripts: [ 'label' => [ 'template', 'src', (array)deps, 'ver' ] ... ];
 			$this->page = $this->set_key( $scripts, 'page' );
 
-			// Conditional scripts: [ 'label' => [ [ 'callback', [ args ] ], 'path_url', (array)dependencies, 'version' ] ... ];
+			// Conditional scripts: [ 'label' => [ [ 'callback', [ args ] ], 'src', (array)deps, 'ver' ] ... ];
 			$this->conditional = $this->set_key( $scripts, 'conditional' );
 
-			// Front Page scripts: [ 'label' => [ 'template', 'path_url', (array)dependencies, 'version' ] ... ];
+			// Front Page scripts: [ 'label' => [ 'template', 'src', (array)deps, 'ver' ] ... ];
 			$this->front = $this->set_key( $scripts, 'front' );
 
-			// Custom scripts: [ 'label' => [ 'path_url', (array)dependencies, 'version' ] ... ];
+			// Custom scripts: [ 'label' => [ 'src', (array)deps, 'ver' ] ... ];
 			$this->custom = $this->set_key( $scripts, 'custom' );
 
-			// Localize scripts: [ 'label' => [ 'name' => name, trans => function/path ] ]
+			// Login scripts: [ 'label' => [ 'src', (array)deps, 'ver' ] ... ]
+			$this->login = $this->set_key( $scripts, 'login' );
+
+			// Localize scripts: [ 'label' => [ 'name' => name, trans => function/src ] ]
 			$this->local = $this->set_key( $scripts, 'local' );
 		}
 
 		/**
 		 * Validate and set key
 		 *
-		 * @param array $scripts
-		 * @param string $key
-		 * @return array
+		 * @param 	array 	$scripts
+		 * @param 	string 	$key
+		 * @return 	array
 		 */
 		private function set_key( $scripts, $key ) {
 			return ( isset ( $scripts[$key] ) && is_array( $scripts[$key] ) && ! empty( $scripts[$key] ) ) ? $scripts[$key] : [];
+		}
+
+		//----------------------------------------------
+		//	Admin Scripts
+		//----------------------------------------------
+
+		/**
+		 * Load admin scripts
+		 *
+		 * @param	string	$hook	Current admin page
+		 */
+		public function load_admin_scripts( $hook ) {
+
+			// Initial validation
+			if ( empty( $this->admin ) ) { return; }
+
+			// Register & enqueue admin scripts
+			foreach ( $this->admin as $k=>$v ) { 
+				
+				// Test hook dependency
+				if ( !empty( $v[0] ) && $hook != $v[0] ) { continue; }
+
+				// Register and enqueue scripts in footer
+				wp_register_script( $k, $v[1], $v[2], $v[3], true ); 
+				wp_enqueue_script( $k );
+			}
 		}
 
 		//----------------------------------------------
@@ -309,13 +361,12 @@ if ( ! class_exists( 'IPR_Load_Scripts' ) ) :
 			// Get local key
 			$h = $this->local[$key]; 
 
-			// Validate
-			if ( !isset( $h['name'] ) || !isset( $h['trans'] ) ) { return; } 
-
-			// Localize
-			wp_localize_script( $key, $h['name'], $h['trans'] ); 
+			// Validate & Localize
+			if ( isset( $h['name'] ) && isset( $h['trans'] ) )  { 
+				wp_localize_script( $key, $h['name'], $h['trans'] ); 
+			}
 		}
-
+		
 		//----------------------------------------------
 		// IE Conditional Scripts 
 		//----------------------------------------------
@@ -397,6 +448,27 @@ if ( ! class_exists( 'IPR_Load_Scripts' ) ) :
 
 			// OK, output analytics code
 			echo sprintf( $ga, $analytics );
+		}
+
+		//----------------------------------------------
+		//	Login Page Scripts
+		//----------------------------------------------
+
+		/**
+		 * Load login scripts
+		 */
+		public function load_login_scripts() {
+
+			// Initial validation
+			if ( empty( $this->login ) ) { return; }
+
+			// Register & enqueue login scripts
+			foreach ( $this->login as $k=>$v ) { 
+				
+				// Register and enqueue script
+				wp_register_script( $k, $v[0], $v[1], $v[2], true ); 
+				wp_enqueue_script( $k );
+			}
 		}
 	}
 
