@@ -30,6 +30,6 @@ require_once 'inc/bootstrap.php';
 //----------------------------------------------
 
 // Theme Setup Configuration: actions, filters etc
-require_once( IPRESS_INCLUDES_DIR . '/config.php' );
+require_once IPRESS_INCLUDES_DIR . '/config.php';
 
 //end
