@@ -26,7 +26,7 @@ if ( ! class_exists( 'IPR_Load_Styles' ) ) :
 		private $admin = [];
 
 		/**
-		 * Styles for deregistration
+		 * Styles for dequeueing
 		 *
 		 * @var array $undo
 		 */
@@ -111,7 +111,7 @@ if ( ! class_exists( 'IPR_Load_Styles' ) ) :
 			// Main styles 
 			add_action( 'wp_enqueue_scripts', 					[ $this, 'load_styles' ] ); 
 
-			// Dequeueue styles0
+			// Dequeueue styles
 			add_action( 'wp_enqueue_scripts', 					[ $this, 'undo_styles' ], 99 ); 
 
 			// Fonts & typography 

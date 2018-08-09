@@ -11,9 +11,6 @@
  * @license		GPL-2.0+
  */
 
-// Retrieve theme settings
-global $ipress;
-
 //----------------------------------------------
 //	Theme SetUp & Configuration
 //----------------------------------------------

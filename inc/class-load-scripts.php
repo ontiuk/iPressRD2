@@ -349,6 +349,23 @@ if ( ! class_exists( 'IPR_Load_Scripts' ) ) :
 		}
 
 		/**
+		 * Localize script
+		 *
+		 * @param string $key
+		 * @return void
+		 */
+		private function localize( $key ) {
+
+			// Get local key
+			$h = $this->local[$key]; 
+
+			// Validate & Localize
+			if ( isset( $h['name'] ) && isset( $h['trans'] ) )  { 
+				wp_localize_script( $key, $h['name'], $h['trans'] ); 
+			}
+		}
+		
+		/**
 		 * Dequeue scripts 
 		 */
 		public function undo_scripts() { 
@@ -366,23 +383,6 @@ if ( ! class_exists( 'IPR_Load_Scripts' ) ) :
 					wp_dequeue_script( $s );
 					wp_deregister_script( $s ); 
 				}
-			}
-		}
-		
-		/**
-		 * Localize script
-		 *
-		 * @param string $key
-		 * @return void
-		 */
-		private function localize( $key ) {
-
-			// Get local key
-			$h = $this->local[$key]; 
-
-			// Validate & Localize
-			if ( isset( $h['name'] ) && isset( $h['trans'] ) )  { 
-				wp_localize_script( $key, $h['name'], $h['trans'] ); 
 			}
 		}
 		

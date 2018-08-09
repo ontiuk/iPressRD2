@@ -186,7 +186,7 @@ if ( class_exists( 'acf' ) ) {
 //	Theme Settings
 //----------------------------------------------
 
-// Register theme object
-$GLOBALS['ipress'] = $ipress;
+// Theme Setup Configuration: actions, filters etc
+include_once IPRESS_INCLUDES_DIR . '/config.php';
 
 //end
