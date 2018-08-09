@@ -19,91 +19,91 @@ if ( ! class_exists( 'IPR_Load_Scripts' ) ) :
 	final class IPR_Load_Scripts {
 
 		/**
-		 * admin scripts 
+		 * Admin scripts 
 		 *
 		 * @var array $admin
 		 */
 		private $admin = [];
 
 		/**
-		 * core scripts for deregistration
+		 * Scripts for deregistration
 		 *
 		 * @var array $undo
 		 */
 		private $undo = [];
 
 		/**
-		 * core scripts
+		 * Core scripts
 		 *
 		 * @var array $core
 		 */
 		private $core = [];
 
 		/**
-		 * external scripts
+		 * External scripts
 		 *
 		 * @var array $external
 		 */
 		private $external = [];
 
 		/**
-		 * header scripts
+		 * Header scripts
 		 *
 		 * @var array $header
 		 */
 		private $header = [];
 
 		/**
-		 * footer scripts
+		 * Footer scripts
 		 *
 		 * @var array $footer
 		 */
 		private $footer = [];
 
 		/**
-		 * plugin scripts
+		 * Plugin scripts
 		 *
 		 * @var array $plugins
 		 */
 		private $plugins = [];
 
 		/**
-		 * page scripts
+		 * Page scripts
 		 *
 		 * @var array $page
 		 */
 		private $page = [];
 
 		/**
-		 * conditional scripts
+		 * Conditional scripts
 		 *
 		 * @var array $conditional
 		 */
 		private $conditional = [];
 
 		/**
-		 * front page scripts
+		 * Front page scripts
 		 *
 		 * @var array $front
 		 */
 		private $front = [];
 
 		/**
-		 * custom scripts
+		 * Custom scripts
 		 *
 		 * @var array $custom
 		 */
 		private $custom = [];
 
 		/**
-		 * login scripts
+		 * Login scripts
 		 *
 		 * @var array $login
 		 */
 		private $login = [];
 
 		/**
-		 * localize scripts
+		 * Localize scripts
 		 *
 		 * @var array $local
 		 */
@@ -126,6 +126,9 @@ if ( ! class_exists( 'IPR_Load_Scripts' ) ) :
 
 			// Load scripts
 			add_action( 'wp_enqueue_scripts', 		[ $this, 'load_scripts' ] ); 
+
+			// Dequeueue scripts
+			add_action( 'wp_enqueue_scripts', 		[ $this, 'undo_scripts' ], 99 ); 
 
 			// Conditional header scripts
 			add_action( 'wp_enqueue_scripts', 		[ $this, 'conditional_scripts' ] ); 
@@ -150,7 +153,7 @@ if ( ! class_exists( 'IPR_Load_Scripts' ) ) :
 			// Admin scripts: [ 'label' => [ 'hook', 'src', (array)deps, 'ver' ] ... ]
 			$this->admin = $this->set_key( $scripts, 'admin' );
 
-			// Core scripts for deregistration: [ 'script-name', 'script-name2' ... ]
+			// Core scripts for deregistration: [ 'script-name', [ 'script-name2', 'template' ] ... ]
 			$this->undo = $this->set_key( $scripts, 'undo' );
 
 			// Core scripts: [ 'script-name', 'script-name2' ... ]
@@ -233,11 +236,6 @@ if ( ! class_exists( 'IPR_Load_Scripts' ) ) :
 		 */
 		public function load_scripts() { 
 	 
-			// Dequeue core scripts - restrict admin for compatibility
-			if ( ! is_admin() ) {
-				foreach ( $this->undo as $k=>$v ) { wp_deregister_script( $v ); }
-			}
-
 			// Register & enqueue core scripts
 			foreach ( $this->core as $k=>$v ) { wp_enqueue_script( $v ); }
 
@@ -350,6 +348,27 @@ if ( ! class_exists( 'IPR_Load_Scripts' ) ) :
 			}
 		}
 
+		/**
+		 * Dequeue scripts 
+		 */
+		public function undo_scripts() { 
+	 
+			// Dequeue core scripts 
+			foreach ( $this->undo as $s ) { 
+
+				// Page template or global
+				if ( is_array( $s ) ) {
+					is_page_template( $s[1] ) {
+						wp_dequeue_script( $s[0] );
+						wp_deregister_script( $s[0] ); 
+					}
+				} else {
+					wp_dequeue_script( $s );
+					wp_deregister_script( $s ); 
+				}
+			}
+		}
+		
 		/**
 		 * Localize script
 		 *
