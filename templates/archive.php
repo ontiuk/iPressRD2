@@ -14,13 +14,11 @@
 ?>
 <?php do_action( 'ipress_loop_before' ); ?>
 
-<?php
-while ( have_posts() ) : the_post();
+<?php while ( have_posts() ) : the_post(); ?>
   
-    get_template_part( 'templates/post/content', get_post_format() );
+	<?php get_template_part( 'templates/post/content', get_post_format() ); ?>
 
-endwhile;
-?>
+<?php endwhile; ?>
 
 <?php /** @hooked ipress_paging_nav - 10 */
 do_action( 'ipress_loop_after' );

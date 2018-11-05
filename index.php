@@ -16,11 +16,9 @@
 
 <?php get_header(); ?>
 
-<div id="primary" class="content-area">
-
 <?php do_action( 'ipress_before_main_content' ); ?>
 
-	<main id="main" class="site-main" role="main">
+	<main id="main" class="site-main">
 
 	<?php do_action( 'ipress_archive_before' ); ?>
 
@@ -49,8 +47,6 @@
 
 <?php do_action( 'ipress_after_main_content' ); ?>
 
-</div><!-- #primary -->
+<?php do_action( 'ipress_sidebar' ); ?>
 
-<?php
-do_action( 'ipress_sidebar' );
-get_footer();
+<?php get_footer();

@@ -11,8 +11,7 @@
  */
 
 // Password protected?
-if ( post_password_required() ) { return; }
-?>
+if ( post_password_required() ) { return; } ?>
 
 <?php do_action( 'ipress_before_comments' ); ?>
 

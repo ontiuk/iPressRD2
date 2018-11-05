@@ -64,11 +64,11 @@ add_action( 'ipress_footer',	'ipress_credit_info',		20 );
  * @see  ipress_paging_nav()
  * @see  ipress_post_thumbnail()
  */
-add_action( 'ipress_loop_post',		'ipress_loop_sticky',			5 );
-add_action( 'ipress_loop_post',		'ipress_loop_header',			10 );
-add_action( 'ipress_loop_post',		'ipress_loop_meta',				20 );
-add_action( 'ipress_loop_post',		'ipress_loop_content',			30 );
-add_action( 'ipress_loop_post',		'ipress_loop_footer',			40 );
+add_action( 'ipress_loop',			'ipress_loop_sticky',			5 );
+add_action( 'ipress_loop',			'ipress_loop_header',			10 );
+add_action( 'ipress_loop',			'ipress_loop_meta',				20 );
+add_action( 'ipress_loop',			'ipress_loop_content',			30 );
+add_action( 'ipress_loop',			'ipress_loop_footer',			40 );
 add_action( 'ipress_loop_footer',	'ipress_init_structured_data',	10 );
 
 add_action( 'ipress_loop_after',			'ipress_paging_nav',	10 );
@@ -84,19 +84,19 @@ add_action( 'ipress_loop_content_before',	'ipress_loop_image',	10 );
  * @see  ipress_loop_content_audio()
  * @see  ipress_init_structured_data()
  */        
-add_action( 'ipress_loop_post_audio',   'ipress_loop_sticky',          5 );
-add_action( 'ipress_loop_post_audio',   'ipress_loop_header',          10 );
-add_action( 'ipress_loop_post_audio',   'ipress_loop_content_audio',   20 );
-add_action( 'ipress_loop_post_audio',   'ipress_init_structured_data', 30 );
+add_action( 'ipress_loop_audio',   'ipress_loop_sticky',          5 );
+add_action( 'ipress_loop_audio',   'ipress_loop_header',          10 );
+add_action( 'ipress_loop_audio',   'ipress_loop_content_audio',   20 );
+add_action( 'ipress_loop_audio',   'ipress_init_structured_data', 30 );
 
 /**
  * @see  ipress_loop_header()
  * @see  ipress_loop_content_excerpt()
  * @see  ipress_init_structured_data()
  */        
-add_action( 'ipress_loop_post_excerpt', 'ipress_loop_header',          10 );
-add_action( 'ipress_loop_post_excerpt', 'ipress_loop_content_excerpt', 20 );
-add_action( 'ipress_loop_post_excerpt', 'ipress_init_structured_data', 30 );
+add_action( 'ipress_loop_excerpt', 'ipress_loop_header',          10 );
+add_action( 'ipress_loop_excerpt', 'ipress_loop_content_excerpt', 20 );
+add_action( 'ipress_loop_excerpt', 'ipress_init_structured_data', 30 );
 
 /**
  * @see  ipress_loop_sticky()
@@ -104,10 +104,10 @@ add_action( 'ipress_loop_post_excerpt', 'ipress_init_structured_data', 30 );
  * @see  ipress_loop_content_gallery()
  * @see  ipress_init_structured_data()
  */        
-add_action( 'ipress_loop_post_gallery', 'ipress_loop_sticky',          5 );
-add_action( 'ipress_loop_post_gallery', 'ipress_loop_header',          10 );
-add_action( 'ipress_loop_post_gallery', 'ipress_loop_content_gallery', 20 );
-add_action( 'ipress_loop_post_gallery', 'ipress_init_structured_data', 30 );
+add_action( 'ipress_loop_gallery', 'ipress_loop_sticky',          5 );
+add_action( 'ipress_loop_gallery', 'ipress_loop_header',          10 );
+add_action( 'ipress_loop_gallery', 'ipress_loop_content_gallery', 20 );
+add_action( 'ipress_loop_gallery', 'ipress_init_structured_data', 30 );
 
 /**
  * @see  ipress_loop_sticky()
@@ -115,10 +115,10 @@ add_action( 'ipress_loop_post_gallery', 'ipress_init_structured_data', 30 );
  * @see  ipress_loop_content_image()
  * @see  ipress_init_structured_data()
  */        
-add_action( 'ipress_loop_post_image',   'ipress_loop_sticky',          5 );
-add_action( 'ipress_loop_post_image',   'ipress_loop_header',          10 );
-add_action( 'ipress_loop_post_image',   'ipress_loop_content_image',   20 );
-add_action( 'ipress_loop_post_image',   'ipress_init_structured_data', 30 );
+add_action( 'ipress_loop_image',   'ipress_loop_sticky',          5 );
+add_action( 'ipress_loop_image',   'ipress_loop_header',          10 );
+add_action( 'ipress_loop_image',   'ipress_loop_content_image',   20 );
+add_action( 'ipress_loop_image',   'ipress_init_structured_data', 30 );
 
 //------------------------------------------
 //  Single
@@ -134,14 +134,13 @@ add_action( 'ipress_loop_post_image',   'ipress_init_structured_data', 30 );
  * @see  ipress_display_comments()
  * @see  ipress_post_thumbnail
  */
-add_action( 'ipress_single_post',			'ipress_post_header',			10 );
-add_action( 'ipress_single_post',		  	'ipress_post_meta',				20 );
-add_action( 'ipress_single_post',		  	'ipress_post_content',			30 );
-add_action( 'ipress_single_post',		  	'ipress_post_footer',			40 );
+add_action( 'ipress_single',				'ipress_post_header',			10 );
+add_action( 'ipress_single',		  		'ipress_post_meta',				20 );
+add_action( 'ipress_single',		  		'ipress_post_content',			30 );
+add_action( 'ipress_single',		  		'ipress_post_footer',			40 );
 add_action( 'ipress_post_footer',			'ipress_init_structured_data',	10 );
 
-add_action( 'ipress_single_post_bottom',  	'ipress_post_nav',			10 );
-add_action( 'ipress_single_post_bottom',  	'ipress_display_comments',	20 );
+add_action( 'ipress_article_after',  		'ipress_post_nav',			10 );
 add_action( 'ipress_post_content_before',	'ipress_post_thumbnail',	10 );
 
 //------------------------------------------
@@ -161,7 +160,7 @@ add_action( 'ipress_page',					'ipress_page_content',			20 );
 add_action( 'ipress_page',					'ipress_page_footer',			30 );
 add_action( 'ipress_page_footer',			'ipress_init_structured_data',	10 );
 
-add_action( 'ipress_page_after_content',	'ipress_display_comments',		10 );
+add_action( 'ipress_article_after',			'ipress_display_comments',		10 );
 add_action( 'ipress_page_content_before',	'ipress_post_thumbnail',		10 );
 
 //------------------------------------------
@@ -175,10 +174,10 @@ add_action( 'ipress_page_content_before',	'ipress_post_thumbnail',		10 );
  * @see  ipress_loop_footer()
  * @see  ipress_init_structured_data()
  */        
-add_action( 'ipress_loop_search',	'ipress_loop_header',			10 );
-add_action( 'ipress_loop_search',	'ipress_loop_meta',				20 );
-add_action( 'ipress_loop_search',	'ipress_loop_excerpt',			30 );
-add_action( 'ipress_loop_search',	'ipress_loop_footer',			40 );
+add_action( 'ipress_search',		'ipress_loop_header',			10 );
+add_action( 'ipress_search',		'ipress_loop_meta',				20 );
+add_action( 'ipress_search',		'ipress_loop_excerpt',			30 );
+add_action( 'ipress_search',		'ipress_loop_footer',			40 );
 add_action( 'ipress_loop_footer',	'ipress_init_structured_data',	10 );
 
 //------------------------------------------

@@ -89,6 +89,13 @@ if ( ! class_exists( 'IPR_Load_Styles' ) ) :
 		private $login = [];
 
 		/**
+		 * Script attributes - defer, async, integrity
+		 *
+		 * @var array $attr
+		 */
+		private $attr = [];
+
+		/**
 		 * Class constructor
 		 */
 		public function __construct() {
@@ -105,6 +112,9 @@ if ( ! class_exists( 'IPR_Load_Styles' ) ) :
 			// Add Editor Styles
 			add_action( 'admin_init', 							[ $this, 'editor_styles' ] );
 
+			// Add styles attributes
+			add_filter( 'style_loader_tag',  					[ $this, 'add_styles_attr' ], 10, 4 );
+			
 			// Front-end only
 			if ( is_admin() ) { return; }
 
@@ -161,6 +171,9 @@ if ( ! class_exists( 'IPR_Load_Styles' ) ) :
 
 			// Login style: [ 'label' => [ 'src', (array)deps, 'ver', ' ] ... ]
 			$this->login = $this->set_key( $styles, 'login' );
+
+			// Styles attributes: [ 'label' => [ 'handle' ] ... ]
+			$this->attr = $this->set_key( $styles, 'attr' );
 
 			// Theme fonts: [ 'label' => [ 'src', (array)deps, 'ver' ] ... ];
 			$this->fonts = ( is_array( $fonts ) && ! empty( $fonts ) ) ? $fonts : [];
@@ -303,7 +316,7 @@ if ( ! class_exists( 'IPR_Load_Styles' ) ) :
 			$fonts_url = add_query_arg( $query_args, 'https://fonts.googleapis.com/css' );
 
 			// Register & enqueue css style file for later use 
-			wp_register_style( 'ipress-fonts', esc_url_raw( $fonts_url ), [], null ); 
+			wp_register_style( 'ipress-fonts', esc_url( $fonts_url ), [], null ); 
 			wp_enqueue_style( 'ipress-fonts' ); 
 		}
 
@@ -435,6 +448,55 @@ if ( ! class_exists( 'IPR_Load_Styles' ) ) :
 				wp_register_style( $k, $v[0], $v[1], $v[2] ); 
 				wp_enqueue_style( $k );
 			}
+		}
+
+		//----------------------------------------------
+		//	Add Styles Attributes
+		//----------------------------------------------
+
+		/**
+		 * Load styles attributes
+		 */
+		public function add_styles_attr( $html, $handle, $href, $media ) {
+		
+			// No attributes?
+			if ( empty( $this->attr ) ) { return $html; }
+
+			// Nothing set?
+			if ( empty( $this->attr ) ) { return $tag; }
+
+			// Sort attr
+			$defer 		= ( isset( $this->attr['defer'] ) && ! empty( $this->attr['defer'] ) ) ? $this->attr['defer'] : [];
+			$async 		= ( isset( $this->attr['async'] ) && ! empty( $this->attr['async'] ) ) ? $this->attr['async'] : [];
+			$integrity 	= ( isset( $this->attr['integrity'] ) && ! empty( $this->attr['integrity'] ) ) ? $this->attr['integrity'] : [];
+
+			// Initialise attr
+			$attr = [];
+
+			// Ok, do defer
+			if ( ! empty( $defer ) && in_array( $handle, $defer ) ) {
+				$attr[] = 'defer="defer"';
+			}
+
+			// Ok, do async
+			if ( ! empty( $async ) && in_array( $handle, $async ) ) {
+				$attr[] = 'async="async"';
+			}
+
+			// Ok, do integrity
+			if ( ! empty( $integrity ) ) {
+				foreach ( $integrity as $k=>$v ) {
+					foreach ( $v as $h=>$a ) {
+						if ( $handle === $h ) {
+							$attr[] = sprintf( 'integrity="%s" crossorigin="anonymous"', $a );
+							break;
+						}
+					}
+				}
+			}
+
+			// Return script tag
+			return ( empty( $attr ) ) ? $html : sprintf( '<link rel="stylesheet" id="%s"  href="%s" media="%s" %s />' . "\n", $handle . '-css', $href, $media, join( ' ', $attr ) );
 		}
 	}
 

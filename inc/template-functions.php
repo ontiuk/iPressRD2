@@ -106,7 +106,7 @@ if ( ! function_exists( 'ipress_loop_sticky' ) ) {
 	 * Display the post sticky link
 	 */
 	function ipress_loop_sticky() {
-		get_template_part( 'templates/loop/loop-sticky' );
+		get_template_part( 'templates/loop/sticky' );
 	}
 }
 
@@ -115,7 +115,7 @@ if ( ! function_exists( 'ipress_loop_header' ) ) {
 	 * Display the post header 
 	 */
 	function ipress_loop_header() {
-		get_template_part( 'templates/loop/loop-header' );
+		get_template_part( 'templates/loop/header' );
 	}
 }
 
@@ -124,7 +124,7 @@ if ( ! function_exists( 'ipress_loop_meta' ) ) {
 	 * Display the post meta data
 	 */
 	function ipress_loop_meta() {
-		get_template_part( 'templates/loop/loop-meta' );
+		get_template_part( 'templates/loop/meta' );
 	}
 }
 
@@ -133,7 +133,7 @@ if ( ! function_exists( 'ipress_loop_content' ) ) {
 	 * Display the post content
 	 */
 	function ipress_loop_content() {
-		get_template_part( 'templates/loop/loop-content' );
+		get_template_part( 'templates/loop/content' );
 	}
 }
 
@@ -142,7 +142,7 @@ if ( ! function_exists( 'ipress_loop_excerpt' ) ) {
 	 * Display the post excerpt
 	 */
 	function ipress_loop_excerpt() {
-		get_template_part( 'templates/loop/loop-excerpt' );
+		get_template_part( 'templates/loop/excerpt' );
 	}
 }
 
@@ -151,7 +151,7 @@ if ( ! function_exists( 'ipress_loop_footer' ) ) {
 	 * Display the post footer
 	 */
 	function ipress_loop_footer() {
-		get_template_part( 'templates/loop/loop-footer' );
+		get_template_part( 'templates/loop/footer' );
 	}
 }
 
@@ -160,7 +160,7 @@ if ( ! function_exists( 'ipress_loop_thumbnail' ) ) {
 	 * Display the post thumbnail
 	 */
 	function ipress_loop_thumbnail() {
-		get_template_part( 'templates/loop/loop-thumbnail' );
+		get_template_part( 'templates/loop/thumbnail' );
 	}
 }
 
@@ -191,7 +191,7 @@ if ( ! function_exists( 'ipress_post_header' ) ) {
 	 * Display the post header 
 	 */
 	function ipress_post_header() {
-		get_template_part( 'templates/single/post-header' );
+		get_template_part( 'templates/single/header' );
 	}
 }
 
@@ -200,7 +200,7 @@ if ( ! function_exists( 'ipress_post_meta' ) ) {
 	 * Display the post meta data
 	 */
 	function ipress_post_meta() {
-		get_template_part( 'templates/single/post-meta' );
+		get_template_part( 'templates/single/meta' );
 	}
 }
 
@@ -209,7 +209,7 @@ if ( ! function_exists( 'ipress_post_content' ) ) {
 	 * Display the post content
 	 */
 	function ipress_post_content() {
-		get_template_part( 'templates/single/post-content' );
+		get_template_part( 'templates/single/content' );
 	}
 }
 
@@ -218,7 +218,7 @@ if ( ! function_exists( 'ipress_post_footer' ) ) {
 	 * Display the post footer
 	 */
 	function ipress_post_footer() {
-		get_template_part( 'templates/single/post-footer' );
+		get_template_part( 'templates/single/footer' );
 	}
 }
 
@@ -227,7 +227,7 @@ if ( ! function_exists( 'ipress_post_image' ) ) {
 	 * Display the post image
 	 */
 	function ipress_post_image() {
-		get_template_part( 'templates/single/post-image' );
+		get_template_part( 'templates/single/image' );
 	}
 }
 
@@ -236,6 +236,9 @@ if ( ! function_exists( 'ipress_display_comments' ) ) {
 	 * Display the comments form
 	 */
 	function ipress_display_comments() {
+
+		// Page or single
+		if ( ! is_singular() ) { return; }
 
 		// If comments are open or we have at least one comment, load up the comment template.
 		if ( comments_open() || '0' != get_comments_number() ) :
@@ -249,6 +252,9 @@ if ( ! function_exists( 'ipress_post_nav' ) ) {
 	 * Display navigation to next/previous post when applicable.
 	 */
 	function ipress_post_nav() {
+
+		// Single post only
+		if ( ! is_single() ) { return; } 
 
 		$args = [
 			'next_text' => '%title',
@@ -267,7 +273,7 @@ if ( ! function_exists( 'ipress_page_header' ) ) {
 	 * Display the page header 
 	 */
 	function ipress_page_header() {
-		get_template_part( 'templates/page/page-header' );
+		get_template_part( 'templates/page/header' );
 	}
 }
 
@@ -276,7 +282,7 @@ if ( ! function_exists( 'ipress_page_content' ) ) {
 	 * Display the page content
 	 */
 	function ipress_page_content() {
-		get_template_part( 'templates/page/page-content' );
+		get_template_part( 'templates/page/content' );
 	}
 }
 
@@ -285,7 +291,7 @@ if ( ! function_exists( 'ipress_page_footer' ) ) {
 	 * Display the page footer 
 	 */
 	function ipress_page_footer() {
-		get_template_part( 'templates/page/page-footer' );
+		get_template_part( 'templates/page/footer' );
 	}
 }
 
@@ -294,7 +300,7 @@ if ( ! function_exists( 'ipress_page_image' ) ) {
 	 * Display the page image 
 	 */
 	function ipress_page_image() {
-		get_template_part( 'templates/page/page-image' );
+		get_template_part( 'templates/page/image' );
 	}
 }
 
@@ -307,7 +313,7 @@ if ( ! function_exists( 'ipress_loop_content_audio' ) ) {
 	 * Display the post format content audio 
 	 */
 	function ipress_loop_content_audio() {
-		get_template_part( 'templates/loop/loop-content-audio' );
+		get_template_part( 'templates/loop/content-audio' );
 	}
 }
 
@@ -316,7 +322,7 @@ if ( ! function_exists( 'ipress_loop_content_excerpt' ) ) {
 	 * Display the post format content excerpt
 	 */
 	function ipress_loop_content_excerpt() {
-		get_template_part( 'templates/loop/loop-content-excerpt' );
+		get_template_part( 'templates/loop/content-excerpt' );
 	}
 }
 if ( ! function_exists( 'ipress_loop_content_gallery' ) ) {
@@ -324,7 +330,7 @@ if ( ! function_exists( 'ipress_loop_content_gallery' ) ) {
 	 * Display the post format content gallery
 	 */
 	function ipress_loop_content_gallery() {
-		get_template_part( 'templates/loop/loop-content-gallery' );
+		get_template_part( 'templates/loop/content-gallery' );
 	}
 }
 if ( ! function_exists( 'ipress_loop_content_image' ) ) {
@@ -332,7 +338,7 @@ if ( ! function_exists( 'ipress_loop_content_image' ) ) {
 	 * Display the post format content image
 	 */
 	function ipress_loop_content_image() {
-		get_template_part( 'templates/loop/loop-content-image' );
+		get_template_part( 'templates/loop/content-image' );
 	}
 }
 

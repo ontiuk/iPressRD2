@@ -41,11 +41,10 @@ if ( ! class_exists( 'IPR_Widgets' ) ) :
 		private function widget_autoload( $widget ) {
 
 			// Syntax for widget classname to file
-			$classname = str_replace( '_', '-', strtolower( $widget ) );
-			//todo: file name without wp_xxx?
+			$classname = 'class-' . str_replace( '_', '-', strtolower( $widget ) );
 
 			// Create the actual filepath
-			$file_path = trailingslashit( IPRESS_WIDGETS_DIR ) . $classname . '.php';
+			$file_path = ( is_child_theme() ) ? trailingslashit( IPRESS_CHILD_WIDGETS_DIR ) . $classname . '.php' : trailingslashit( IPRESS_WIDGETS_DIR ) . $classname . '.php';
 
 			// Check if the file exists in parent theme
 			if ( file_exists( $file_path ) && is_file( $file_path ) ) { 

@@ -16,7 +16,7 @@
 
 <?php  while ( have_posts() ) : the_post(); ?>
   
-    <?php get_template_part( 'templates/search/content-search' ); ?>
+    <?php get_template_part( 'templates/search/content' ); ?>
 
 <?php endwhile; ?>
 

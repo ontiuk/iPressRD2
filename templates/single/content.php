@@ -38,6 +38,7 @@ do_action( 'ipress_post_content_before' ); ?>
    		'link_after'    => '</span>',
 	] );
 ?>
+
 </section><!-- .entry-content -->
 
 <?php do_action( 'ipress_post_content_after' );

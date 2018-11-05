@@ -15,13 +15,16 @@
 <html <?php language_attributes(); ?>>
 <head>
 	<meta charset="<?php bloginfo('charset'); ?>">
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<link rel="profile" href="http://gmpg.org/xfn/11">
 	<?php wp_head(); ?>
 </head>
 
-<body <?php body_class(); ?>>
-	<div id="page" class="site">
+<body <?php body_class(); ?> itemscope itemtype="https://schema.org/WebPage">
+
+	<?php do_action( 'ipress_before' ); ?>
+
+	<div id="page" class="site-container">
 
 	<?php 
 	/**
@@ -31,7 +34,9 @@
 	 */
 	do_action( 'ipress_before_header' ); ?>
 
-	<header id="masthead" class="site-header" role="banner" <?php ipress_header_style(); ?>>
+	<header id="masthead" class="site-header" <?php ipress_header_style(); ?> itemscope itemtype="https://schema.org/WPHeader">
+		<?php do_action( 'ipress_header_before' ); ?>
+
 		<div class="wrap">
 			<?php 
 			/**
@@ -42,11 +47,11 @@
 			*/
 			do_action( 'ipress_header' ); ?>
 		</div>
+
+		<?php do_action( 'ipress_header_after' ); ?>
+
 	</header><!-- .site-header -->
 
-	<?php do_action( 'ipress_before_content' ); ?>
+	<?php do_action( 'ipress_after_header' ); ?>
 
-	<div id="content" class="site-content" tabindex="-1">
-		<div class="wrap">
-
-		<?php do_action( 'ipress_content_top' );
+	<div id="content" class="site-content">

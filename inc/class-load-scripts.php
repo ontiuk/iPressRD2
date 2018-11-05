@@ -110,6 +110,20 @@ if ( ! class_exists( 'IPR_Load_Scripts' ) ) :
 		private $local = [];
 
 		/**
+		 * Inline scripts
+		 *
+		 * @var array $inline
+		 */
+		private $inline = [];
+
+		/**
+		 * Script attributes - defer, async, integrity
+		 *
+		 * @var array $attr
+		 */
+		private $attr = [];
+
+		/**
 		 * Class constructor
 		 * - set up hooks
 		 */
@@ -120,6 +134,9 @@ if ( ! class_exists( 'IPR_Load_Scripts' ) ) :
 
 			// Login page scripts
 			add_action( 'login_enqueue_scripts', 	[ $this, 'load_login_scripts' ], 1 );			
+
+			// Add attributes to scripts if there			
+			add_filter( 'script_loader_tag', 		[ $this, 'add_scripts_attr' ], 10, 3 );
 
 			// Front end only
 			if ( is_admin() ) { return; }
@@ -188,6 +205,12 @@ if ( ! class_exists( 'IPR_Load_Scripts' ) ) :
 
 			// Localize scripts: [ 'label' => [ 'name' => name, trans => function/src ] ]
 			$this->local = $this->set_key( $scripts, 'local' );
+			
+			// Inline scripts: [ 'handle' => [ 'src' => function/src ] ]
+			$this->inline = $this->set_key( $scripts, 'inline' );
+
+			// Localize scripts: [ 'label' => [ 'handle' ] ]
+			$this->attr = $this->set_key( $scripts, 'attr' );
 		}
 
 		/**
@@ -221,8 +244,9 @@ if ( ! class_exists( 'IPR_Load_Scripts' ) ) :
 				// Test hook dependency
 				if ( !empty( $v[0] ) && $hook != $v[0] ) { continue; }
 
-				// Register and enqueue scripts in footer
-				wp_register_script( $k, $v[1], $v[2], $v[3], true ); 
+				// Register and enqueue scripts in footer by default
+				$locale = ( isset( $v[4] ) && $v[4] === false ) ? false : true;			   	
+				wp_register_script( $k, $v[1], $v[2], $v[3], $locale ); 
 				wp_enqueue_script( $k );
 			}
 		}
@@ -243,6 +267,9 @@ if ( ! class_exists( 'IPR_Load_Scripts' ) ) :
 			foreach ( $this->external as $k=>$v ) { 
 				$locale = ( isset( $v[3] ) && $v[3] === true ) ? true : false;
 				wp_register_script( $k, $v[0], $v[1], $v[2], $locale ); 
+				if ( array_key_exists( $k, $this->inline ) ) {
+					$this->inline( $k );
+				}
 				wp_enqueue_script( $k );
 			}
 
@@ -266,7 +293,8 @@ if ( ! class_exists( 'IPR_Load_Scripts' ) ) :
 
 			// Register & enqueue plugin scripts
 			foreach ( $this->plugins as $k=>$v ) { 
-				wp_register_script( $k, $v[0], $v[1], $v[2], true ); 
+				$locale = ( isset( $v[3] ) && $v[3] === false ) ? false : true;
+				wp_register_script( $k, $v[0], $v[1], $v[2], $locale ); 
 				if ( array_key_exists( $k, $this->local ) ) {
 					$this->localize( $k );
 				}
@@ -276,7 +304,8 @@ if ( ! class_exists( 'IPR_Load_Scripts' ) ) :
 			// Page templates in footer head
 			foreach ( $this->page as $k=>$v ) {
 				if ( is_page_template( $v[0] ) ) {
-					wp_register_script( $k, $v[1], $v[2], $v[3], true ); 
+					$locale = ( isset( $v[4] ) && $v[4] === false ) ? false : true;			   	
+					wp_register_script( $k, $v[1], $v[2], $v[3], $locale ); 
 					if ( array_key_exists( $k, $this->local ) ) {	
 						$this->localize( $k );
 					} 
@@ -303,7 +332,8 @@ if ( ! class_exists( 'IPR_Load_Scripts' ) ) :
 				switch( $v[0] ) {
 					case 'front' :
 						if ( is_front_page() ) { 
-							wp_register_script( $k, $v[1], $v[2], $v[3], true ); 
+							$locale = ( isset( $v[4] ) && $v[4] === false ) ? false : true;			   	
+							wp_register_script( $k, $v[1], $v[2], $v[3], $locale ); 
 							if ( array_key_exists( $k, $this->local ) ) {
 								$this->localize( $k );
 							}
@@ -312,7 +342,8 @@ if ( ! class_exists( 'IPR_Load_Scripts' ) ) :
 						break;
 					case 'home' :
 						if ( is_home() ) { 
-							wp_register_script( $k, $v[1], $v[2], $v[3], true ); 
+							$locale = ( isset( $v[4] ) && $v[4] === false ) ? false : true;			   	
+							wp_register_script( $k, $v[1], $v[2], $v[3], $locale ); 
 							if ( array_key_exists( $k, $this->local ) ) {
 								$this->localize( $k );
 							}
@@ -322,7 +353,8 @@ if ( ! class_exists( 'IPR_Load_Scripts' ) ) :
 					case 'front-home' :
 					case 'home-front' :
 						if ( is_home() && is_front_page() ) { 
-							wp_register_script( $k, $v[1], $v[2], $v[3], true ); 
+							$locale = ( isset( $v[4] ) && $v[4] === false ) ? false : true;			   	
+							wp_register_script( $k, $v[1], $v[2], $v[3], $locale ); 
 							if ( array_key_exists( $k, $this->local ) ) {
 								$this->localize( $k );
 							}
@@ -365,6 +397,23 @@ if ( ! class_exists( 'IPR_Load_Scripts' ) ) :
 			}
 		}
 		
+		/**
+		 * Add inline scripts
+		 *
+		 * @param string $key
+		 * @return void
+		 */
+		private function inline( $key ) {
+
+			// Get local key
+			$h = $this->inline[$key]; 
+
+			// Validate & Inject Inline Script
+			if ( isset( $h['src'] ) ) { 
+				wp_add_inline_script( $key, $h['src'] ); 
+			}
+		}
+
 		/**
 		 * Dequeue scripts 
 		 */
@@ -423,7 +472,7 @@ if ( ! class_exists( 'IPR_Load_Scripts' ) ) :
 		 */
 		public function header_scripts() {
 
-			// Set?
+			// Get content?
 			$scripts = apply_filters( 'ipress_header_scripts', get_theme_mod( 'ipress_header_scripts', '' ) );
 			if ( empty( $scripts ) ) { return; }
 			
@@ -437,7 +486,7 @@ if ( ! class_exists( 'IPR_Load_Scripts' ) ) :
 		 */
 		public function footer_scripts() {
 
-			// Set?
+			// Get content?
 			$scripts = apply_filters( 'ipress_footer_scripts', get_theme_mod( 'ipress_footer_scripts', '' ) );
 			if ( empty( $scripts ) ) { return; }
 
@@ -488,6 +537,57 @@ if ( ! class_exists( 'IPR_Load_Scripts' ) ) :
 				wp_register_script( $k, $v[0], $v[1], $v[2], true ); 
 				wp_enqueue_script( $k );
 			}
+		}
+
+		//----------------------------------------------
+		//	Script attributes - defer, async, integrity
+		//----------------------------------------------
+
+		/**
+		 * Tag on script attributes to matching handles
+		 *
+		 * @param	string	$tag
+		 * @param	string	$handle
+		 * @param	string	$src
+		 * @return	string
+		 */
+		public function add_scripts_attr( $tag, $handle, $src ) {
+
+			// Nothing set?
+			if ( empty( $this->attr ) ) { return $tag; }
+
+			// Sort attr
+			$defer 		= ( isset( $this->attr['defer'] ) && ! empty( $this->attr['defer'] ) ) ? $this->attr['defer'] : [];
+			$async 		= ( isset( $this->attr['async'] ) && ! empty( $this->attr['async'] ) ) ? $this->attr['async'] : [];
+			$integrity 	= ( isset( $this->attr['integrity'] ) && ! empty( $this->attr['integrity'] ) ) ? $this->attr['integrity'] : [];
+
+			// Initialise attr
+			$attr = [];
+
+			// Ok, do defer
+			if ( ! empty( $defer ) && in_array( $handle, $defer ) ) {
+				$attr[] = 'defer="defer"';
+			}
+
+			// Ok, do async
+			if ( ! empty( $async ) && in_array( $handle, $async ) ) {
+				$attr[] = 'async="async"';
+			}
+
+			// Ok, do integrity
+			if ( ! empty( $integrity ) ) {
+				foreach ( $integrity as $k=>$v ) {
+					foreach ( $v as $h=>$a ) {
+						if ( $handle === $h ) {
+							$attr[] = sprintf( 'integrity="%s" crossorigin="anonymous"', $a );
+							break;
+						}
+					}
+				}
+			}
+
+			// Return script tag
+			return ( empty( $attr ) ) ? $tag : sprintf( '<script src="%s" %s></script>' . "\n", $src, join( ' ', $attr ) );
 		}
 	}
 

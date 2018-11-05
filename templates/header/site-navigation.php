@@ -11,9 +11,9 @@
  * @license     GPL-2.0+
  */
 ?>
-<nav id="site-navigation" class="main-navigation" role="navigation" aria-label="<?php esc_html_e( 'Primary Navigation', 'ipress' ); ?>">
-    <button class="menu-toggle" aria-controls="primary-navigation" aria-expanded="false"><span><?php echo esc_attr( 'Menu', 'ipress' ); ?></span></button>
-    <?php 
+<nav id="site-navigation" class="main-navigation" role="navigation" aria-label="Main" itemscope itemtype="https://schema.org/SiteNavigationElement">
+    <button class="menu-toggle" aria-controls="primary-navigation" aria-expanded="false"><span><?= esc_attr( 'Menu', 'ipress' ); ?></span></button>
+   <?php 
         wp_nav_menu( [
             'theme_location'    => 'primary', 
             'container_class'	=> 'primary-navigation'

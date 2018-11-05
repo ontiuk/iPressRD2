@@ -12,13 +12,11 @@
  * @license     GPL-2.0+
  */
 ?>
-<?php do_action( 'ipress_single_post_before' ); ?>
+<?php do_action( 'ipress_article_before' ); ?>
 
-<article id="post-<?php the_ID(); ?>" <?php post_class( 'entry' ); ?>>
+<article id="post-<?php the_ID(); ?>" <?php post_class(); ?> itemscope itemtype="https://schema.org/CreativeWork">
 
 	<?php
-	do_action( 'ipress_single_post_top' );
-
 	/**
 	 * Functions hooked into ipress_single_post add_action
 	 *
@@ -27,16 +25,8 @@
 	 * @hooked ipress_post_content      - 30
 	 * @hooked ipress_footer            - 40
 	 */
-	do_action( 'ipress_single_post' );
-
-	/**
-	 * Functions hooked in to ipress_single_post_bottom action
-	 *
-	 * @hooked ipress_post_nav         - 10
-	 * @hooked ipress_display_comments - 20
-	 */
-	do_action( 'ipress_single_post_bottom' ); ?>
+	do_action( 'ipress_single' ); ?>
 
 </article><!-- #post-<?php the_ID(); ?> -->
 
-<?php do_action( 'ipress_single_post_after' );
+<?php do_action( 'ipress_article_after' );

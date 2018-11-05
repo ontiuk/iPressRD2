@@ -22,8 +22,8 @@ if ( $wp_query->max_num_pages > 1 ) :
 <section id="pagination" class="paginate post-paginate">
 
 	<nav class="pagination" role="navigation"> 
-		<div class="nav-next nav-left"><?php echo get_next_posts_link( $older, $wp_query->max_num_pages ); ?></div> 
-		<div class="nav-previous nav-right"><?php echo get_previous_posts_link( $newer ); ?></div> 
+		<div class="nav-next nav-left"><?= get_next_posts_link( $older, $wp_query->max_num_pages ); ?></div> 
+		<div class="nav-previous nav-right"><?= get_previous_posts_link( $newer ); ?></div> 
 	</nav>
 
 </section>

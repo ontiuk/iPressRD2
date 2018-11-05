@@ -12,17 +12,15 @@
  * @license		GPL-2.0+
  */
 ?>
-
-		<?php do_action( 'ipress_after_content' ); ?>
-
-		</div><!-- .wrap -->
-	</div><!-- #content -->
+	</div><!-- #content / .site-content -->
 
 	<?php do_action( 'ipress_before_footer' ); ?>
 
-	<footer id="footer" class="site-footer" role="contentinfo">
+	<?php do_action( 'ipress_before_footer' ); ?>
 
-		<?php do_action( 'ipress_footer_top' ); ?>
+	<footer id="footer" class="site-footer" itemscope itemtype="https://schema.org/WPFooter">
+
+		<?php do_action( 'ipress_footer_before' ); ?>
 
 		<div class="wrap">
 
@@ -37,13 +35,15 @@
 
 		</div>
 
-		<?php do_action( 'ipress_footer_bottom' ); ?>
+		<?php do_action( 'ipress_footer_after' ); ?>
 
 	</footer><!-- #footer -->
 
 	<?php do_action( 'ipress_after_footer' ); ?>
 
 	</div><!-- #page -->
+
+	<?php do_action( 'ipress_after' ); ?>
 
 <?php wp_footer(); ?>
 

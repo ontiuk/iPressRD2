@@ -16,23 +16,21 @@
 
 <?php get_header(); ?>
 
-<div id="primary" class="content-area">
-
 <?php do_action( 'ipress_before_main_content' ); ?>
 
-	<main id="main" class="site-main" role="main">
+	<main id="main" class="site-main">
 
 	<?php do_action( 'ipress_archive_before' ); ?>
 
 	 <?php if ( have_posts() ) : the_post(); ?>
 
 		<header class="page-header">
-			<h1 class="page-title author-title"><?php echo sprintf( __( 'Author: <span class="vcard">%s</span>', 'ipress' ), get_the_author() ); ?></h1>
+			<h1 class="page-title author-title"><?= sprintf( __( 'Author: <span class="vcard">%s</span>', 'ipress' ), get_the_author() ); ?></h1>
 		</header><!-- .page-header -->
 
 		<?php if ( get_the_author_meta( 'description' ) ) : ?>
 		<section class="content-author">
-			<?php echo wpautop( get_the_author_meta( 'description' ) ); ?>
+			<?= wpautop( get_the_author_meta( 'description' ) ); ?>
 		</section>	  
 		<?php endif; ?>
 	
@@ -52,8 +50,6 @@
 
 <?php do_action( 'ipress_after_main_content' ); ?>
 
-</div><!-- #primary -->
+<?php do_action( 'ipress_sidebar' ); ?>
 
-<?php 
-do_action( 'ipress_sidebar' );
-get_footer();
+<?php get_footer();

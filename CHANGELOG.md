@@ -13,3 +13,4 @@
 * (30 July 2018). 1.1.1 Theme compatibility filters 
 * (07 August 2018). 1.1.2 Admin & login scripts/styles, minor refactorins
 * (09 August 2018). 1.1.3 Refactor script & style dequeue
+* (05 Novemner 2018). 1.1.4 Various tweaks and enhancements

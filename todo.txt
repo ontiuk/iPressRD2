@@ -1,6 +1,0 @@
-iPress RD2 ToDo
-=====================
-
-Add sections to customizer: analytics, header scripts, header styles
-
-Schema for main sections e.g. generatepress css functionality
