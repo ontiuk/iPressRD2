@@ -120,6 +120,17 @@ add_action( 'ipress_loop_image',   'ipress_loop_header',          10 );
 add_action( 'ipress_loop_image',   'ipress_loop_content_image',   20 );
 add_action( 'ipress_loop_image',   'ipress_init_structured_data', 30 );
 
+/**
+ * @see  ipress_loop_sticky()
+ * @see  ipress_loop_header()
+ * @see  ipress_loop_content_image()
+ * @see  ipress_init_structured_data()
+ */        
+add_action( 'ipress_loop_video',   	'ipress_loop_sticky',          	5 );
+add_action( 'ipress_loop_video',   	'ipress_loop_header',          	10 );
+add_action( 'ipress_loop_video',   	'ipress_loop_content_video',   	20 );
+add_action( 'ipress_loop_video',   	'ipress_init_structured_data', 	30 );
+
 //------------------------------------------
 //  Single
 //------------------------------------------

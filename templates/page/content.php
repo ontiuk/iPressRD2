@@ -26,4 +26,4 @@ do_action( 'ipress_page_content_before' ); ?>
 ?>
 </section><!-- .entry-content -->
 
-<?php do_action( 'ipress_post_content_after' );
+<?php do_action( 'ipress_page_content_after' );

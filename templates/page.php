@@ -29,6 +29,5 @@
 
 </article><!-- #post-<?php the_ID(); ?> -->
 
-<?php 
-/** @hooked ipress_display_comments - 10 */
+<?php /** @hooked ipress_display_comments - 10 */
 do_action( 'ipress_article_after' );
